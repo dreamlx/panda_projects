@@ -1,9 +1,7 @@
 class DeductionsController < ApplicationController
   def index
-    #list
-    #render :action => 'list'
     id = params[:prj_id]
-    item_found =Deduction.find(:first,:conditions=>['project_id=?',id])
+    item_found =Deduction.find(project_id: id)
     if item_found.nil?
       redirect_to :action => 'new',:id=> id
     else
@@ -11,13 +9,8 @@ class DeductionsController < ApplicationController
     end    
   end
 
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update ],
-         :redirect_to => { :action => :list }
-
   def list
-    @deduction_pages, @deductions = paginate :deductions, :per_page => 20,:joins =>"inner join projects on deductions.project_id = projects.id ",
-                                                :order_by => "projects.job_code"
+    @deduction_pages, @deductions = paginate :deductions, :joins =>"inner join projects on deductions.project_id = projects.id ", :order_by => "projects.job_code"
   end
 
   def show
@@ -31,10 +24,9 @@ class DeductionsController < ApplicationController
   end
 
   def create
-    @deduction = Deduction.new(params[:deduction])
+    @deduction = Deduction.new(deduction_params)
     if @deduction.save
-      flash[:notice] = 'Deduction was successfully created.'
-      redirect_to :action => 'show', :id => @deduction
+      redirect_to :action => 'show', :id => @deduction, notice: 'Deduction was successfully created.'
     else
       render :action => 'new'
     end
@@ -47,10 +39,8 @@ class DeductionsController < ApplicationController
 
   def update
     @deduction = Deduction.find(params[:id])
-    if @deduction.update_attributes(params[:deduction])
-      flash[:notice] = 'Deduction was successfully updated.'
-      redirect_to :action => 'show', :id => @deduction
-      #redirect_to :controller =>'initialfees', :action => 'list'
+    if @deduction.update(deduction_params)
+      redirect_to :action => 'show', :id => @deduction, notice: 'Deduction was successfully updated.'
     else
       render :action => 'edit'
     end
@@ -58,7 +48,13 @@ class DeductionsController < ApplicationController
 
   def destroy
     Deduction.find(params[:id]).destroy
-    redirect_to :controller =>'deductions', :action => 'list'
+    redirect_to deductions_url
   end
 
+  private
+    def deduction_params
+      params.require(:deduction).permit(
+        :created_on, :updated_on, :service_PFA, :service_UFA, :service_billing, :expense_PFA,
+        :expense_UFA, :expense_billing, :project_id)
+    end
 end

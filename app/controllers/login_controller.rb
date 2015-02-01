@@ -1,11 +1,10 @@
 class LoginController < ApplicationController
-  #before_filter :authorize, :except => :login
   def add_user
     @people =Person.find(:all, :order => 'english_name')  
     if request.get?
       @user = User.new
     else
-      @user = User.new(params[:user])
+      @user = User.new(user_params)
     end
     if @user.save
       redirect_to_index("User #{@user.name} created")
@@ -19,20 +18,18 @@ class LoginController < ApplicationController
   end
 
   def update
-    @user =User.find(params[:id])
-    
-    if @user.update_attributes(params[:user])
-      flash[:notice] = 'Industry was successfully updated.'
-      redirect_to :action => 'list'
+    @user =User.find(params[:id]) 
+    if @user.update(user_params)
+      redirect_to :action => 'list', notice: 'Industry was successfully updated.'
     else
-      @people =Person.find(:all, :order => 'english_name')
-      render :action => 'edit'
+      @people =Person.order('english_name')
+      render 'edit'
     end
   end
     
   def list
     @vals = session[:other1].split
-    @user_pages, @users = paginate :users, :per_page => 50
+    @user_pages, @users = paginate :users
   end
 
   def destroy
@@ -45,7 +42,7 @@ class LoginController < ApplicationController
       session[:user_id] = nil
       @user = User.new
     else
-      @user = User.new(params[:user])
+      @user = User.new(user_params)
       logged_in_user = @user.try_to_login
       
       if logged_in_user
@@ -95,13 +92,11 @@ class LoginController < ApplicationController
   end
   
   def index
-    #redirect_to(:controller =>"projects",:action => "list")
-    @periods = Period.find(:all, :order =>'number')
+    @periods = Period.order(:number)
     @now_period = get_now_period
     @last_login = Dict.new
-    @last_login = Dict.find(:first, :conditions =>" category ='billing_number' ")
+    @last_login = Dict.find(category: 'billing_number')
 
-          
     #billings number
     today = Time.now
     if @last_login.title != today.strftime("%Y%m%d")
@@ -119,5 +114,9 @@ class LoginController < ApplicationController
     cookies[:the_time] = params[:period]
     redirect_to :action =>"index"
   end
-  
+
+  private
+    def user_params
+      params.require(:user).permit(:name, :person_id, :hashed_password, :auth, :other1, :other2)
+    end
 end

@@ -1,21 +1,12 @@
 class DictsController < ApplicationController
   def index
-    list
-    render :action => 'list'
-  end
-
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update ],
-         :redirect_to => { :action => :list }
-
-  def list
-    @dict = Dict.new(params[:dict])
+    @dict = Dict.new(dict_params)
     if not (@dict.category =="" or @dict.category.nil?)
       condition_sql = " category like '%#{@dict.category}%'"
     else
       condition_sql = " 1 "
     end
-    @dict_pages, @dicts = paginate :dicts, :per_page => 20, :order_by => 'category', :conditions => condition_sql
+    @dict_pages, @dicts = paginate :dicts, :order_by => 'category', :conditions => condition_sql
   end
 
   def show
@@ -27,12 +18,11 @@ class DictsController < ApplicationController
   end
 
   def create
-    @dict = Dict.new(params[:dict])
+    @dict = Dict.new(dict_params)
     if @dict.save
-      flash[:notice] = 'Dict was successfully created.'
-      redirect_to :action => 'list'
+      redirect_to dicts_url, notice: 'Dict was successfully created.'
     else
-      render :action => 'new'
+      render 'new'
     end
   end
 
@@ -42,18 +32,20 @@ class DictsController < ApplicationController
 
   def update
     @dict = Dict.find(params[:id])
-    if @dict.update_attributes(params[:dict])
-      flash[:notice] = 'Dict was successfully updated.'
-      redirect_to :action => 'show', :id => @dict
+    if @dict.update_attributes(dict_params)
+      redirect_to @dict, notice: 'Dict was successfully updated.'
     else
-      render :action => 'edit'
+      render 'edit'
     end
   end
 
   def destroy
     Dict.find(params[:id]).destroy
-    redirect_to :action => 'list'
+    redirect_to dicts_url
   end
-  
 
+  private
+    def dict_params
+      params.require(:dict).permit(:category, :code, :title)
+    end
 end

@@ -1,15 +1,6 @@
 class ContactsController < ApplicationController
   def index
-    list
-    render :action => 'list'
-  end
-
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update ],
-         :redirect_to => { :action => :list }
-
-  def list
-    @contact_pages, @contacts = paginate :contacts, :per_page => 10
+    @contact_pages, @contacts = paginate :contacts
   end
 
   def show
@@ -21,10 +12,9 @@ class ContactsController < ApplicationController
   end
 
   def create
-    @contact = Contact.new(params[:contact])
+    @contact = Contact.new(contact_params)
     if @contact.save
-      flash[:notice] = 'Contact was successfully created.'
-      redirect_to :action => 'list'
+      redirect_to contacts_url, notice: 'Contact was successfully created.'
     else
       render :action => 'new'
     end
@@ -36,9 +26,8 @@ class ContactsController < ApplicationController
 
   def update
     @contact = Contact.find(params[:id])
-    if @contact.update_attributes(params[:contact])
-      flash[:notice] = 'Contact was successfully updated.'
-      redirect_to :action => 'show', :id => @contact
+    if @contact.update(contact_params)
+      redirect_to :action => 'show', :id => @contact, notice: 'Contact was successfully updated.'
     else
       render :action => 'edit'
     end
@@ -46,6 +35,11 @@ class ContactsController < ApplicationController
 
   def destroy
     Contact.find(params[:id]).destroy
-    redirect_to :action => 'list'
+    redirect_to contacts_url
   end
+
+  private
+    def contact_params
+      params.require(:contact).permit(:client_id, :name, :title, :gender, :mobile, :tel, :fax, :email, :other)
+    end
 end

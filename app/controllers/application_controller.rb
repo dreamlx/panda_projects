@@ -42,10 +42,7 @@ class ApplicationController < ActionController::Base
     end
     
     def get_cookie
-      cookie_value = cookies[:the_time]
-      #cookie_value ||= 0
-      return cookie_value
-      #render(:action=>index,:text =>" #{cookie_value}")
+      return cookies[:the_time]
     end
     
     def get_now_period
@@ -55,7 +52,7 @@ class ApplicationController < ActionController::Base
       else
         sql_condition = "id = 0"
       end
-      now_period = Period.find(:first, :conditions => sql_condition )|| Period.today_period
+      now_period = Period.wehre(sql_condition ).first || Period.today_period
       
       return now_period
     end
@@ -63,19 +60,15 @@ class ApplicationController < ActionController::Base
     def init_set
       prj_status = Dict.find_by_title_and_category("Active","prj_status")
       person_status = Dict.find_by_title_and_category("Resigned","person_status")
-      @people = Person.find(:all, 
-        :conditions => "status_id != '#{person_status.id}' ",
-        :order => 'english_name')
+      @people = Person.where("status_id != '#{person_status.id}' ").order('english_name')
        
-      @projects = Project.find( :all, :conditions=>" status_id =#{prj_status.id}",
-                                 
-        :order=>'job_code')
-      @periods = Period.find(:all, :order => 'number DESC') 
+      @projects = Project.where(" status_id =#{prj_status.id}").order('job_code')
+      @periods = Period.order('number DESC') 
       
     end  
 
     def billing_number_set
-      @billing_number = Dict.find(:first, :conditions =>" category ='billing_number' ")
+      @billing_number = Dict.find(category: 'billing_number')
       @number = @billing_number.code.to_i + 1
       
       if @number <10 

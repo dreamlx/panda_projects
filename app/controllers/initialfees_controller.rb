@@ -1,26 +1,16 @@
 class InitialfeesController < ApplicationController
-  
   def index
     id = params[:prj_id]
-    #list
-    item_found=Initialfee.find(:first,
-                      :conditions =>["project_id=?",id])
+    item_found=Initialfee.find(project_id: id)
     if item_found.nil?     
       redirect_to :action => 'new', :id =>id
     else
       redirect_to :action => 'show', :id =>item_found
-    end                     
-    
+    end
   end
 
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update ],
-         :redirect_to => { :action => :list }
-
   def list
-    @initialfee_pages, @initialfees = paginate  :initialfees, :per_page => 20, :joins =>"inner join projects on initialfees.project_id = projects.id ",
-                                                :order_by => "projects.job_code"
-                                       
+    @initialfee_pages, @initialfees = paginate  :initialfees, :joins =>"inner join projects on initialfees.project_id = projects.id ", :order_by => "projects.job_code"                                 
   end
 
   def show
@@ -29,15 +19,13 @@ class InitialfeesController < ApplicationController
 
   def new
     init_set 
-    @initialfee = Initialfee.new
-    @initialfee.project_id = params[:id]
+    @initialfee = Initialfee.new(project_id: params[:id])
   end
 
   def create
-    @initialfee = Initialfee.new(params[:initialfee])
+    @initialfee = Initialfee.new(initialfee_params)
     if @initialfee.save
-      flash[:notice] = 'Initialfee was successfully created.'
-      redirect_to :action => 'show', :id => @initialfee
+      redirect_to @initialfee, notice: 'Initialfee was successfully created.'
     else
       render :action => 'new'
     end
@@ -50,9 +38,8 @@ class InitialfeesController < ApplicationController
 
   def update
     @initialfee = Initialfee.find(params[:id])
-    if @initialfee.update_attributes(params[:initialfee])
-      flash[:notice] = 'Initialfee was successfully updated.'
-      redirect_to :action => 'show', :id => @initialfee
+    if @initialfee.update(initialfee_params)
+      redirect_to @initialfee, notice: 'Initialfee was successfully updated.'
     else
       render :action => 'edit'
     end
@@ -60,9 +47,14 @@ class InitialfeesController < ApplicationController
 
   def destroy
     Initialfee.find(params[:id]).destroy
-    redirect_to :action => 'list'
+    redirect_to initialfees_url
   end
-  
 
-  
+  private
+    def initialfee_params
+      params.require(:initialfee).permit(
+        :created_on, :updated_on, :service_fee, :commission, :outsourcing, :reimbursement, :meal_allowance,
+        :travel_allowance, :business_tax, :tickets, :courrier, :postage, :stationery, :report_binding, 
+        :payment_on_behalf, :project_id, :cash_advance )
+    end
 end

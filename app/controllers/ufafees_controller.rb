@@ -1,21 +1,11 @@
 class UfafeesController < ApplicationController
 auto_complete_for :ufafee, :number
   def index
-    list
-    render :action => 'list'
-  end
-
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update ],
-         :redirect_to => { :action => :list }
-
-  def list
-  	sql = ' 1 '
-  	if !request.get?
-  		sql +=" and number like '%#{params[:ufafee][:number]}%' "
-  	end
-  	
-    @ufafee_pages, @ufafees = paginate :ufafees, :per_page => 10,:conditions=>sql
+    sql = ' 1 '
+    if !request.get?
+      sql +=" and number like '%#{ufafee_params[:number]}%' "
+    end
+    @ufafee_pages, @ufafees = paginate :ufafees, :conditions=>sql
   end
 
   def show
@@ -25,22 +15,19 @@ auto_complete_for :ufafee, :number
   def new
     init_set  
     billing_number_set
-    @ufafee = Ufafee.new
-    @ufafee.number = @billing_number.title + @str_number
+    @ufafee = Ufafee.new(number: @billing_number.title + @str_number)
   end
 
   def create
-    @billing_number = Dict.find(:first, :conditions =>" category ='billing_number' ")
+    @billing_number = Dict.find(category: 'billing_number')
     @number = @billing_number.code.to_i + 1
-    @billing_number.code = @number.to_s
-    @billing_number.save  
-    @ufafee = Ufafee.new(params[:ufafee])
+    @billing_number.update(code: @number.to_s)
+    @ufafee = Ufafee.new(ufafee_params)
     get_amount
     if @ufafee.save
-      flash[:notice] = 'Ufafee was successfully created.'
-      redirect_to :action => 'list'
+      redirect_to ufafees_url, notice: 'Ufafee was successfully created.'
     else
-      render :action => 'new'
+      render 'new'
     end
   end
 
@@ -51,23 +38,27 @@ auto_complete_for :ufafee, :number
 
   def update
     @ufafee = Ufafee.find(params[:id])
-    if @ufafee.update_attributes(params[:ufafee])
+    if @ufafee.update(ufafee_params)
     get_amount
     @ufafee.save
-      flash[:notice] = 'Ufafee was successfully updated.'
-      redirect_to :action => 'show', :id => @ufafee
+      redirect_to @ufafee, notice: 'Ufafee was successfully updated.'
     else
-      render :action => 'edit'
+      render 'edit'
     end
   end
 
   def destroy
     Ufafee.find(params[:id]).destroy
-    redirect_to :action => 'list'
+    redirect_to ufafees_url
   end
   
   private
     def get_amount
-    @ufafee.amount = @ufafee.service_UFA + @ufafee.expense_UFA
-  end
+      @ufafee.amount = @ufafee.service_UFA + @ufafee.expense_UFA
+    end
+
+    def ufafee_params
+      params.require(:ufafee).permit(
+        :created_on, :updated_on, :number, :amount, :project_id, :period_id, :service_UFA, :expense_UFA)
+    end
 end

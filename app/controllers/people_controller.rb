@@ -1,90 +1,63 @@
 class PeopleController < ApplicationController
-  auto_complete_for :person,:english_name
-  auto_complete_for :person,:employee_number
   def index 
-    list
-    render :action => 'list' 
-  end
-
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update ],
-         :redirect_to => { :action => :list }
-
-def list
-    #Person.find(:all,:order=>"english_name",:include=>:status,:conditions=>"title = 'Employed'").collect {|p| [ p.english_name, p.id ] }
-    @person = Person.new(params[:person]) 
-	#@person.id = params[:person_id]
-    #person_id = params[:person][:id] 
-    #flash[:notice] = "#{person_id.length?}"
+    @person = Person.new(person_params) 
     sql_condition = " 1 "
-    
-      sql_condition +=" and employee_number like '%#{@person.employee_number}%'" unless @person.employee_number.blank?
-      sql_condition +=" and id = #{params[:person_id]}" unless params[:person_id].to_s == ''
+    sql_condition +=" and employee_number like '%#{@person.employee_number}%'" unless @person.employee_number.blank?
+    sql_condition +=" and id = #{params[:person_id]}" unless params[:person_id].to_s == ''
     
     @sql = sql_condition
-    @person_pages, @people = paginate :people,
-      :per_page => 20,
-      :conditions=>sql_condition,
-      :order_by => "employee_number"
+    @person_pages, @people = paginate :people,      :conditions=>sql_condition,      :order_by => "employee_number" 
   end
 
-
   def create
-    @person = Person.new(params[:person])
+    @person = Person.new(person_params)
     if @person.save
-      flash[:notice] = 'Person was successfully created.'
-      redirect_to :action => 'list'
+      redirect_to people_url, notice: 'Person was successfully created.'
     else
-      render :action => 'new'
+      render 'new'
     end
   end
 
-
   def update
     @person = Person.find(params[:id])
-    if @person.update_attributes(params[:person])
-      flash[:notice] = 'Person was successfully updated.'
-      redirect_to :action => 'show', :id => @person
+    if @person.update_attributes(person_params)
+      redirect_to  @person, notice: 'Person was successfully updated.'
     else
-      render :action => 'edit'
+      render 'edit'
     end
   end
 
   def destroy
     Person.find(params[:id]).destroy if Person.find(params[:id]).english_name != "guest"
-    redirect_to :action => 'list'
+    redirect_to people_url
   end
   
   def new
-    @person = Person.new
-    @dicts = Dict.find(:all,
-                      :conditions =>"category ='GMU'")    
-    @status = Dict.find(:all,
-                      :conditions =>"category ='person_status'")
-    @gender = Dict.find(:all,
-                      :conditions =>"category ='gender'")
-    @departments = Dict.find(:all,
-                      :conditions =>"category ='department'")                      
+    @person       = Person.new
+    @dicts        = Dict.where("category ='GMU'")    
+    @status       = Dict.where("category ='person_status'")
+    @gender       = Dict.where("category ='gender'")
+    @departments  = Dict.where("category ='department'")                      
   end
   
   def edit
-    @person = Person.find(@params["id"])
-    @dicts = Dict.find(:all,
-                      :conditions =>"category ='GMU'")
-    @status = Dict.find(:all,
-                      :conditions =>"category ='person_status'")
-    @gender = Dict.find(:all,
-                      :conditions =>"category ='gender'")
-    @departments = Dict.find(:all,
-                      :conditions =>"category ='department'")                       
+    @person       = Person.find(@params[:id])
+    @dicts        = Dict.where("category ='GMU'")    
+    @status       = Dict.where("category ='person_status'")
+    @gender       = Dict.where("category ='gender'")
+    @departments  = Dict.where("category ='department'") 
   end
   
   def show
-    @person = Person.find(@params["id"])
-    @dicts = Dict.find(:all,
-                      :conditions =>"category ='GMU'")
-    @status = Dict.find(:all,
-                      :conditions =>"category ='person_status'")
-                 
-  end  
+    @person       = Person.find(@params[:id])
+    @dicts        = Dict.where("category ='GMU'")    
+    @status       = Dict.where("category ='person_status'")
+  end
+
+  private
+    def person_params
+      params.require(:person).permit(
+        :created_on, :updated_on, :chinese_name, :english_name, :employee_number, :department_id, :grade, :charge_rate,
+        :employeement_date, :address, :postalcode, :mobile, :tel, :extension, :gender_id, :status_id, :GMU_id)
+    end
 end

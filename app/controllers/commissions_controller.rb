@@ -1,9 +1,7 @@
 class CommissionsController < ApplicationController
   def index
-    #list
-    #render :action => 'list'
     id = params[:prj_id]
-    item_found =Commission.find(:first,:conditions=>['project_id=?',id])
+    item_found =Commission.find(project_id: id)
     if item_found.nil?
       redirect_to :action => 'new',:id=> id
     else
@@ -11,15 +9,11 @@ class CommissionsController < ApplicationController
     end 
   end
 
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update ],
-         :redirect_to => { :action => :list }
-
   def list
     if params[:id].nil?
-    @commission_pages, @commissions = paginate :commissions, :per_page => 10
+      @commission_pages, @commissions = paginate :commissions
     else
-    @commission_pages, @commissions = paginate :commissions, :per_page => 10, :conditions =>["project_id=?",params[:id]]
+      @commission_pages, @commissions = paginate :commissions, :conditions =>["project_id=?",params[:id]]
     end
   end
 
@@ -46,14 +40,12 @@ class CommissionsController < ApplicationController
   def edit
     init_set
     @commission = Commission.find(params[:id])
-
   end
 
   def update
     @commission = Commission.find(params[:id])
-    if @commission.update_attributes(params[:commission])
-      flash[:notice] = 'Commission was successfully updated.'
-      redirect_to :action => 'show', :id => @commission
+    if @commission.update(params[:commission])
+      redirect_to :action => 'show', :id => @commission, notice: 'Commission was successfully updated.'
     else
       render :action => 'edit'
     end
@@ -63,4 +55,10 @@ class CommissionsController < ApplicationController
     Commission.find(params[:id]).destroy
     redirect_to :action => 'list', :id => params[:prj_id]
   end
+
+  private
+    def commission_params
+      params.require(:commission).permit(
+        :created_on, :updated_on, :number, :date, :person_id, :amount, :project_id, :period_id)
+    end
 end

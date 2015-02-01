@@ -1,15 +1,6 @@
 class PrjExpenseLogsController < ApplicationController
   def index
-    list
-    render :action => 'list'
-  end
-
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update ],
-         :redirect_to => { :action => :list }
-
-  def list
-    @prj_expense_log_pages, @prj_expense_logs = paginate :prj_expense_logs, :per_page => 10
+    @prj_expense_log_pages, @prj_expense_logs = paginate :prj_expense_logs
   end
 
   def show
@@ -21,10 +12,9 @@ class PrjExpenseLogsController < ApplicationController
   end
 
   def create
-    @prj_expense_log = PrjExpenseLog.new(params[:prj_expense_log])
+    @prj_expense_log = PrjExpenseLog.new(prj_expense_log_params)
     if @prj_expense_log.save
-      flash[:notice] = 'PrjExpenseLog was successfully created.'
-      redirect_to :action => 'list'
+      redirect_to prj_expense_logs_url, notice: 'PrjExpenseLog was successfully created.'
     else
       render :action => 'new'
     end
@@ -36,9 +26,8 @@ class PrjExpenseLogsController < ApplicationController
 
   def update
     @prj_expense_log = PrjExpenseLog.find(params[:id])
-    if @prj_expense_log.update_attributes(params[:prj_expense_log])
-      flash[:notice] = 'PrjExpenseLog was successfully updated.'
-      redirect_to :action => 'show', :id => @prj_expense_log
+    if @prj_expense_log.update(prj_expense_log_params)
+      redirect_to @prj_expense_log, notice: 'PrjExpenseLog was successfully updated.'
     else
       render :action => 'edit'
     end
@@ -46,6 +35,11 @@ class PrjExpenseLogsController < ApplicationController
 
   def destroy
     PrjExpenseLog.find(params[:id]).destroy
-    redirect_to :action => 'list'
+    redirect_to prj_expense_logs_url
   end
+
+  private
+    def prj_expense_log_params
+      params.require(:prj_expense_log).permit(:prj_id, :expense_id, :period_id, :other)
+    end
 end

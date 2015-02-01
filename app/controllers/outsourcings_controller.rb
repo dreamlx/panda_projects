@@ -1,29 +1,12 @@
 class OutsourcingsController < ApplicationController
   def index
-    #list
-    #render :action => 'list'
     id = params[:prj_id]
     item_found =Outsourcing.find(:first,:conditions=>['project_id=?',id])
     if item_found.nil?
-      redirect_to :action => 'new',:id=> id
+      redirect_to 'new', id: id
     else
-      redirect_to :action => 'list',:id => id
+      @outsourcing_pages, @outsourcings = id ? paginate(:outsourcings, :conditions =>["project_id=?",params[:id]]) : paginate(:outsourcings)
     end     
-  end
-
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update ],
-         :redirect_to => { :action => :list }
-
-  def list
-    if params[:id].nil?
-    @outsourcing_pages, @outsourcings = paginate(:outsourcings, 
-                                                  :per_page => 10) 
-    else
-    @outsourcing_pages, @outsourcings = paginate(:outsourcings, 
-                                                  :per_page => 10, 
-                                                  :conditions =>["project_id=?",params[:id]])
-    end
   end
 
   def show
@@ -32,15 +15,13 @@ class OutsourcingsController < ApplicationController
 
   def new
     init_set  
-    @outsourcing = Outsourcing.new
-    @outsourcing.project_id = params[:id]
+    @outsourcing = Outsourcing.new(project_id: params[:id])
   end
 
   def create
     @outsourcing = Outsourcing.new(params[:outsourcing])
     if @outsourcing.save
-      flash[:notice] = 'Outsourcing was successfully created.'
-      redirect_to :action => 'list', :id => @outsourcing.project_id
+      redirect_to outsourcings_url, id: @outsourcing.project_id, notice: 'Outsourcing was successfully created.'
     else
       render :action => 'new'
     end
@@ -53,16 +34,20 @@ class OutsourcingsController < ApplicationController
 
   def update
     @outsourcing = Outsourcing.find(params[:id])
-    if @outsourcing.update_attributes(params[:outsourcing])
-      flash[:notice] = 'Outsourcing was successfully updated.'
-      redirect_to :action => 'show', :id => @outsourcing
+    if @outsourcing.update(params[:outsourcing])
+      redirect_to @outsourcing, notice: 'Outsourcing was successfully updated.'
     else
-      render :action => 'edit'
+      render 'edit'
     end
   end
 
   def destroy
     Outsourcing.find(params[:id]).destroy
-    redirect_to :action => 'list', :id => params[:prj_id]
+    redirect_to outsourcings_url, id: params[:prj_id]
   end
+
+  private
+    def outsourcing_params
+      params.require(:outsourcing).permit(:created_on, :updated_on, :number, :date, :person_id, :amount, :project_id, :period_id)
+    end
 end

@@ -1,65 +1,42 @@
 class PersonalchargesController < ApplicationController
   def index
-    #list
-    #render :action => 'list'
     prj_id = params[:prj_id]
     person_id = params[:person_id]
     
-    if not params[:person_id].nil?
+    if params[:person_id]
       redirect_to :action => 'list', :person_id => person_id
     else
-      item_found =Personalcharge.find(:first,:conditions=>['project_id=?',prj_id])
+      item_found =Personalcharge.find(project_id: prj_id)
       if item_found.nil?
-        redirect_to :action => 'new',:id=> prj_id
+        redirect_to 'new',:id=> prj_id
       else
-        redirect_to :action => 'prj_list',:id => prj_id
+        redirect_to 'prj_list',:id => prj_id
       end 
     end 
   end
 
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update ],
-         :redirect_to => { :action => :list }
-
   def list
-  get_now_period
-
-  if not params[:person_id].nil?
-    if not @now_period.nil?
-    @personalcharge_pages, @personalcharges = paginate( :personalcharges, 
-                                                        :per_page => 20, 
-                                                        :conditions =>["person_id=? and period_id =?",params[:person_id],@now_period.id],
-                                                        :order_by =>'period_id')
+    get_now_period
+    if not params[:person_id].nil?
+      if not @now_period.nil?
+        @personalcharge_pages, @personalcharges = paginate( :personalcharges, :conditions =>["person_id=? and period_id =?",params[:person_id],@now_period.id], :order_by =>'period_id')
+      else
+        @personalcharge_pages, @personalcharges = paginate( :personalcharges, :conditions =>["person_id=? ",params[:person_id]],   :order_by =>'period_id')
+      end
     else
-    @personalcharge_pages, @personalcharges = paginate( :personalcharges, 
-                                                        :per_page => 20, 
-                                                        :conditions =>["person_id=? ",params[:person_id]],
-                                                        :order_by =>'period_id')
+      if params[:id].nil?
+        @personalcharge_pages, @personalcharges = paginate( :personalcharges,  :order_by => 'project_id')  
+      else
+        @personalcharge_pages, @personalcharges = paginate( :personalcharges, :conditions =>["project_id=?",params[:id]])
+      end
     end
-  
-  else
-    if params[:id].nil?
-      @personalcharge_pages, @personalcharges = paginate( :personalcharges, 
-                                                        :per_page => 20,
-                                                        :order_by => 'project_id')  
-    else
-        @personalcharge_pages, @personalcharges = paginate( :personalcharges, 
-                                                        :per_page => 20, 
-                                                        :conditions =>["project_id=?",params[:id]])
-    end
-  end
-  
   end
   
   def prj_list
     if params[:id].nil?
-      @personalcharge_pages, @personalcharges = paginate( :personalcharges, 
-                                                        :per_page => 20,
-                                                        :order_by => 'project_id')  
+      @personalcharge_pages, @personalcharges = paginate( :personalcharges,  :order_by => 'project_id')  
     else
-        @personalcharge_pages, @personalcharges = paginate( :personalcharges, 
-                                                        :per_page => 20, 
-                                                        :conditions =>["project_id=?",params[:id]])
+      @personalcharge_pages, @personalcharges = paginate( :personalcharges, :conditions =>["project_id=?",params[:id]])
     end  
   end
 
@@ -70,6 +47,7 @@ class PersonalchargesController < ApplicationController
   def prj_show
     @personalcharge = Personalcharge.find(params[:id])
   end
+
   def new
     init_set
     @personalcharge = Personalcharge.new
@@ -83,14 +61,14 @@ class PersonalchargesController < ApplicationController
   end
 
   def create
-    @personalcharge = Personalcharge.new(params[:personalcharge])
+    @personalcharge = Personalcharge.new(personalcharge_params)
     person = Person.find(@personalcharge.person_id)
     @personalcharge.service_fee = @personalcharge.hours * person.charge_rate
     if @personalcharge.save
       flash[:notice] = 'Personalcharge was successfully created.'
       redirect_to :action => 'list', :person_id => @personalcharge.person_id, :id => @personalcharge.project_id
     else
-      render :action => 'new'
+      render 'new'
     end
   end
 
@@ -101,44 +79,28 @@ class PersonalchargesController < ApplicationController
 
   def update
     @personalcharge = Personalcharge.find(params[:id])
-    if @personalcharge.update_attributes(params[:personalcharge])
-      flash[:notice] = 'Personalcharge was successfully updated.'
-      person = Person.find(@personalcharge.person_id)
-      @personalcharge.service_fee = @personalcharge.hours * person.charge_rate      
-      @personalcharge.save
-      redirect_to :action => 'show', :id => @personalcharge
+    if @personalcharge.update(personalcharge_params)
+      @personalcharge.update(service_fee: @personalcharge.hours * @personalchargeperson.charge_rate ) if @personalcharge.person.charge_rate
+      redirect_to @personalcharge, notice: 'Personalcharge was successfully updated.'
     else
-      render :action => 'edit'
+      render 'edit'
     end
   end
 
   def destroy
     Personalcharge.find(params[:id]).destroy
-    if not params[:person_id].nil?
-      redirect_to :action => 'list', :person_id => params[:person_id], :id => params[:prj_id]
-    else    
-      redirect_to :action => 'list', :person_id => params[:person_id], :id => params[:prj_id]
-    end
+    redirect_to 'list', person_id: params[:person_id], id: params[:prj_id]
   end
   
-  #totalfee
-  #sql_str = "select sum(service_fee) as total,periods.number, people.english_name " +
-  #          "from personalcharges,periods,people "+
-  #          "where personalcharges.period_id=periods.id and person_id=people.id "+
-  #          "group by period_id,person_id "+
-  #          "order by periods.number,people.english_name"
-
-  
   def search
-    @personalcharge = Personalcharge.new(params[:personalcharge])
+    @personalcharge = Personalcharge.new(personalcharge_params)
     @personalcharge.period_id = nil
     period_from_id = params[:period_from]
     period_to_id = params[:period_to]
     @period_condition = " "
     if period_from_id == period_to_id
       @personalcharge.period_id = period_to_id
-    else
-           
+    else  
       unless period_from_id == ""
         @start_period = Period.find(period_from_id)
         @period_condition += " and C.starting_date >= '#{@start_period.starting_date}' "  
@@ -148,7 +110,6 @@ class PersonalchargesController < ApplicationController
         @end_period = Period.find(period_to_id)
         @period_condition += " and C.ending_date <= '#{@end_period.ending_date}' "
       end
-     
     end
     @p_total = Personalcharge.new
     @projects = Project.find(:all, :order => 'job_code')
@@ -169,7 +130,6 @@ class PersonalchargesController < ApplicationController
     
     if not @personalcharge.project_id.nil? and not ( @personalcharge.project_id == -1 or  @personalcharge.project_id == -2 )
       sql_condition += " and project_id =#{ @personalcharge.project_id} "
-    
     end
     
     # select the frist char of jobCode in 0-9  
@@ -182,49 +142,32 @@ class PersonalchargesController < ApplicationController
       sql_condition += " AND left( job_code, 1 )NOT IN ( 01, 2, 3, 4, 5, 6, 7, 8, 9 )"
     end
       
-    sql_str ="select D.job_code, C.number, B.english_name, A.* from "+
-              "personalcharges as A, people as B,periods as C, projects as D "+
-              " where A.person_id = B.id and A.period_id = C.id and A.project_id = D.id and "
-     
+    sql_str ="select D.job_code, C.number, B.english_name, A.* from "+              "personalcharges as A, people as B,periods as C, projects as D "+              " where A.person_id = B.id and A.period_id = C.id and A.project_id = D.id and "
     sql_order =" order by D.job_code,  C.number, B.english_name "       
-    #@personalcharges = Personalcharge.find(:all, :conditions =>sql_condition)
     @personalcharges        = Personalcharge.find_by_sql(sql_str + sql_condition + sql_order)
     @tempsql =sql_str + sql_condition + sql_order
     join_sql = " inner join projects on personalcharges.project_id = projects.id left join periods as C on personalcharges.period_id = C.id "
-    @p_total.hours          = Personalcharge.sum("hours", 
-        :joins =>join_sql,
-        :conditions =>sql_condition)
-    @p_total.service_fee    = Personalcharge.sum("service_fee", 
-        :joins =>join_sql,
-        :conditions =>sql_condition)                      
-    @p_total.reimbursement  = Personalcharge.sum("reimbursement", 
-        :joins =>join_sql,
-        :conditions =>sql_condition)
-    @p_total.meal_allowance = Personalcharge.sum("meal_allowance", 
-        :joins =>join_sql,
-        :conditions =>sql_condition)
-    @p_total.travel_allowance = Personalcharge.sum("travel_allowance", 
-        :joins =>join_sql,
-        :conditions =>sql_condition)
-    @p_count = Personalcharge.count(
-          :joins =>join_sql,
-          :conditions =>sql_condition)
+    @p_total.hours          = Personalcharge.sum("hours",         :joins =>join_sql,        :conditions =>sql_condition)
+    @p_total.service_fee    = Personalcharge.sum("service_fee",         :joins =>join_sql,        :conditions =>sql_condition)                      
+    @p_total.reimbursement  = Personalcharge.sum("reimbursement",         :joins =>join_sql,        :conditions =>sql_condition)
+    @p_total.meal_allowance = Personalcharge.sum("meal_allowance",         :joins =>join_sql,        :conditions =>sql_condition)
+    @p_total.travel_allowance = Personalcharge.sum("travel_allowance",         :joins =>join_sql,        :conditions =>sql_condition)
+    @p_count = Personalcharge.count(          :joins =>join_sql,          :conditions =>sql_condition)
     @pfa_fee = [0,0]
-    
     @p_t1 = Personalcharge.new
     @p_t0 = Personalcharge.new
-    
   end
 
-def get_now_period
-@cookie_value = cookies[:the_time]
-    if @cookie_value != ""
-    sql_condition  = " id = '#{@cookie_value}'" 
-    else
-    sql_condition = "id = 0"
-    end
-    @now_period = Period.find(:first, :conditions => sql_condition )
-#render(:action=>index,:text =>" #{cookie_value}")
-end
+  def get_now_period
+    @cookie_value = cookies[:the_time]
+    sql_condition = @cookie_value != "" ? " id = '#{@cookie_value}'" : "id = 0"
+    @now_period = Period.where(sql_condition).first
+  end
 
+  private
+    def personalcharge_params
+      params.require(:personalcharge).permit(
+        :created_on, :updated_on, :hours, :service_fee, :reimbursement, :meal_allowance,
+        :travel_allowance, :project_id, :period_id, :person_id)
+    end
 end

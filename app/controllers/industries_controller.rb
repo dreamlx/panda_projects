@@ -1,15 +1,6 @@
 class IndustriesController < ApplicationController
   def index
-    list
-    render :action => 'list'
-  end
-
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update ],
-         :redirect_to => { :action => :list }
-
-  def list
-    @industry_pages, @industries = paginate :industries, :per_page => 10
+    @industry_pages, @industries = paginate :industries
   end
 
   def show
@@ -23,10 +14,9 @@ class IndustriesController < ApplicationController
   def create
     @industry = Industry.new(params[:industry])
     if @industry.save
-      flash[:notice] = 'Industry was successfully created.'
-      redirect_to :action => 'list'
+      redirect_to industries_url, notice: 'Industry was successfully created.'
     else
-      render :action => 'new'
+      render 'new'
     end
   end
 
@@ -36,9 +26,8 @@ class IndustriesController < ApplicationController
 
   def update
     @industry = Industry.find(params[:id])
-    if @industry.update_attributes(params[:industry])
-      flash[:notice] = 'Industry was successfully updated.'
-      redirect_to :action => 'show', :id => @industry
+    if @industry.update(params[:industry])
+      redirect_to @industry, notice: 'Industry was successfully updated.'
     else
       render :action => 'edit'
     end
@@ -46,6 +35,11 @@ class IndustriesController < ApplicationController
 
   def destroy
     Industry.find(params[:id]).destroy
-    redirect_to :action => 'list'
+    redirect_to industries_url
   end
+
+  private
+    def industry_params
+      params.require(:industry).permit(:code, :title)
+    end
 end

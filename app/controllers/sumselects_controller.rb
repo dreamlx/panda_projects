@@ -1,15 +1,6 @@
 class SumselectsController < ApplicationController
   def index
-    list
-    render :action => 'list'
-  end
-
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update ],
-         :redirect_to => { :action => :list }
-
-  def list
-    @sumselect_pages, @sumselects = paginate :sumselects, :per_page => 10
+    @sumselect_pages, @sumselects = paginate :sumselects
   end
 
   def show
@@ -21,12 +12,11 @@ class SumselectsController < ApplicationController
   end
 
   def create
-    @sumselect = Sumselect.new(params[:sumselect])
+    @sumselect = Sumselect.new(sumselect_params)
     if @sumselect.save
-      flash[:notice] = 'Sumselect was successfully created.'
-      redirect_to :action => 'list'
+      redirect_to sumselects_url, notice: 'Sumselect was successfully created.'
     else
-      render :action => 'new'
+      render 'new'
     end
   end
 
@@ -36,16 +26,20 @@ class SumselectsController < ApplicationController
 
   def update
     @sumselect = Sumselect.find(params[:id])
-    if @sumselect.update_attributes(params[:sumselect])
-      flash[:notice] = 'Sumselect was successfully updated.'
-      redirect_to :action => 'show', :id => @sumselect
+    if @sumselect.update(sumselect_params)
+      redirect_to @sumselect, notice: 'Sumselect was successfully updated.'
     else
-      render :action => 'edit'
+      render 'edit'
     end
   end
 
   def destroy
     Sumselect.find(params[:id]).destroy
-    redirect_to :action => 'list'
+    redirect_to sumselects_url
   end
+
+  private
+    def sumselect_params
+      params.permit(:sumselect).permit(:type, :count_item)
+    end
 end

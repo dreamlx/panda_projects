@@ -1,15 +1,6 @@
 class ReceiveAmountsController < ApplicationController
   def index
-    list
-    render :action => 'list'
-  end
-
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update ],
-         :redirect_to => { :action => :list }
-
-  def list
-    @receive_amount_pages, @receive_amounts = paginate :receive_amounts, :per_page => 30
+    @receive_amount_pages, @receive_amounts = paginate :receive_amounts
   end
 
   def show
@@ -22,36 +13,37 @@ class ReceiveAmountsController < ApplicationController
   end
 
   def create
-    @receive_amount = ReceiveAmount.new(params[:receive_amount])
+    @receive_amount = ReceiveAmount.new(receive_amount_params)
     if @receive_amount.save
-      flash[:notice] = 'ReceiveAmount was successfully created.'
-      #redirect_to :action => 'list', :billing_id => @receive_amount.billing_id
-      redirect_to :controller => 'billings', :action =>'show', :id => @receive_amount.billing_id
+      redirect_to :controller => 'billings', :action =>'show', :id => @receive_amount.billing_id, notice: 'ReceiveAmount was successfully created.'
     else
-      render :action => 'new'
+      render 'new'
     end
   end
 
   def edit
-    
     @receive_amount = ReceiveAmount.find(params[:id])
     @billing = Billing.find(@receive_amount.billing_id)
   end
 
   def update
     @receive_amount = ReceiveAmount.find(params[:id])
-    if @receive_amount.update_attributes(params[:receive_amount])
-      flash[:notice] = 'ReceiveAmount was successfully updated.'
-      #redirect_to :action => 'show', :id => @receive_amount
-      redirect_to :controller => 'billings', :action =>'show', :id => @receive_amount.billing_id
+    if @receive_amount.update(receive_amount_params)
+      redirect_to :controller => 'billings', :action =>'show', :id => @receive_amount.billing_id, notice: 'ReceiveAmount was successfully updated.'
     else
-      render :action => 'edit'
+      render 'edit'
     end
   end
 
   def destroy
-    @receive_amount=ReceiveAmount.find(params[:id])
     ReceiveAmount.find(params[:id]).destroy
     redirect_to :controller => 'billings', :action =>'show', :id => @receive_amount.billing_id
   end
+
+  private
+    def receive_amount_params
+      params.require(:receive_amount).permit(
+        :created_on, :updated_on, :billing_id, :invoice_no, :receive_date,
+        :receive_amount, :job_code)
+    end
 end

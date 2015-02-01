@@ -23,13 +23,10 @@ class ReportsController < ApplicationController
     @contractNumbers = Project.find_by_sql("select distinct contract_number from projects order by contract_number;")
   end
   
-  #################################3
   def time_report
     @info = Personalcharge.new(params[:personalcharge])
-    @statuses   = Dict.find(:all,
-      :conditions =>"category ='prj_status' and code = '1'")# 1 open, 0 close
+    @statuses   = Dict.find(:all,      :conditions =>"category ='prj_status' and code = '1'")# 1 open, 0 close
                    
-    #sql_p     = " starting_date => '2007-09-16' or status_id = #{@statuses.id}}"
     @project = Project.find(@info.project_id)
     @now_period = Period.find(@info.period_id)
     
@@ -59,10 +56,6 @@ class ReportsController < ApplicationController
     sum_e_total 	+= @e_cumulative.stationery
     sum_expenses 	+= @e_current.tickets
     sum_e_total 	+= @e_cumulative.tickets
-    #sum_expenses 	+= @e_current.commission
-    #sum_e_total 	+= @e_cumulative.commission
-    #sum_expenses 	+= @e_current.outsourcing
-    #sum_e_total 	+= @e_cumulative.outsourcing
     sum_e_total 	+= @e_cumulative.payment_on_be_half
     #billings
     @billings  = @report.billings
@@ -217,24 +210,12 @@ class ReportsController < ApplicationController
     #@personalcharges = Personalcharge.find(:all, :conditions =>sql_condition)
     @personalcharges        = Personalcharge.find_by_sql(sql_str + sql_condition + sql_order)
     @tempsql =sql_str + sql_condition + sql_order
-    @p_total.hours          = Personalcharge.sum("hours", 
-      :joins =>" inner join projects on personalcharges.project_id = projects.id",
-      :conditions =>sql_condition)
-    @p_total.service_fee    = Personalcharge.sum("service_fee", 
-      :joins =>" inner join projects on personalcharges.project_id = projects.id",
-      :conditions =>sql_condition)                      
-    @p_total.reimbursement  = Personalcharge.sum("reimbursement", 
-      :joins =>" inner join projects on personalcharges.project_id = projects.id",
-      :conditions =>sql_condition)
-    @p_total.meal_allowance = Personalcharge.sum("meal_allowance", 
-      :joins =>" inner join projects on personalcharges.project_id = projects.id",
-      :conditions =>sql_condition)
-    @p_total.travel_allowance = Personalcharge.sum("travel_allowance", 
-      :joins =>" inner join projects on personalcharges.project_id = projects.id",
-      :conditions =>sql_condition)
-    @p_count = Personalcharge.count(
-      :joins =>" inner join projects on personalcharges.project_id = projects.id",
-      :conditions =>sql_condition)
+    @p_total.hours          = Personalcharge.sum("hours",       :joins =>" inner join projects on personalcharges.project_id = projects.id",      :conditions =>sql_condition)
+    @p_total.service_fee    = Personalcharge.sum("service_fee",       :joins =>" inner join projects on personalcharges.project_id = projects.id",      :conditions =>sql_condition)                      
+    @p_total.reimbursement  = Personalcharge.sum("reimbursement",       :joins =>" inner join projects on personalcharges.project_id = projects.id",      :conditions =>sql_condition)
+    @p_total.meal_allowance = Personalcharge.sum("meal_allowance",       :joins =>" inner join projects on personalcharges.project_id = projects.id",      :conditions =>sql_condition)
+    @p_total.travel_allowance = Personalcharge.sum("travel_allowance",       :joins =>" inner join projects on personalcharges.project_id = projects.id",      :conditions =>sql_condition)
+    @p_count = Personalcharge.count(      :joins =>" inner join projects on personalcharges.project_id = projects.id",      :conditions =>sql_condition)
     @pfa_fee = [0,0]
     
     @p_t1 = Personalcharge.new
@@ -243,7 +224,6 @@ class ReportsController < ApplicationController
   end
   
   def billing_export
-    
     sql_str = params[:p_sql]
     sql_condition = params[:p_condition]
     sql_order = params[:p_order]
@@ -643,40 +623,35 @@ class ReportsController < ApplicationController
   end
   
   private
-  def get_summary_record(params_info,period)
-    summary_record = {
-      'id'  => "",
-      'GMU' => "",
-      'job_code' => "",
-      'clien_name' => "",
-      'job_Ref' => "",
-      'job_Ptr' => "",
-      'job_Mgr' => "",
-      'service_line' => "",
-      'service_PFA' => "",
-      'contracted_fee' => "",
-      'contracted_expense' => "",
-      'project_status' => "",
-      'fees_Beg' => 0,
-      'fees_Cum' => 0,
-      'fees_Sub' => 0,
-      'PFA_Beg' => 0,
-      'PFA_Cum' => 0,
-      'PFA_Sub' => 0,        
-      'Billing_Beg' => 0,	
-      'Billing_Cum' => 0,	
-      'Billing_Sub' => 0,	        	
-      'BT' => 0,    
-    		
-      'INVENTORY_BALANCE' =>""    
-    }
-    
-      
-    @info = params_info
-    @projects = Project.find(:all)
-    @now_period = Period.find(period)
-    
-    
-
-  end
+    def get_summary_record(params_info,period)
+      summary_record = {
+        'id'  => "",
+        'GMU' => "",
+        'job_code' => "",
+        'clien_name' => "",
+        'job_Ref' => "",
+        'job_Ptr' => "",
+        'job_Mgr' => "",
+        'service_line' => "",
+        'service_PFA' => "",
+        'contracted_fee' => "",
+        'contracted_expense' => "",
+        'project_status' => "",
+        'fees_Beg' => 0,
+        'fees_Cum' => 0,
+        'fees_Sub' => 0,
+        'PFA_Beg' => 0,
+        'PFA_Cum' => 0,
+        'PFA_Sub' => 0,        
+        'Billing_Beg' => 0,	
+        'Billing_Cum' => 0,	
+        'Billing_Sub' => 0,	        	
+        'BT' => 0,    
+        'INVENTORY_BALANCE' =>""    
+      }
+       
+      @info = params_info
+      @projects = Project.find(:all)
+      @now_period = Period.find(period)
+    end
 end

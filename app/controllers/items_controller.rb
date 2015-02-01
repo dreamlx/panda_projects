@@ -1,15 +1,6 @@
 class ItemsController < ApplicationController
   def index
-    list
-    render :action => 'list'
-  end
-
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update ],
-         :redirect_to => { :action => :list }
-
-  def list
-    @item_pages, @items = paginate :items, :per_page => 10
+    @item_pages, @items = paginate :items
   end
 
   def show
@@ -21,12 +12,11 @@ class ItemsController < ApplicationController
   end
 
   def create
-    @item = Item.new(params[:item])
+    @item = Item.new(item_params)
     if @item.save
-      flash[:notice] = 'Item was successfully created.'
-      redirect_to :action => 'list'
+      redirect_to items_url, notice: 'Item was successfully created.'
     else
-      render :action => 'new'
+      render 'new'
     end
   end
 
@@ -36,16 +26,20 @@ class ItemsController < ApplicationController
 
   def update
     @item = Item.find(params[:id])
-    if @item.update_attributes(params[:item])
-      flash[:notice] = 'Item was successfully updated.'
-      redirect_to :action => 'show', :id => @item
+    if @item.update(item_params)
+      redirect_to @item, notice: 'Item was successfully updated.'
     else
-      render :action => 'edit'
+      render 'edit'
     end
   end
 
   def destroy
     Item.find(params[:id]).destroy
-    redirect_to :action => 'list'
+    redirect_to items_url
   end
+
+  private
+    def item_params
+      params.require(:item).permit(:code, :titlename, :img_url)
+    end
 end
