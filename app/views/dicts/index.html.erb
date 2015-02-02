@@ -1,0 +1,35 @@
+<h1>Listing dicts</h1>
+<%= search_form_for @q do |f| %>
+  <%= f.input :category_cont, 
+              label: 'Any word in Category',
+              required: false %>
+  <%= f.button :submit %>
+<% end %>
+<div>
+  <%= link_to 'New dict', new_dict_path %>
+</div>
+<%= paginate @dicts %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>category</th>
+      <th>code</th>
+      <th>title</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    <% for dict in @dicts %>
+      <tr>
+        <td><%= dict.category %></td>
+        <td><%= dict.code %></td>
+        <td><%= dict.title %></td>
+        <td><%= link_to 'Show', :action => 'show', :id => dict %></td>
+        <td><%= link_to 'Edit', :action => 'edit', :id => dict %></td>
+        <td><%= link_to 'Destroy', { :action => 'destroy', :id => dict }, :confirm => 'Are you sure?', :post => true %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @dicts %>

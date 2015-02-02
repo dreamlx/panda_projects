@@ -1,0 +1,13 @@
+<%= simple_form_for([@billing, @receive_amount]) do |f| %>
+  <p><label >Billing Number</label><br/>
+  <%= @billing.number %></p>
+
+  <p><label for="receive_amount_job_code">Job code</label><br/>
+  <input id="receive_amount_job_code" name="receive_amount[job_code]" size="30" type="text" value=<%=@billing.project.job_code%> /></p>
+  <%= f.input :created_on, as: :date, html5: true  %>
+  <%= f.input :updated_on, as: :date, html5: true  %>
+  <%= f.input :invoice_no  %></p>
+  <%= f.input :receive_date, as: :date, html5: true  %></p>
+  <%= f.input :receive_amount  %></p>
+  <%= f.button :submit %>
+<% end %>

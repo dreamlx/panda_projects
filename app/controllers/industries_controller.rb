@@ -1,6 +1,6 @@
 class IndustriesController < ApplicationController
   def index
-    @industry_pages, @industries = paginate :industries
+    @industries = Industry.page(params[:page])
   end
 
   def show
@@ -12,7 +12,7 @@ class IndustriesController < ApplicationController
   end
 
   def create
-    @industry = Industry.new(params[:industry])
+    @industry = Industry.new(industry_params)
     if @industry.save
       redirect_to industries_url, notice: 'Industry was successfully created.'
     else
@@ -26,7 +26,7 @@ class IndustriesController < ApplicationController
 
   def update
     @industry = Industry.find(params[:id])
-    if @industry.update(params[:industry])
+    if @industry.update(industry_params)
       redirect_to @industry, notice: 'Industry was successfully updated.'
     else
       render :action => 'edit'

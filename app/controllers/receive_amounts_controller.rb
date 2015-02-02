@@ -8,14 +8,15 @@ class ReceiveAmountsController < ApplicationController
   end
 
   def new
-    @billing = Billing.find(params[:id])
+    @billing = Billing.find(params[:billing_id])
     @receive_amount = ReceiveAmount.new
   end
 
   def create
-    @receive_amount = ReceiveAmount.new(receive_amount_params)
+    @billing = Billing.find(params[:billing_id])
+    @receive_amount = @billing.receive_amounts.build(receive_amount_params)
     if @receive_amount.save
-      redirect_to :controller => 'billings', :action =>'show', :id => @receive_amount.billing_id, notice: 'ReceiveAmount was successfully created.'
+      redirect_to @billing, notice: 'ReceiveAmount was successfully created.'
     else
       render 'new'
     end

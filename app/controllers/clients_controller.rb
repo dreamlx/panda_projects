@@ -1,54 +1,29 @@
 class ClientsController < ApplicationController
-
   def index
-    @client_pages, @clients = paginate :clients, :order_by => 'client_code'
-    @statuses = Dict.where("category ='client_status'")
+    @q = Client.ransack(params[:q])
+    @clients = @q.result.order('client_code').page(params[:page])
+    @statuses = Dict.where(category: 'client_status')
   end
   
   def new
-    @client         = Client.new
-    @industries     = Industry.all
-    @categories     = Dict.where("category ='client_category'").order("code")
-    @statuses       = Dict.where("category ='client_status'").order("code") 
-    @regions        = Dict.where("category ='region'".order("code")
-    @gender         = Dict.where("category ='gender'".order("code")
-    @account_owners = Person.order('english_name')                   
+    @client = Client.new                 
   end
-   def create
-    @client         = Client.new(client_params)
-    @industries     = Industry.find_all
-    @categories     = Dict.where(                                :conditions =>"category ='client_category'",                                :order =>"code")
-    @statuses       = Dict.where(                                :conditions =>"category ='client_status'",                                 :order =>"code") 
-    @regions        = Dict.where(                                :conditions =>"category ='region'",                                 :order =>"code")
-    @gender         = Dict.where(                                :conditions =>"category ='gender'",                                 :order =>"code")
-    @account_owners = Person.order('english_name')  
+
+  def create
+    @client = Client.new(client_params)
     if @client.save
       redirect_to clients_url
     else
-      render :action => 'new'
+      render 'new'
     end
   end
   
   def edit
-    @client         = Client.find(params[:id])
-    @industries     = Industry.all
-    @categories     = Dict.where("category ='client_category'").order("code")
-    @statuses       = Dict.where("category ='client_status'").order("code") 
-    @regions        = Dict.where("category ='region'").order("code")
-    @gender         = Dict.where("category ='gender'").order("code")
-    @account_owners = Person.order('english_name')                                                                                       
+    @client = Client.find(params[:id])                                                                                     
   end
-  
-  def search
-    @client = Client.new(client_params)
-    sql = "1"
-    sql += " and client_code like '%"+@client.client_code+"%' " if @client.client_code
-    sql += " and chinese_name like '%"+@client.chinese_name+"%' " if @client.chinese_name
-    if @client.client_code 
-      @clients = Client.where(sql)
-    else
-      redirect_to clients_url
-    end
+
+  def show
+    @client = Client.find(params[:id])
   end
 
   private

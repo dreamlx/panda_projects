@@ -1,0 +1,33 @@
+<h1>Listing clients</h1>
+<%= link_to 'New client', new_client_path %>
+<%= search_form_for @q do |f| %>
+  <%= f.input :chinese_name_or_english_name_or_client_code_cont, 
+              label: 'Any word or letter',
+              required: false %>
+  <%= f.button :submit %>
+<% end %>
+<%= paginate @clients %> 
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Client code</th>
+      <th>Chinese name</th>
+      <th>English name</th>
+      <th>Account Owner</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @clients.each do |client| %>
+      <tr>
+        <td><b><%= link_to client.client_code, client %></b></td>
+        <td><%= client.chinese_name %></td>
+        <td><%= client.english_name %></td>
+        <td><%= client.person.english_name if client.person %></td>
+        <td><%= link_to 'Edit', edit_client_path(client) %></td>
+        <td><%= link_to 'Destroy', client, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @clients %>

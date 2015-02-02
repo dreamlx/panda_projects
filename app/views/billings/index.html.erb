@@ -1,44 +1,29 @@
 <h1>Listing billings</h1>
-<table class="table table-striped">
-  <tr>
-    <th>Job code</th>
-    <th>Number</th>
-    <th>Billing_date</th>
-    <th>Amount</th>
-    <th>Outstanding</th>
-    <th>Service billing</th>
-    <th>Expense billing</th>
-    <th>Days of ageing</th>
-    <th>Business tax</th>
-    <th>Status</th>
-    <th>Collection days</th>
-    <th>Write off</th>
-    <th>Provision</th>
-    <th colspan="3">Operation</th>
-  </tr>
-  
-  <% @billings.each do |billing| %>
-    <tr>
-      <td><%= billing.project.job_code%></td>
-      <td><%= billing.number %></td>
-      <td><%= billing.billing_date %></td>
-      <td><%= billing.amount %></td>
-      <td><%= billing.outstanding %></td>
-      <td><%= billing.service_billing %></td>
-      <td><%= billing.expense_billing %></td>
-      <td><%= billing.days_of_ageing %></td>
-      <td><%= billing.business_tax %></td>
-      <td><%= billing.status == "0" ? "outstanding" : "received" %></td>
-      <td><%= billing.collection_days %></td>
-      <td><%= billing.write_off %></td>
-      <td><%= billing.provision %></td>
-      <td><%= link_to 'Show', billing %></td>
-      <td><%= link_to 'Edit', edit_billing_path(billing) if billing.status == '0'%></td>
-      <td><%= link_to 'Destroy', billing, method: :delete, data: {confirm: 'Are you sure ?'} if billing.status == '0' %></td>
-    </tr>
-  <% end %>
-</table>
-<%= paginate @billings %>
 <div>
   <%= link_to 'New billing', new_billing_path %>
 </div>
+<%= paginate @billings %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Job code</th>
+      <th>Number</th>
+      <th>Billing_date</th>
+      <th>Amount</th>
+      <th>Outstanding</th>
+      <th>Service billing</th>
+      <th>Expense billing</th>
+      <th>Days of ageing</th>
+      <th>Business tax</th>
+      <th>Status</th>
+      <th>Collection days</th>
+      <th>Write off</th>
+      <th>Provision</th>
+      <th colspan="2">Operation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render @billings %>
+  </tbody>
+</table>
+<%= paginate @billings %>

@@ -1,6 +1,6 @@
 class ContactsController < ApplicationController
   def index
-    @contact_pages, @contacts = paginate :contacts
+    @contacts = Contact.page(params[:page])
   end
 
   def show

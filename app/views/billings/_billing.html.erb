@@ -1,0 +1,17 @@
+<tr>
+  <td><%= billing.project.job_code%></td>
+  <td><%= link_to billing.number, billing %></td>
+  <td><%= billing.billing_date %></td>
+  <td><%= billing.amount %></td>
+  <td><%= billing.outstanding %></td>
+  <td><%= billing.service_billing %></td>
+  <td><%= billing.expense_billing %></td>
+  <td><%= billing.days_of_ageing %></td>
+  <td><%= billing.business_tax %></td>
+  <td><%= billing.status == "0" ? "outstanding" : "received" %></td>
+  <td><%= billing.collection_days %></td>
+  <td><%= billing.write_off %></td>
+  <td><%= billing.provision %></td>
+  <td><%= link_to 'Edit', edit_billing_path(billing) if billing.status == '0'%></td>
+  <td><%= link_to 'Destroy', billing, method: :delete, data: {confirm: 'Are you sure ?'} if billing.status == '0' %></td>
+</tr>

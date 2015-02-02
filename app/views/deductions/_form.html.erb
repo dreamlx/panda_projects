@@ -1,0 +1,12 @@
+<div class="col-md-6">
+  <%= simple_form_for @deduction do |f| %>
+    <%= f.input :service_PFA %>
+    <%= f.input :service_UFA %>
+    <%= f.input :service_billing %>
+    <%= f.input :expense_PFA %>
+    <%= f.input :expense_UFA %>
+    <%= f.input :expense_billing %>
+    <%= f.input :project_id, collection: Project.all %>
+    <%= f.button :submit %>
+  <% end %>
+</div>

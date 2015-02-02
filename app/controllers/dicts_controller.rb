@@ -1,12 +1,7 @@
 class DictsController < ApplicationController
   def index
-    @dict = Dict.new(dict_params)
-    if not (@dict.category =="" or @dict.category.nil?)
-      condition_sql = " category like '%#{@dict.category}%'"
-    else
-      condition_sql = " 1 "
-    end
-    @dict_pages, @dicts = paginate :dicts, :order_by => 'category', :conditions => condition_sql
+    @q = Dict.ransack(params[:q])
+    @dicts = @q.result.order(:category).page(params[:page])
   end
 
   def show
