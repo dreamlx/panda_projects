@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_filter :authorize, :except => [:login]
-  before_filter :configure_charsets
 
   def authorize
     unless session[:user_id]
@@ -52,7 +51,7 @@ class ApplicationController < ActionController::Base
       else
         sql_condition = "id = 0"
       end
-      now_period = Period.wehre(sql_condition ).first || Period.today_period
+      now_period = Period.where(sql_condition ).first || Period.today_period
       
       return now_period
     end
@@ -68,7 +67,7 @@ class ApplicationController < ActionController::Base
     end  
 
     def billing_number_set
-      @billing_number = Dict.find(category: 'billing_number')
+      @billing_number = Dict.find_by_category('billing_number')
       @number = @billing_number.code.to_i + 1
       
       if @number <10 

@@ -43,4 +43,8 @@ group :development, :test do
   gem 'spring'
 end
 
+gem 'kaminari'
+gem 'simple_form'
+gem 'country_select'
+gem 'bootstrap-sass', '~> 3.3.3'
 gem 'yaml_db', github: 'jetthoughts/yaml_db', ref: 'fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba', group: :development

@@ -1,4 +1,4 @@
-class LoginController < ApplicationController
+class UsersController < ApplicationController
   def add_user
     @people =Person.find(:all, :order => 'english_name')  
     if request.get?
@@ -46,23 +46,19 @@ class LoginController < ApplicationController
       logged_in_user = @user.try_to_login
       
       if logged_in_user
-        session[:user_id] = logged_in_user.person_id  
+        session[:user_id]       = logged_in_user.person_id  
         session[:login_user_id] = logged_in_user.id
-        session[:other1] = logged_in_user.other1
+        session[:other1]        = logged_in_user.other1
         
           
-        redirect_to(:action => "index")
+        redirect_to users_url
         #expense 在每月一号需要创建一个report_biding项目 100元
         #1判断当前period是否已经创建过update日志
         now_period = Period.today_period
-        unless Dict.find(:first, :conditions=>" title ='#{now_period.number}' ")
-          expense_log = Dict.new
-          expense_log.category = "expense_log"
-          expense_log.code = '1'
-          expense_log.title = now_period.number
-          expense_log.save
+        unless Dict.where(title: now_period.number).first
+          expense_log = Dict.create(category: "expense_log", code: '1', title: now_period.number)
           
-          projects = Project.find(:all,:include=>:status,:conditions=>" title = 'Active'")
+          projects = Project.includes(:status).where(title: 'Active')
           prj_count =0
           for project in projects
             if project.service_code.code.to_i >= 60 and project.service_code.code.to_i <=68
@@ -95,7 +91,7 @@ class LoginController < ApplicationController
     @periods = Period.order(:number)
     @now_period = get_now_period
     @last_login = Dict.new
-    @last_login = Dict.find(category: 'billing_number')
+    @last_login = Dict.find_by_category('billing_number')
 
     #billings number
     today = Time.now
@@ -106,7 +102,7 @@ class LoginController < ApplicationController
         flash[:notice] = "Today: you are the first login user"
       end
       #update_days_of_ageing
-      Billing.update_all("days_of_ageing= to_days(now()) - to_days(billing_date)"," status=0 ")
+      Billing.update_all(days_of_ageing: (to_days(now()) - to_days(billing_date)), status: 0)
     end
   end
   
@@ -117,6 +113,6 @@ class LoginController < ApplicationController
 
   private
     def user_params
-      params.require(:user).permit(:name, :person_id, :hashed_password, :auth, :other1, :other2)
+      params.require(:user).permit(:name, :person_id, :hashed_password, :auth, :other1, :other2, :password)
     end
 end

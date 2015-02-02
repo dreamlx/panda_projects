@@ -1,34 +1,17 @@
 class BillingsController < ApplicationController
-
   def index
-    id = params[:prj_id]
-    item_found =Billing.find(project_id: id)
-    if item_found.nil?
-      redirect_to :action => 'new',:id=> id
-    else
-      redirect_to :action => 'list',:id => id
-    end
-  end
-
-  def list
-  if not params[:id].nil?
-    @billing_pages, @billings = paginate( :billings, :conditions =>["project_id=?",params[:id]])
-  else
-    @billing_pages, @billings = paginate( :billings)
-  end                                            
+    @billings = Billing.page(params[:page])
   end
 
   def show
     @billing = Billing.find(params[:id])
-    @receive_amounts = ReceiveAmount.where(billing_id: @billing.id)
-    @num = @receive_amounts.count
     if @billing.status != '1'
       @billing_amount = ReceiveAmount.where(billing_id: @billing.id).sum(:receive_amount) || 0
       @billing.outstanding = @billing.amount - @billing_amount
       @billing.update(outstanding: @billing.outstanding)
       (@billing_amount == @billing.amount) ?  @billing.update(status: '1') : @billing.update(status: '0')
     else
-      @billing.outstanding =0
+      @billing.outstanding = 0
       @billing.update(outstanding: @billing.outstanding)
     end
   end
@@ -43,7 +26,7 @@ class BillingsController < ApplicationController
 
   def create
     @billing              = Billing.new(billing_params)
-    @billing_number       = Dict.find(category: 'billing_number')
+    @billing_number       = Dict.find_by_category('billing_number')
     @number               = @billing_number.code.to_i + 1
     @billing_number.code  = @number.to_s
         
@@ -54,7 +37,7 @@ class BillingsController < ApplicationController
     
     if @billing.save
       @billing_number.save
-      redirect_to :action => 'list', :id=> @billing.project_id, notice: "#{@billing.project.job_code} -- Billing was successfully updated."
+      redirect_to billings_url, id: @billing.project_id, notice: "#{@billing.project.job_code} -- Billing was successfully updated."
     else
       render 'new'
     end
@@ -93,7 +76,7 @@ class BillingsController < ApplicationController
 
   def destroy
     Billing.find(params[:id]).destroy
-    redirect_to :action => 'list',:id => params[:prj_id]
+    redirect_to billings_url
   end
 
   def search

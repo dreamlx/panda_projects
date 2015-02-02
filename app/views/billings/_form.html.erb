@@ -1,0 +1,26 @@
+<div class="col-md-6">
+  <%= simple_form_for(@billing, html: { class: 'form-horizontal' }, 
+        wrapper: :horizontal_form,
+        wrapper_mappings: {
+        check_boxes: :horizontal_radio_and_checkboxes,
+        radio_buttons: :horizontal_radio_and_checkboxes,
+        file: :horizontal_file_input,
+        boolean: :horizontal_boolean}) do |f| %>
+    <%= f.input :project_id, collection:  Project.all %>
+    <%= f.input :period_id, collection: Period.all %>
+    <%= f.input :person_id, collection: Person.all, label: 'Prepared by' %> 
+    <%= f.input :created_on, as: :date, html5: true  %>
+    <%= f.input :updated_on, as: :date, html5: true  %></p>
+    <%= f.input 'number'  %>
+    <%= f.input 'billing_date', as: :date, html5: true  %>
+    <%= f.input 'service_billing'  %>
+    <%= f.input 'expense_billing'  %>
+    <%= f.input 'days_of_ageing'  %>
+    <%= f.input 'business_tax'  %>
+    <%= f.input 'write_off'  %>
+    <%= f.input 'provision'  %>
+    <%= f.input :status, collection: [["Outstanding", "0"],["Received", "1"]] %>
+    <%= f.input :collection_days  %>
+    <%= f.button :submit %>
+  <% end %>
+</div>

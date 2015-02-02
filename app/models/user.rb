@@ -1,7 +1,8 @@
 class User < ActiveRecord::Base
   validates   :name,      presence: true, uniqueness: true
-  validates   :password,  presence: true
   belongs_to  :person
+
+  attr_accessor :password
   
   def before_create
     self.hashed_password = User.hash_password(self.password)
