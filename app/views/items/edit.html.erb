@@ -1,9 +1,6 @@
 <h1>Editing item</h1>
-
-<%= start_form_tag :action => 'update', :id => @item %>
-  <%= render :partial => 'form' %>
-  <%= submit_tag 'Edit' %>
-<%= end_form_tag %>
-
-<%= link_to 'Show', :action => 'show', :id => @item %> |
-<%= link_to 'Back', :action => 'list' %>
+<%= render 'form' %>
+<div class="col-md-12">
+  <%= link_to 'Show', @item %> |
+  <%= link_to 'Back', items_url %>
+</div>

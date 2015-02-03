@@ -3,23 +3,25 @@
   <%= link_to 'New item', :action => 'new' %>
 </div>
 <table class="table table-striped">
-  <tr>
-  <% for column in Item.content_columns %>
-    <th><%= column.human_name %></th>
-  <% end %>
-  <th colspan="3">Operation</th>
-  </tr>
-  
-  <% for item in @items %>
+  <thead>
     <tr>
-    <% for column in Item.content_columns %>
-      <td><%=h item.send(column.name) %></td>
-    <% end %>
-      <td><%= link_to 'Show', item %></td>
-      <td><%= link_to 'Edit', edit_item_path(item) %></td>
-      <td><%= link_to 'Destroy', item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+      <th>code</th>
+      <th>titlename</th>
+      <th>img_url</th>
+      <th colspan="2">Operation</th>
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <% @items.each do |item| %>
+      <tr>
+        <td><%= link_to item.code, item %></td>
+        <td><%= item.titlename %></td>
+        <td><%= item.img_url %></td>
+        <td><%= link_to 'Edit', edit_item_path(item) %></td>
+        <td><%= link_to 'Destroy', item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 
 <%= paginate @items %>

@@ -1,0 +1,16 @@
+<tr>
+  <td><%= link_to expense.project.job_code, expense.project if expense.project %></td>
+  <td><%= expense.commission %></td>
+  <td><%= expense.outsourcing %></td>
+  <td><%= expense.tickets %></td>
+  <td><%= expense.courrier %></td>
+  <td><%= expense.postage %></td>
+  <td><%= expense.stationery %></td>
+  <td><%= expense.report_binding %></td>
+  <td><%= expense.cash_advance %></td>
+  <td><%= expense.payment_on_be_half %></td>
+  <td><%= expense.memo %></td>
+  <td><%= link_to ('View'), expense %></td>
+  <td><%= link_to ('Edit'), edit_expense_path(expense) %></td>
+  <td><%= link_to ('Destroy'), expense, data: {confirm: 'Are you sure?'}, method: :delete %></td>
+</tr>

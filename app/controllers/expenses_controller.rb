@@ -1,32 +1,7 @@
 class ExpensesController < ApplicationController
   def index
-    @col_lists  = %w[commission outsourcing tickets courrier postage stationery report_binding cash_advance payment_on_be_half ]
-    @col_list   = params[:col_list]
-    
-    @expense = Expense.new(expense_params)
-    @expense.project_id = params[:prj_id] unless params[:prj_id].blank?
-    @period_from = Expense.new(params[:period_from])
-    @period_to = Expense.new(params[:period_to])
-
-    str_order =" periods.number desc,expenses.updated_on desc "
-    sql =" 1 "
-    sql += " and project_id =#{ @expense.project_id} " unless @expense.project_id.nil?
-    sql += " and memo like '%#{ @expense.memo}%' " unless @expense.memo.nil?
-    sql += " and periods.number >='#{ @period_from.period.number}' " unless (@period_from.period_id.nil? or @period_from.period.nil?)
-    sql += " and periods.number <='#{ @period_to.period.number}' " unless (@period_to.period_id.nil? or @period_to.period.nil?)
-    sql += " and not #{@col_list} = 0 " if @col_list != "" and @col_list != nil
-    @temp = sql
-    @sum_expense = Expense.new
-    @sum_expense.cash_advance       = Expense.sum(:cash_advance,      :include => :period,:conditions=>sql)
-    @sum_expense.commission         = Expense.sum(:commission,        :include => :period,:conditions=>sql)
-    @sum_expense.courrier           = Expense.sum(:courrier,          :include => :period,:conditions=>sql)
-    @sum_expense.outsourcing        = Expense.sum(:outsourcing,       :include => :period,:conditions=>sql)
-    @sum_expense.payment_on_be_half = Expense.sum(:payment_on_be_half,:include => :period,:conditions=>sql)
-    @sum_expense.postage            = Expense.sum(:postage,           :include => :period,:conditions=>sql)
-    @sum_expense.report_binding     = Expense.sum(:report_binding,    :include => :period,:conditions=>sql)
-    @sum_expense.stationery         = Expense.sum(:stationery,        :include => :period,:conditions=>sql)
-    @sum_expense.tickets            = Expense.sum(:tickets,           :include => :period,:conditions=>sql)
-    @expenses = Expense.paginate  :page => params[:page], :order=>str_order,      :include => :period,      :conditions => sql
+    @q = Expense.ransack(params[:q])
+    @expenses = @q.result.includes(:project, :period).order(updated_on: :desc).page(params[:page])
   end
 
   def show

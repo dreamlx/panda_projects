@@ -1,0 +1,22 @@
+<%= search_form_for(@q) do |f| %>
+  <%= f.input :project_id_eq, 
+              collection: Project.order(:job_code),
+              required: false %>
+  <%= f.input :period_number_gteq, 
+              collection: Period.order(:number), 
+              label: 'Period From',
+              as: :date,
+              html5: true,
+              required: false %>
+  <%= f.input :period_number_lteq, 
+              collection: Period.order(:number), 
+              label: 'Period To',
+              as: :date,
+              html5: true,
+              required: false %>
+  <%= f.input :commission_or_outsourcing_or_tickets_or_courrier_or_postage_or_stationery_or_report_binding_or_cash_advance_or_payment_on_be_half_cont,
+              required: false %>
+  <%= f.input :memo_cont,
+              required: false %>
+  <%= f.button :submit %>
+<% end %>

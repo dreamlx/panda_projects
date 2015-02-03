@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   resources :dicts
   resources :industries
   resources :items
+  resources :expenses
 
   # Example resource route with options:
   #   resources :products do

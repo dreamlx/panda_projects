@@ -1,0 +1,19 @@
+<div class="col-md-6">
+  <%= simple_form_for @expense do |f| %>
+    <%= f.input :project_id, collection: Project.order(:job_code) %>
+    <%= f.input :period_id, collection: Period.order(:number) %>
+    <%= f.input :created_on, as: :date, html5: true %>
+    <%= f.input :updated_on, as: :date, html5: true %>
+    <%= f.input :commission %>
+    <%= f.input :outsourcing %>
+    <%= f.input :tickets %>
+    <%= f.input :courrier %>
+    <%= f.input :postage %>
+    <%= f.input :stationery %>
+    <%= f.input :report_binding %>
+    <%= f.input :cash_advance %>
+    <%= f.input :payment_on_be_half %>
+    <%= f.input :memo %>
+    <%= f.button :submit %>
+  <% end %>
+</div>

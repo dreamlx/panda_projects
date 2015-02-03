@@ -1,13 +1,8 @@
-<%= error_messages_for 'item' %>
-
-<!--[form:item]-->
-<p><label for="item_code">Code</label><br/>
-<%= text_field 'item', 'code'  %></p>
-
-<p><label for="item_titlename">Titlename</label><br/>
-<%= text_field 'item', 'titlename'  %></p>
-
-<p><label for="item_img_url">Img url</label><br/>
-<%= text_field 'item', 'img_url'  %></p>
-<!--[eoform:item]-->
-
+<div class="col-md-6">
+  <%= simple_form_for @item do |f| %>
+    <%= f.input 'code'  %></p>
+    <%= f.input 'titlename'  %></p>
+    <%= f.input 'img_url'  %></p>
+    <%= f.button :submit %>
+  <% end %>
+</div>
