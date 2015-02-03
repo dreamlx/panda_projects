@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   def index
-    @item_pages, @items = paginate :items
+    @items = Item.page(params[:page])
   end
 
   def show
