@@ -20,11 +20,20 @@ Rails.application.routes.draw do
   end
   resources :clients
   resources :deductions
-  resources :projects
-  resources :dicts
+  resources :projects do
+    post :close, on: :member
+  end
+  resources :dicts, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :industries
   resources :items
   resources :expenses
+  resources :initialfees
+  resources :personalcharges
+  resources :reports
+  resources :people
+  resources :periods
+  resources :prj_expense_logs, only: [:index, :destroy]
+  resources :ufafees
 
   # Example resource route with options:
   #   resources :products do

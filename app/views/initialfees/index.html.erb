@@ -1,0 +1,28 @@
+<h1>Listing initialfees</h1>
+<%= paginate @initialfees %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Job code</th>
+      <th>Fees</th>
+      <th>Commission</th>
+      <th>Outsourcing</th>
+      <th>Reimbursement</th>
+      <th>Meal allowance</label></th>
+      <th>Travel allowance</label></th>
+      <th>Business tax</label></th>
+      <th>Tickets</label></th>
+      <th>Courrier</label></th>
+      <th>Postage</label></th>
+      <th>Stationery</label></th>
+      <th>Report Binding</label></th>
+      <th>Payment on be half</label></th>
+      <th colspan="3">Operation</th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    <%= render @initialfees %>
+  </tbody>
+</table>
+<%= paginate @initialfees %>

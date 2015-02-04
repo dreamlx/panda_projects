@@ -1,0 +1,13 @@
+<div class="col-md-6">
+  <%= simple_form_for @ufafee do |f| %>
+    <%= f.input :project_id, collection: Project.all %>
+    <%= f.input :period_id, collection: Period.all %>
+    <%= f.input :created_on, as: :date, html5: true  %>
+    <%= f.input :updated_on, as: :date, html5: true  %>
+    <%= f.input :number, disabled: true  %>
+    <%= f.input :amount, disabled: true  %>
+    <%= f.input :service_UFA  %>
+    <%= f.input :expense_UFA  %>
+    <%= f.button :submit  %>
+  <% end %>
+</div>

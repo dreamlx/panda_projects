@@ -1,16 +1,6 @@
 class InitialfeesController < ApplicationController
   def index
-    id = params[:prj_id]
-    item_found=Initialfee.find(project_id: id)
-    if item_found.nil?     
-      redirect_to :action => 'new', :id =>id
-    else
-      redirect_to :action => 'show', :id =>item_found
-    end
-  end
-
-  def list
-    @initialfee_pages, @initialfees = paginate  :initialfees, :joins =>"inner join projects on initialfees.project_id = projects.id ", :order_by => "projects.job_code"                                 
+    @initialfees = Initialfee.joins("inner join projects on initialfees.project_id = projects.id ").order("projects.job_code").page(params[:page])
   end
 
   def show
@@ -18,7 +8,6 @@ class InitialfeesController < ApplicationController
   end
 
   def new
-    init_set 
     @initialfee = Initialfee.new(project_id: params[:id])
   end
 
@@ -27,12 +16,11 @@ class InitialfeesController < ApplicationController
     if @initialfee.save
       redirect_to @initialfee, notice: 'Initialfee was successfully created.'
     else
-      render :action => 'new'
+      render 'new'
     end
   end
 
   def edit
-    init_set
     @initialfee = Initialfee.find(params[:id])
   end
 
@@ -41,7 +29,7 @@ class InitialfeesController < ApplicationController
     if @initialfee.update(initialfee_params)
       redirect_to @initialfee, notice: 'Initialfee was successfully updated.'
     else
-      render :action => 'edit'
+      render 'edit'
     end
   end
 

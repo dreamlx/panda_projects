@@ -15,7 +15,7 @@
       <th>category</th>
       <th>code</th>
       <th>title</th>
-      <th colspan="3"></th>
+      <th colspan="2"></th>
     </tr>
   </thead>
   
@@ -25,7 +25,6 @@
         <td><%= dict.category %></td>
         <td><%= dict.code %></td>
         <td><%= dict.title %></td>
-        <td><%= link_to 'Show', :action => 'show', :id => dict %></td>
         <td><%= link_to 'Edit', :action => 'edit', :id => dict %></td>
         <td><%= link_to 'Destroy', { :action => 'destroy', :id => dict }, :confirm => 'Are you sure?', :post => true %></td>
       </tr>

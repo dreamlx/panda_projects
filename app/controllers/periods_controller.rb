@@ -1,6 +1,6 @@
 class PeriodsController < ApplicationController
   def index
-    @periods = Period.paginate  :page => params[:page], :order=>"number"
+    @periods = Period.order(:number).page(params[:page])
   end
 
   def show

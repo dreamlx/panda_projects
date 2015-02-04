@@ -1,0 +1,40 @@
+<h1>Listing ufafees</h1>
+<%= link_to 'New ufafee', :action => 'new' %>
+<%= search_form_for @q do |f| %>
+  <%= f.input :number_cont,
+              required: false %>
+  <%= f.button :submit %>
+<% end %>
+<%= paginate @ufafees %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Job code</th>
+      <th>Period</th>
+      <th>created_on</th>
+      <th>updated_on</th>
+      <th>number</th>
+      <th>amount</th>
+      <th>service_UFA</th>
+      <th>expense_UFA</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for ufafee in @ufafees %>
+      <tr>
+        <td><%= ufafee.project.job_code %></td>
+        <td><%= ufafee.period.number %></td>
+        <td><%= ufafee.created_on %></td>
+        <td><%= ufafee.updated_on %></td>
+        <td><%= link_to ufafee.number, ufafee %></td>
+        <td><%= ufafee.amount %></td>
+        <td><%= ufafee.service_UFA %></td>
+        <td><%= ufafee.expense_UFA %></td>
+        <td><%= link_to 'Edit', edit_ufafee_path(ufafee) if ufafee.project.status.title == 'Active'%></td>
+        <td><%= link_to 'Destroy', ufafee, method: :delete, data: {confirm: 'Are you sure?'} if ufafee.project.status.title == 'Active'%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @ufafees %>

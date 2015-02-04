@@ -1,15 +1,7 @@
 class ProjectsController < ApplicationController
   def index
-    @project = Project.new(project_params)
-    @client = Client.new(params[:client])
-    str_order = 'projects.status_id,job_code'
-    str_status = " and title = 'Active' "
-    sql = ' 1 '
-    sql += " and english_name like '%#{@client.english_name}%' " unless (@client.english_name.nil? or @client.english_name.blank?)
-    sql += " and partner_id = #{@project.partner_id} " unless @project.partner_id == 0 or @project.partner_id.nil?
-    sql += " and manager_id = #{@project.manager_id} " unless @project.manager_id == 0 or @project.manager_id.nil?
-    sql += " and job_code like '%#{@project.job_code}%' " unless @project.job_code.nil? or @project.job_code.blank?
-    @projects = Project.paginate  :page => params[:page], :order=>str_order, :include =>[:status,:client],      :conditions=>sql    
+    @q = Project.search(params[:q])
+    @projects = @q.result.includes(:status, :client, :partner, :manager).order(created_on: :desc ).page(params[:page])
   end
 
   def show
@@ -265,7 +257,7 @@ class ProjectsController < ApplicationController
       @service_balance = service_total_charges - service_PFA - service_billing - service_UFA
       @expense_balance = expense_total_charges - expense_PFA - expense_billing - expense_UFA
       
-      return (@service_balance <1 and @service_balance >-1 ) and (@expense_balance <1  and @expense_balance >-1 )#为0 允许close
+      return ((@service_balance <1 and @service_balance >-1 ) and (@expense_balance <1  and @expense_balance >-1 ))#为0 允许close
     end
 
     def project_params

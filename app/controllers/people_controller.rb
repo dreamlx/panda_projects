@@ -1,12 +1,7 @@
 class PeopleController < ApplicationController
-  def index 
-    @person = Person.new(person_params) 
-    sql_condition = " 1 "
-    sql_condition +=" and employee_number like '%#{@person.employee_number}%'" unless @person.employee_number.blank?
-    sql_condition +=" and id = #{params[:person_id]}" unless params[:person_id].to_s == ''
-    
-    @sql = sql_condition
-    @person_pages, @people = paginate :people,      :conditions=>sql_condition,      :order_by => "employee_number" 
+  def index
+    @q = Person.ransack(params[:q])
+    @people = @q.result.order(:employee_number).page(params[:page])
   end
 
   def create
@@ -33,25 +28,15 @@ class PeopleController < ApplicationController
   end
   
   def new
-    @person       = Person.new
-    @dicts        = Dict.where("category ='GMU'")    
-    @status       = Dict.where("category ='person_status'")
-    @gender       = Dict.where("category ='gender'")
-    @departments  = Dict.where("category ='department'")                      
+    @person       = Person.new                    
   end
   
   def edit
-    @person       = Person.find(@params[:id])
-    @dicts        = Dict.where("category ='GMU'")    
-    @status       = Dict.where("category ='person_status'")
-    @gender       = Dict.where("category ='gender'")
-    @departments  = Dict.where("category ='department'") 
+    @person       = Person.find(params[:id])
   end
   
   def show
-    @person       = Person.find(@params[:id])
-    @dicts        = Dict.where("category ='GMU'")    
-    @status       = Dict.where("category ='person_status'")
+    @person       = Person.find(params[:id])
   end
 
   private

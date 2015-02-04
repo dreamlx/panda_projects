@@ -55,16 +55,6 @@ class ApplicationController < ActionController::Base
       
       return now_period
     end
-    
-    def init_set
-      prj_status = Dict.find_by_title_and_category("Active","prj_status")
-      person_status = Dict.find_by_title_and_category("Resigned","person_status")
-      @people = Person.where("status_id != '#{person_status.id}' ").order('english_name')
-       
-      @projects = Project.where(" status_id =#{prj_status.id}").order('job_code')
-      @periods = Period.order('number DESC') 
-      
-    end  
 
     def billing_number_set
       @billing_number = Dict.find_by_category('billing_number')

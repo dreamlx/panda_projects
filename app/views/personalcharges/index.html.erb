@@ -1,0 +1,23 @@
+<h1>Listing personalcharges</h1>
+<div>
+  <%= link_to 'New personalcharge', new_personalcharge_path  %>
+</div>
+<%= render 'search' %>
+<%= paginate @personalcharges %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Job code</th>
+      <th>Employee name</th> 
+      <th>Period</th>  
+      <% for column in Personalcharge.content_columns %>
+        <th><%= column.human_name %></th>
+      <% end %>
+      <th colspan="3">Operation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render @personalcharges %>
+  </tbody>
+</table>
+<%= paginate @personalcharges %>

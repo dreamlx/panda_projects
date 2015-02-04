@@ -1,0 +1,19 @@
+<h1>Listing prj_expense_logs</h1>
+<%= paginate @prj_expense_logs %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>other</th>
+      <th>Operation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for prj_expense_log in @prj_expense_logs %>
+      <tr>
+        <td><%= prj_expense_log.other %></td>
+        <td><%= link_to 'Destroy', prj_expense_log_path(prj_expense_log, page: params[:page]), method: :delete, data: {confirm: 'Are you sure?'} %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @prj_expense_logs %>

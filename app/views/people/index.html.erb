@@ -1,0 +1,38 @@
+<h1>Listing people</h1>
+<div>
+  <%= link_to 'New person', new_person_path %>
+</div>
+<%= search_form_for(@q) do |f| %>
+  <%= f.input :english_name_eq,
+              collection: Person.pluck(:english_name),
+              required: false %>
+  <%= f.input :employee_number_cont,
+              required: false %>
+  <%= f.button :submit %>
+<% end %>
+
+<%= paginate @people %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Employee number</th>
+      <th>Chinese name</th>
+      <th>English name</th>
+      <th>Charge rate</th>
+      <th colspan="2">Operation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @people.each do |person| %>
+      <tr>
+        <td><%= link_to person.employee_number, person %></td>
+        <td><%= person.chinese_name%></td>
+        <td><%= person.english_name%></td>
+        <td><%=person.charge_rate%></td>
+        <td><%= link_to 'Edit', edit_person_path(person) %></td>
+        <td><%= link_to 'Destroy', person, method: :delete, data: {:confirm => 'Are you sure?'} %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @people %>

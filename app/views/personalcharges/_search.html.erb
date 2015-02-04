@@ -1,0 +1,19 @@
+<%= search_form_for(@q) do |f| %>
+  <%= f.input :person_english_name_eq, 
+              collection: Person.pluck(:english_name),
+              required: false %>
+  <%= f.input :project_job_code_eq, 
+              collection: Project.order(:job_code).pluck(:job_code),
+              required: false %>
+  <%= f.input :period_number_gteq, 
+              as: :date,
+              html5: true,
+              required: false,
+              label: 'Period From' %>
+  <%= f.input :period_number_lteq, 
+              as: :date,
+              html5: true,
+              required: false,
+              label: 'Period To' %>
+  <%= f.button :submit %>
+<% end %>

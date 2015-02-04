@@ -1,0 +1,8 @@
+<% for column in Ufafee.content_columns %>
+<p>
+  <b><%= column.human_name %>:</b> <%=h @ufafee.send(column.name) %>
+</p>
+<% end %>
+
+<%= link_to 'Edit', edit_ufafee_path(@ufafee) if @ufafee.project.status.title == 'Active'%> |
+<%= link_to 'Back', ufafees_url %>

@@ -1,0 +1,19 @@
+<tr>
+  <td><%= initialfee.project.job_code %></td>
+  <td><%= initialfee.service_fee %></td>
+  <td><%= initialfee.commission %></td>
+  <td><%= initialfee.outsourcing %></td>
+  <td><%= initialfee.reimbursement %></td>
+  <td><%= initialfee.meal_allowance %></td>
+  <td><%= initialfee.travel_allowance  %></td>
+  <td><%= initialfee.business_tax %></td>
+  <td><%= initialfee.tickets %></td>
+  <td><%= initialfee.courrier %></td>
+  <td><%= initialfee.postage %></td>
+  <td><%= initialfee.stationery %></td>
+  <td><%= initialfee.report_binding %></td>    
+  <td><%= initialfee.payment_on_be_half %></td>
+  <td><%= link_to 'Show', initialfee %></td>
+  <td><%= link_to 'Edit', edit_initialfee_path(initialfee) if initialfee.project.status.title == 'Active'%></td>
+  <td><%= link_to 'Destroy', initialfee, method: :delete, data: {confirm: 'Are you sure?'} if initialfee.project.status.title == 'Active'%></td>
+</tr>
