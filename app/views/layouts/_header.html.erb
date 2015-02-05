@@ -19,7 +19,7 @@
           <li class="<%= 'active' if params[:controller] == 'clients' %>"><%= link_to t('clients'), clients_path %></li>
           <li class="<%= 'active' if params[:controller] == 'reports' %>"><%= link_to t('reports'), reports_path %></li>
           <li class="<%= 'active' if params[:controller] == 'projects' %>"><%= link_to t('projects'), projects_url %></li>
-          <li class="<%= 'active' if params[:controller] == 'initialfees_url' %>"><%= link_to t('initialfees'), initialfees_url %></li>
+          <li class="<%= 'active' if params[:controller] == 'initialfees' %>"><%= link_to t('initialfees'), initialfees_url %></li>
           <li class="<%= 'active' if params[:controller] == 'deductions' %>"><%= link_to t('deductions'), deductions_url %></li>
           <li class="<%= 'active' if params[:controller] == 'people' %>"><%= link_to t('people'), people_url %></li>
           <li class="<%= 'active' if params[:controller] == 'ufafees' %>"><%= link_to t('ufafees'), ufafees_url %></li>
@@ -31,7 +31,7 @@
               <li class="<%= 'active' if params[:controller] == 'prj_expense_logs' %>"><%= link_to t('prj_expense_logs'), prj_expense_logs_url %></li>
               <li class="<%= 'active' if params[:controller] == 'periods' %>"><%= link_to t('periods'), periods_path %></li>
               <li class="<%= 'active' if params[:controller] == 'users' %>"><%= link_to 'user&password', users_path %></li>
-              <li><a href="/login/logout">Logout</a></li>
+              <li><%= link_to 'Logout', logout_users_url, method: :post %></li>
             </ul>
           </li>
         </ul>

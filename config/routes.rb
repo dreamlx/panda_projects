@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :users do
     get :login, on: :collection
     post :login, on: :collection
+    post :logout, on: :collection
   end
 
   # Example of named route that can be invoked with purchase_url(id: product.id)

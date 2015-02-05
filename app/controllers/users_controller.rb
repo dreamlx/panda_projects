@@ -102,7 +102,7 @@ class UsersController < ApplicationController
         flash[:notice] = "Today: you are the first login user"
       end
       #update_days_of_ageing
-      Billing.update_all(days_of_ageing: (to_days(now()) - to_days(billing_date)), status: 0)
+      Billing.update_all(days_of_ageing: (to_days(Time.now()) - to_days(billing_date)), status: 0)
     end
   end
   
