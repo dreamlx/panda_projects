@@ -1,0 +1,11 @@
+<tr>
+  <td><%= link_to project.job_code, project %></td>
+  <td><%= project.created_on.to_date %></td>
+  <td><%= project.client.english_name if project.client %></td>      
+  <td><%= project.partner.english_name if project.partner %></td>
+  <td><%= project.manager.english_name if project.manager %></td>
+  <td><%= project.status.title if project.status %></td>
+  <td><%= project.description %></td>
+  <td><%= link_to ('Edit'), edit_project_path(project) if project.status && project.status.code == '1'%></td>
+  <td><%= link_to ('Close'), close_project_path(project), data: {confirm: ('Are you sure?')},method: :post if project.status && project.status.code == '1' %></td>
+</tr>

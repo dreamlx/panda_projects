@@ -23,7 +23,7 @@ class ProjectsController < ApplicationController
       if (@project.service_code.code.to_i < 60 || @project.service_code.code.to_i >68) && @project.service_code.code.to_i != 100
         add_expense_observer(@project.job_code,250,"if prj code not in 60-68,then add 250")
       end
-      redirect_to project_url(@project), notice: _('%s was successfully created.', Project.human_name)
+      redirect_to @project, notice: 'Project was successfully created.'
     else
       render :action => "new"
     end

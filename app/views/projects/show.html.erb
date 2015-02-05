@@ -1,91 +1,113 @@
-      <% @admin = get_role(session[:user_id],'admin') %>
-      <% partner = get_role(session[:user_id],'partner') %>
-      <% manager = get_role(session[:user_id],'manager') %>
-	  <% if @admin %>
-<% if @project.status.title == 'Active' %>
-<%= link_to 'Initialfee|',           :controller => 'initialfees',       :prj_id => @project %>
-<%= link_to 'InitialDeduction|',     :controller => 'deductions',        :prj_id => @project %>
-<%#= link_to 'Outsourcing',          :controller => 'outsourcings',      :prj_id => @project %>
-<%#= link_to 'Commission',           :controller => 'commissions',       :prj_id => @project %>
-<%= link_to 'Billing|',              :controller => 'billings',          :prj_id => @project %>
-<%= link_to 'Expense|',              :controller => 'expenses',          :prj_id => @project %>
-<%= link_to 'PersonalCharges',      :controller => 'personalcharges',   :prj_id => @project %>
-<% end %>
-<% end %>
-<hr/>
-<fieldset>
-  <p>
-    <label for="Project_contract_number"><%= Project.human_attribute_name("contract_number") %></label>
-    <%=h @project.contract_number %>
-  </p>
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Main</h3>
+      </div>
+      <div class="panel-body">
+        <dl class="dl-horizontal">
+          <dt><%= t('contract_number') %></dt>
+          <dd><%= @project.contract_number %></dd>
 
-  <p>
-    <label for="Project_job_code"><%= Project.human_attribute_name("job_code") %></label>
-    <%=h @project.job_code %>
-  </p>
+          <dt><%= t('client') %></dt>
+          <dd><%= @project.client.english_name if @project.client %></dd>
 
-  <p>
-    <label for="Project_description"><%= Project.human_attribute_name("description") %></label>
-    <%=h @project.description %>
-  </p>
+          <dt><%= t('GMU') %></dt>
+          <dd><%= @project.GMU.title if @project.GMU %></dd>
 
-  <p>
-    <label for="Project_starting_date"><%= Project.human_attribute_name("starting_date") %></label>
-    <%=h @project.starting_date %>
-  </p>
+          <dt><%= t('description') %></dt>
+          <dd><%= @project.description %></dd>
 
-  <p>
-    <label for="Project_ending_date"><%= Project.human_attribute_name("ending_date") %></label>
-    <%=h @project.ending_date %>
-  </p>
+          <dt><%= t('service') %></dt>
+          <dd><%= @project.service.title if @project.service %></dd>
 
-  <p>
-    <label for="Project_estimated_annual_fee"><%= Project.human_attribute_name("estimated_annual_fee") %></label>
-    <%=h @project.estimated_annual_fee %>
-  </p>
+          <dt><%= t('revenue') %></dt>
+          <dd><%= @project.revenue.title if @project.revenue %></dd>
 
-  <p>
-    <label for="Project_contracted_service_fee"><%= Project.human_attribute_name("contracted_service_fee") %></label>
-    <%=h @project.contracted_service_fee %>
-  </p>
+          <dt><%= t('starting_date') %></dt>
+          <dd><%= @project.starting_date %></dd>
 
-  <p>
-    <label for="Project_estimated_commision"><%= Project.human_attribute_name("estimated_commision") %></label>
-    <%=h @project.estimated_commision %>
-  </p>
+          <dt><%= t('ending_date') %></dt>
+          <dd><%= @project.ending_date %></dd>
 
-  <p>
-    <label for="Project_estimated_outsorcing"><%= Project.human_attribute_name("estimated_outsorcing") %></label>
-    <%=h @project.estimated_outsorcing %>
-  </p>
+          <dt><%= t('estimated_annual_fee') %></dt>
+          <dd><%= @project.estimated_annual_fee %></dd>
 
-  <p>
-    <label for="Project_budgeted_service_fee"><%= Project.human_attribute_name("budgeted_service_fee") %></label>
-    <%=h @project.budgeted_service_fee %>
-  </p>
+          <dt><%= t('risk') %></dt>
+          <dd><%= @project.risk.title if @project.risk %></dd>
 
-  <p>
-    <label for="Project_service_PFA"><%= Project.human_attribute_name("service_PFA") %></label>
-    <%=h @project.service_PFA %>
-  </p>
+          <dt><%= t('status') %></dt>
+          <dd><%= @project.status.title if @project.status %></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
 
-  <p>
-    <label for="Project_expense_PFA"><%= Project.human_attribute_name("expense_PFA") %></label>
-    <%=h @project.expense_PFA %>
-  </p>
 
-  <p>
-    <label for="Project_contracted_expense"><%= Project.human_attribute_name("contracted_expense") %></label>
-    <%=h @project.contracted_expense %>
-  </p>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Estimated and Budgeted</h3>
+      </div>
+      <div class="panel-body">
+        <dl class="dl-horizontal">
+          <dt><%= t('partner') %></dt>
+          <dd><%= @project.partner.english_name if @project.partner %></dd>
 
-  <p>
-    <label for="Project_budgeted_expense"><%= Project.human_attribute_name("budgeted_expense") %></label>
-    <%=h @project.budgeted_expense %>
-  </p>
+          <dt><%= t('manager') %></dt>
+          <dd><%= @project.manager.english_name if @project.manager %></dd>
 
-</fieldset>
-<%if @project.status.code == '1'%>
-<%= link_to _('Edit'), edit_project_path(@project) if @admin%> |
-<%end%>
-<%= link_to _('Back'), projects_path %>
+          <dt><%= t('referring') %></dt>
+          <dd><%= @project.referring.english_name if @project.referring %></dd>
+
+          <dt><%= t('contracted_service_fee') %></dt>
+          <dd><%= @project.contracted_service_fee %></dd>
+
+          <dt><%= t('estimated_commision') %></dt>
+          <dd><%= @project.estimated_commision %></dd>
+
+          <dt><%= t('estimated_outsorcing') %></dt>
+          <dd><%= @project.estimated_outsorcing %></dd>
+
+          <dt><%= t('budgeted_service_fee') %></dt>
+          <dd><%= @project.budgeted_service_fee %></dd>
+
+          <dt><%= t('service_PFA') %></dt>
+          <dd><%= @project.service_PFA %></dd>
+
+          <dt><%= t('expense_PFA') %></dt>
+          <dd><%= @project.expense_PFA %></dd>
+
+          <dt><%= t('contracted_expense') %></dt>
+          <dd><%= @project.contracted_expense %></dd>
+
+          <dt><%= t('budgeted_expense') %></dt>
+          <dd><%= @project.budgeted_expense %></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Billing Responsibility</h3>
+      </div>
+      <div class="panel-body">
+        <dl class="dl-horizontal">
+          <dt><%= t('billing_partner') %></dt>
+          <dd><%= @project.billing_partner.english_name if @project.billing_partner %></dd>
+
+          <dt><%= t('billing_manager') %></dt>
+          <dd><%= @project.billing_manager.english_name if @project.billing_manager %></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <%= link_to t('edit'), edit_project_path(@project) if @project.status && @project.status.code == '1' %> ||
+    <%= link_to t('back'), projects_path %>
+  </div>
+</div>

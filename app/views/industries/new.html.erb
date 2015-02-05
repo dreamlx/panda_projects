@@ -1,5 +1,18 @@
-<h1>New industry</h1>
-<%= render 'form' %>
-<div>
-  <%= link_to 'Back', industries_url %>
+<%= simple_form_for(@industry, html: { class: 'form-horizontal' }, 
+    wrapper: :horizontal_form,
+    wrapper_mappings: {
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean}) do |f| %>
+  <div class="col-md-6">
+    <%= f.input 'code' %>
+    <%= f.input 'title' %>
+  </div>
+  <div class="col-md-12">
+    <%= f.button :submit %>
+  </div>
+<% end %>
+<div class="col-md-12">
+  <%= link_to t('back'), industries_path %>
 </div>

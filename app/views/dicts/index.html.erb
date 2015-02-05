@@ -1,34 +1,32 @@
-<h1>Listing dicts</h1>
-<%= search_form_for @q do |f| %>
-  <%= f.input :category_cont, 
-              label: 'Any word in Category',
-              required: false %>
-  <%= f.button :submit %>
-<% end %>
-<div>
-  <%= link_to 'New dict', new_dict_path %>
+<div class="row">
+  <div class="col-md-3">
+    <h3>Dict list</h3>
+    <%= link_to 'new_dict', new_dict_path, class: 'btn btn-danger' %>
+    <hr>
+    <div class="well">
+      <%= search_form_for(@q) do |f| %>
+        <%= f.input :category_or_title_cont, 
+                    as: :search,
+                    label: 'category_or_title_cont',
+                    required: false %>
+        <%= f.button :submit, 'search' %>
+      <% end %>
+    </div>
+    <%= render partial: 'shared/click_to_edit' %>
+  </div>
+  <div class="col-md-9">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th><%= sort_link(@q, :category, t('category')) %></th>
+          <th><%= sort_link(@q, :title, t('title')) %></th>
+          <th><%= sort_link(@q, :code, t('code')) %></th>
+          <th><%= t('operations') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render @dicts %>
+      </tbody>
+    </table>
+  </div>
 </div>
-<%= paginate @dicts %>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>category</th>
-      <th>code</th>
-      <th>title</th>
-      <th colspan="2"></th>
-    </tr>
-  </thead>
-  
-  <tbody>
-    <% for dict in @dicts %>
-      <tr>
-        <td><%= dict.category %></td>
-        <td><%= dict.code %></td>
-        <td><%= dict.title %></td>
-        <td><%= link_to 'Edit', :action => 'edit', :id => dict %></td>
-        <td><%= link_to 'Destroy', { :action => 'destroy', :id => dict }, :confirm => 'Are you sure?', :post => true %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<%= paginate @dicts %>

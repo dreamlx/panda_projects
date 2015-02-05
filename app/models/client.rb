@@ -9,5 +9,9 @@ class Client < ActiveRecord::Base
   belongs_to  :region,    -> { where category: 'region' },          class_name: "Dict",   foreign_key: "region_id"   
   belongs_to  :gender1,   -> { where category: 'gender' },          class_name: "Dict",   foreign_key: "gender1_id"  
   belongs_to  :gender2,   -> { where category: 'gender' },          class_name: "Dict",   foreign_key: "gender2_id"
-  belongs_to  :gender3,   -> { where category: 'gender' },          class_name: "Dict",   foreign_key: "gender3_id"  
+  belongs_to  :gender3,   -> { where category: 'gender' },          class_name: "Dict",   foreign_key: "gender3_id"
+
+  def self.selected_clients
+    order("english_name").map {|c| ["#{c.client_code} || #{c.english_name}", c.id ] }
+  end
 end

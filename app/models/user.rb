@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   belongs_to  :person
 
   attr_accessor :password
-  
+
   def before_create
     self.hashed_password = User.hash_password(self.password)
   end
@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
     User.login(self.name, self.password)
   end
 
-    private
+  private
     def self.hash_password(password)
       Digest::SHA1.hexdigest(password)
     end

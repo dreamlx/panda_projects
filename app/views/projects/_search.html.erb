@@ -1,0 +1,7 @@
+<%= search_form_for(@q) do |f| %>
+  <%= f.input :job_code_cont, required: false %>
+  <%= f.input :client_english_name_cont, required: false %>
+  <%= f.input :partner_english_name_cont, required: false %>
+  <%= f.input :manager_english_name_cont, required: false %>
+  <%= f.button :submit %>
+<% end %>

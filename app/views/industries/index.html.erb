@@ -1,26 +1,29 @@
-<h1>Listing industries</h1>
-<div>
-  <%= link_to 'New industry', new_industry_path %>
-</div>
-<%= paginate @industries %>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>code</th>
-      <th>title</th>
-      <th colspan="3">Operation</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @industries.each do |industry| %>
+<div class="row">
+  <div class="col-md-3">
+    <h3>Industry list</h3>
+    <%= link_to t('new_industry'), new_industry_path, class: 'btn btn-danger' %>
+    <hr>
+    <div class="well">
+      <%= search_form_for(@q) do |f| %>
+        <%= f.input :code_or_title_cont, 
+                    as: :search,
+                    label: t('code_or_title_cont'),
+                    required: false %>
+        <%= f.button :submit, t('search') %>
+      <% end %>
+    </div>
+  
+    <%= render partial: 'shared/click_to_edit' %>
+  </div>
+
+  <div class="col-md-9">
+    <table class="table table-striped">
       <tr>
-        <td><%= industry.code %></td>
-        <td><%= industry.title %></td>
-        <td><%= link_to 'Show',  industry %></td>
-        <td><%= link_to 'Edit', edit_industry_path(industry) %></td>
-        <td><%= link_to 'Destroy', industry, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <th><%= sort_link(@q, :code,  t('code')) %></th>
+        <th><%= sort_link(@q, :title,  t('title')) %></th>
+        <th><%= t('operations') %></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
-<%= paginate @industries %>
+      <%= render @industries %>
+    </table>
+  </div>
+</div>

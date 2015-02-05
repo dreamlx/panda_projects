@@ -3,39 +3,24 @@
   <%= link_to "New Project", new_project_path %>
 </div>
 
-<%= search_form_for(@q) do |f| %>
-  <%= f.input :job_code_cont, required: false %>
-  <%= f.input :client_english_name_cont, required: false %>
-  <%= f.input :partner_english_name_cont, required: false %>
-  <%= f.input :manager_english_name_cont, required: false %>
-  <%= f.button :submit %>
-<% end %>
+<%= render "search" %>
 
 <%= paginate @projects %>
 <table class="table table-striped">
-  <tr>
-    <th>Job code</th>
-    <th>Created date</th>
-    <th>Client name</th>
-    <th>Job partner</th>
-    <th>Job manager</th>
-    <th>Job status</th>
-    <th>Job Description</th>
-    <th colspan="2">Operation</th> 
-  </tr>
-  
-  <% for project in @projects %>
+  <thead>
     <tr>
-      <td><%= link_to project.job_code, project %></td>
-      <td><%= project.created_on.to_date %></td>
-      <td><%= project.client.english_name if project.client %></td>      
-      <td><%= project.partner.english_name if project.partner %></td>
-      <td><%= project.manager.english_name if project.manager %></td>
-      <td><%= project.status.title if project.client %></td>
-      <td><%= project.description if project.client %></td>
-      <td><%= link_to ('Edit'), edit_project_path(project) if project.status.code == '1'%></td>
-      <td><%= link_to ('Close'), close_project_path(project), data: {confirm: ('Are you sure?')},method: :post if project.status.code == '1' %></td>
+      <th>Job code</th>
+      <th>Created date</th>
+      <th>Client name</th>
+      <th>Job partner</th>
+      <th>Job manager</th>
+      <th>Job status</th>
+      <th>Job Description</th>
+      <th colspan="2">Operation</th> 
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <%= render @projects %>
+  </tbody>
 </table>
 <%= paginate @projects %>

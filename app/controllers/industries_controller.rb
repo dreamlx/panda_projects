@@ -1,10 +1,7 @@
 class IndustriesController < ApplicationController
   def index
-    @industries = Industry.page(params[:page])
-  end
-
-  def show
-    @industry = Industry.find(params[:id])
+    @q = Industry.search(params[:q])
+    @industries  = @q.result.order(:code)
   end
 
   def new
@@ -14,28 +11,29 @@ class IndustriesController < ApplicationController
   def create
     @industry = Industry.new(industry_params)
     if @industry.save
-      redirect_to industries_url, notice: 'Industry was successfully created.'
+      redirect_to industries_path, notice: 'Industry was successfully created.'
     else
       render 'new'
     end
   end
 
-  def edit
-    @industry = Industry.find(params[:id])
-  end
-
   def update
     @industry = Industry.find(params[:id])
-    if @industry.update(industry_params)
-      redirect_to @industry, notice: 'Industry was successfully updated.'
-    else
-      render :action => 'edit'
+    respond_to do |format|
+      if @industry.update(industry_params)
+        format.html {redirect_to @industry, notice: 'Industry was successfully updated.'}
+        format.json { respond_with_bip(@industry)}
+      else
+        format.html { render :action => "edit" }
+        format.json { respond_with_bip(@industry) }
+      end
     end
+    
   end
 
   def destroy
     Industry.find(params[:id]).destroy
-    redirect_to industries_url
+    redirect_to industries_path
   end
 
   private

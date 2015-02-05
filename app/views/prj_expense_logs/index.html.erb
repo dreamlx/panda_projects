@@ -1,19 +1,18 @@
-<h1>Listing prj_expense_logs</h1>
+<%= search_form_for(@q) do |f| %>
+  <%= f.input :other_cont, 
+              as: :search,
+              label: t('other_cont'),
+              required: false %>
+  <%= f.button :submit, t('search') %>
+<% end %>
+
 <%= paginate @prj_expense_logs %>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>other</th>
-      <th>Operation</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% for prj_expense_log in @prj_expense_logs %>
-      <tr>
-        <td><%= prj_expense_log.other %></td>
-        <td><%= link_to 'Destroy', prj_expense_log_path(prj_expense_log, page: params[:page]), method: :delete, data: {confirm: 'Are you sure?'} %></td>
-      </tr>
+  <div class="row">
+    <% @prj_expense_logs.each do |prj_expense_log| %>
+      <div class="col-md-6">
+        <%= prj_expense_log.other %>
+        <%= link_to t('destroy'), prj_expense_log, data: {confirm: t('are_you_sure')}, method: :delete %>
+      </div>
     <% end %>
-  </tbody>
-</table>
+  </div>
 <%= paginate @prj_expense_logs %>

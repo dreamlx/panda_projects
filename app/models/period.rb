@@ -1,4 +1,8 @@
 class Period < ActiveRecord::Base
+  validates :number,        uniqueness: true
+  validates :number,        presence:   true
+  validates :starting_date, presence: true
+  validates :ending_date,   presence: true
   has_many  :deductions
   has_many  :expenses
   has_many  :personalcharges

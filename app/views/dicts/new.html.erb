@@ -1,8 +1,19 @@
-<h1>New dict</h1>
-
-<%= start_form_tag :action => 'create' %>
-  <%= render :partial => 'form' %>
-  <%= submit_tag "Create" %>
-<%= end_form_tag %>
-
-<%= link_to 'Back', :action => 'list' %>
+<%= simple_form_for(@dict, html: { class: 'form-horizontal' }, 
+    wrapper: :horizontal_form,
+    wrapper_mappings: {
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean}) do |f| %>
+  <div class="col-md-6">
+    <%= f.input :category %>
+    <%= f.input :code %>
+    <%= f.input :title %>
+  </div>
+  <div class="col-md-12">
+    <%= f.button :submit %>
+  </div>
+<% end %>
+<div class="col-md-12">
+  <%= link_to t('back'), dicts_path %>
+</div>

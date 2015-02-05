@@ -1,13 +1,7 @@
-<h1><%=_ "Editing %s", Project.human_name %></h1>
+<h1>Editing Project</h1>
 
-<%= error_messages_for :project %>
-
-<% form_for(:project, :url => project_path(@project), :html => { :method => :put }) do |f| %>
-  <%= render :partial => 'form',:locals => { :f => f }%>
-  <p>
-    <%= submit_tag _("Update") %>
-  </p>
-<% end %>
-
-<%= link_to _('View'), project_path(@project) %> |
-<%= link_to _('Back'), projects_path %>
+<%= render 'form' %>
+<div class="col-md-12">
+  <%= link_to t('show'), project_path(@project) %>
+  <%= link_to t('back'), projects_path %>
+</div>

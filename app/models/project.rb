@@ -16,6 +16,8 @@ class Project < ActiveRecord::Base
   belongs_to  :PFA_reason,      -> {where category: 'PFA_reason' },   class_name: "Dict",   foreign_key: "PFA_reason_id"
   belongs_to  :revenue,         -> {where category: 'revenue_type' }, class_name: "Dict",   foreign_key: "revenue_id"
   belongs_to  :risk,            -> {where category: 'risk' },         class_name: "Dict",   foreign_key: "risk_id"
+  belongs_to  :service,         -> { where category:'service'},       class_name: "Dict", foreign_key: "service_id"
+  belongs_to  :status,          -> { where category:'prj_status'},    class_name: "Dict", foreign_key: "status_id"
   belongs_to  :partner,                                               class_name: "Person", foreign_key: "partner_id"
   belongs_to  :manager,                                               class_name: "Person", foreign_key: "manager_id"
   belongs_to  :referring,                                             class_name: "Person", foreign_key: "referring_id"
