@@ -9,13 +9,13 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Job code</th>
-      <th>Created date</th>
-      <th>Client name</th>
-      <th>Job partner</th>
-      <th>Job manager</th>
-      <th>Job status</th>
-      <th>Job Description</th>
+      <th><%= sort_link(@q, :job_code, t('Job code')) %></th>
+      <th><%= sort_link(@q, :created_on, t('Created date')) %></th>
+      <th><%= sort_link(@q, :client_english_name, t('Client name')) %></th>
+      <th><%= sort_link(@q, :partner_english_name, t('Job partner')) %></th>
+      <th><%= sort_link(@q, :manager_english_name, t('Job manager')) %></th>
+      <th><%= sort_link(@q, :status_title, t('Job status')) %></th>
+      <th><%= sort_link(@q, :description, t('Job Description')) %></th>
       <th colspan="2">Operation</th> 
     </tr>
   </thead>

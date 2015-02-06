@@ -13,7 +13,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <% if session[:user_id] %>
         <ul class="nav navbar-nav">
-          <li class="<%= 'active' if params[:controller] == 'personalcharges' %>"><%= link_to t('TimeReport'), personalcharges_url %></li>
+          <li class="<%= 'active' if params[:controller] == 'personalcharges' %>"><%= link_to t('personalcharge'), personalcharges_url %></li>
           <li class="<%= 'active' if params[:controller] == 'billings' || params[:controller] == 'receive_amounts' %>"><%= link_to t('billings'), billings_path %></li>
           <li class="<%= 'active' if params[:controller] == 'expenses' %>"><%= link_to t('expenses'), expenses_url %></li>
           <li class="<%= 'active' if params[:controller] == 'clients' %>"><%= link_to t('clients'), clients_path %></li>

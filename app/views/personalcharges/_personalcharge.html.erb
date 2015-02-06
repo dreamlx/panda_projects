@@ -1,11 +1,13 @@
 <tr>
   <td><%= link_to personalcharge.project.job_code, personalcharge.project if personalcharge.project %></td>
   <td><%= personalcharge.person.english_name %></td>
-  <td><%= personalcharge.period.number%></td>
-  <% for column in Personalcharge.content_columns %>
-    <td><%= personalcharge.send(column.name) %></td>
-  <% end %>
+  <td><%= personalcharge.period.number %></td>
+  <td><%= personalcharge.hours %></td>
+  <td><%= personalcharge.service_fee %></td>
+  <td><%= personalcharge.reimbursement %></td>
+  <td><%= personalcharge.meal_allowance %></td>
+  <td><%= personalcharge.travel_allowance %></td>
   <td><%= link_to 'Show', personalcharge %></td>
-  <td><%= link_to 'Edit', edit_personalcharge_path(personalcharge) if personalcharge.project.status.title == 'Active'%></td>
-  <td><%= link_to 'Destroy', personalcharge, method: :delete, data: {confirm: 'Are you sure?'} if personalcharge.project.status.title == 'Active'%></td>
+  <td><%= link_to 'Edit', edit_personalcharge_path(personalcharge) if personalcharge.project && personalcharge.project.status && personalcharge.project.status.title == 'Active'%></td>
+  <td><%= link_to 'Destroy', personalcharge, method: :delete, data: {confirm: 'Are you sure?'} if personalcharge.project && personalcharge.project.status && personalcharge.project.status.title == 'Active'%></td>
 </tr>

@@ -1,10 +1,12 @@
 <%= search_form_for(@q) do |f| %>
   <%= f.input :person_english_name_eq, 
               collection: Person.pluck(:english_name),
-              required: false %>
+              required: false,
+              label: 'Please select manager' %>
   <%= f.input :project_job_code_eq, 
               collection: Project.order(:job_code).pluck(:job_code),
-              required: false %>
+              required: false,
+              label: 'Please select job code' %>
   <%= f.input :period_number_gteq, 
               as: :date,
               html5: true,

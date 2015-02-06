@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
   def index
     @q = Project.search(params[:q])
-    @projects = @q.result.includes(:status, :client, :partner, :manager).order(created_on: :desc ).page(params[:page])
+    @projects = @q.result.includes(:status, :client, :partner, :manager).page(params[:page])
   end
 
   def show
@@ -25,7 +25,7 @@ class ProjectsController < ApplicationController
       end
       redirect_to @project, notice: 'Project was successfully created.'
     else
-      render :action => "new"
+      render "new"
     end
   end
 
@@ -42,7 +42,7 @@ class ProjectsController < ApplicationController
   end
   
   def close
-    closed_item = Dict.where("category ='prj_status' and code = '0'").first
+    closed_item = Dict.find_by_category_and_code('prj_status', '0')
     #需要判断balance是否为0，如果有结余！=0 则无法close
     allow_closed = is_balance(Project.find(params[:id]),Period.today_period)
     billings = Billing.where(project_id: params[:id])
@@ -67,126 +67,9 @@ class ProjectsController < ApplicationController
     redirect_to projects_url
   end
   
- def turn_next_year
-    @projects = Project.where("starting_date < '2007-09-16'").order(:job_code)
-
-    for project in @projects
-      unless (project.status.code != '0' )#closed
-        Project.delete(project.id)
-        Initialfee.delete_all(["project_id = ?", project.id])
-        Deduction.delete_all(["project_id = ?", project.id])
-        Billing.delete_all(["project_id = ?", project.id])
-        Expense.delete_all(["project_id = ?", project.id])
-        Personalcharge.delete_all(["project_id = ?", project.id])
-        Ufafee.delete_all(["project_id = ?", project.id])
-        flash[:notice] =" Clear complete initialfee,deduction, billing, expense, personalcharge, ufafee"
-      end
-    end
-
-    @projects = Project.order(:job_code)
-
-    for project in @projects
-      unless (project.status.code != '0' )#closed
-      else
-        sql_condition     = [" periods.number <= '2007-09-16' and project_id = ?", project.id]
-        sql_join          = " inner join periods on periods.id = period_id "
-        @sum_personal = Personalcharge.new
-        @sum_personal.service_fee = Personalcharge.sum( "service_fee",   :joins => sql_join,   :conditions => sql_condition)||0
-        @sum_personal.reimbursement = Personalcharge.sum("reimbursement",   :joins => sql_join,   :conditions => sql_condition)||0
-        @sum_personal.meal_allowance = Personalcharge.sum("meal_allowance",   :joins => sql_join,   :conditions => sql_condition)||0
-        @sum_personal.travel_allowance = Personalcharge.sum("travel_allowance",   :joins => sql_join,   :conditions => sql_condition)||0
-        @sum_personal.hours = Personalcharge.sum("hours",   :joins => sql_join,   :conditions => sql_condition)||0
-
-        @sum_expense = Expense.new
-        @e_total = 0
-        @sum_expense.commission =         Expense.sum(  "commission",   :joins => sql_join,   :conditions => sql_condition)||0
-        @sum_expense.outsourcing =        Expense.sum(  "outsourcing",   :joins => sql_join,   :conditions => sql_condition)||0
-        @sum_expense.tickets =            Expense.sum(  "tickets",   :joins => sql_join,   :conditions => sql_condition)||0        
-        @sum_expense.courrier =           Expense.sum(  "courrier",   :joins => sql_join,   :conditions => sql_condition)||0        
-        @sum_expense.postage =            Expense.sum(  "postage",   :joins => sql_join,   :conditions => sql_condition)||0        
-        @sum_expense.stationery =         Expense.sum(  "stationery",   :joins => sql_join,   :conditions => sql_condition)||0
-        @sum_expense.report_binding =     Expense.sum(  "report_binding",   :joins => sql_join,   :conditions => sql_condition)||0
-        @sum_expense.cash_advance =       Expense.sum(  "cash_advance",   :joins => sql_join,   :conditions => sql_condition)||0
-        @sum_expense.payment_on_be_half = Expense.sum(  "payment_on_be_half",   :joins => sql_join,   :conditions => sql_condition)||0
-
-        @e_total = @sum_expense.tickets+@sum_expense.courrier+@sum_expense.postage+@sum_expense.stationery+@sum_expense.report_binding+@sum_expense.cash_advance
-
-        @sum_billing = Billing.new
-        @sum_billing.service_billing  = Billing.sum("service_billing",   :joins => sql_join,   :conditions => sql_condition)||0
-        @sum_billing.expense_billing  = Billing.sum("expense_billing",   :joins => sql_join,   :conditions => sql_condition)||0
-        @sum_billing.business_tax      = Billing.sum("business_tax",   :joins => sql_join,   :conditions => sql_condition)||0
-        @e_total += @sum_billing.business_tax
-
-        @sum_UFA = Ufafee.new
-        @sum_UFA.service_UFA = Ufafee.sum("service_UFA",   :joins => sql_join,   :conditions => sql_condition)||0
-        @sum_UFA.expense_UFA = Ufafee.sum("expense_UFA",   :joins => sql_join,   :conditions => sql_condition)||0
-
-        @initialfee = Initialfee.find(:first, :conditions=>" project_id = #{project.id} ")||Initialfee.new
-        @initialfee.project_id = project.id
-
-        @deduction = Deduction.find(:first, :conditions=>" project_id = #{project.id} ") || Deduction.new
-        @deduction.project_id = project.id
-
-        @sum_service_PFA = (@sum_personal.service_fee * project.service_PFA/100)
-        @sum_expense_PFA = (@sum_personal.reimbursement+@sum_personal.meal_allowance+ @sum_personal.travel_allowance+@e_total)*project.expense_PFA/100
-
-        @initialfee.service_fee += @sum_personal.service_fee
-        @initialfee.reimbursement += @sum_personal.reimbursement
-        @initialfee.meal_allowance += @sum_personal.meal_allowance
-        @initialfee.travel_allowance += @sum_personal.travel_allowance
-        @initialfee.commission += @sum_expense.commission
-        @initialfee.outsourcing += @sum_expense.outsourcing
-        @initialfee.tickets += @sum_expense.tickets
-        @initialfee.courrier += @sum_expense.courrier
-        @initialfee.postage += @sum_expense.postage
-        @initialfee.stationery += @sum_expense.stationery
-        @initialfee.report_binding += @sum_expense.report_binding
-        @initialfee.cash_advance += @sum_expense.cash_advance
-        @initialfee.payment_on_be_half += @sum_expense.payment_on_be_half
-        @initialfee.business_tax += @sum_billing.business_tax
-
-
-        @deduction.service_PFA +=@sum_service_PFA
-        @deduction.expense_PFA +=@sum_expense_PFA
-        @deduction.service_UFA +=@sum_UFA.service_UFA
-        @deduction.expense_UFA +=@sum_UFA.expense_UFA
-        @deduction.service_billing +=@sum_billing.service_billing
-        @deduction.expense_billing +=@sum_billing.expense_billing
-
-        #del personalcharge
-        @del_list = Personalcharge.find(      :all, :joins => sql_join, :conditions => sql_condition)
-        for del_now in @del_list
-          Personalcharge.delete(del_now.id)
-        end
-
-        #del expense
-        @del_list = Expense.find(      :all, :joins => sql_join, :conditions => sql_condition)
-        for del_now in @del_list
-          Expense.delete(del_now.id)
-        end
-
-        #del billing
-        @del_list = Billing.find(      :all, :joins => sql_join, :conditions => sql_condition)
-        for del_now in @del_list
-          Billing.delete(del_now.id)
-        end
-
-        #del ufa
-        @del_list = Ufafee.find(      :all, :joins => sql_join, :conditions => sql_condition)
-        for del_now in @del_list
-          Ufafee.delete(del_now.id)
-        end
-
-        @initialfee.save
-        @deduction.save
-      end
-    end
-  end
-
   private
     def is_balance(t_project,t_period)
-      @statuses   = Dict.find(:all,
-        :conditions =>"category ='prj_status' and code = '1'")# 1 open, 0 close
+      @statuses   = Dict.where("category ='prj_status' and code = '1'")# 1 open, 0 close
                      
       @project = t_project
       @now_period = t_period
