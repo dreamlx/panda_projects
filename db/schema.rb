@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150201092538) do
+ActiveRecord::Schema.define(version: 20150207122450) do
 
   create_table "billings", force: :cascade do |t|
     t.datetime "created_on"
@@ -257,14 +257,15 @@ ActiveRecord::Schema.define(version: 20150201092538) do
   create_table "personalcharges", force: :cascade do |t|
     t.datetime "created_on"
     t.datetime "updated_on"
-    t.decimal  "hours",                      precision: 10, scale: 2
-    t.decimal  "service_fee",                precision: 10, scale: 2
-    t.decimal  "reimbursement",              precision: 10, scale: 2
-    t.decimal  "meal_allowance",             precision: 10, scale: 2
-    t.decimal  "travel_allowance",           precision: 10, scale: 2
-    t.integer  "project_id",       limit: 4
-    t.integer  "period_id",        limit: 4
-    t.integer  "person_id",        limit: 4
+    t.decimal  "hours",                        precision: 10, scale: 2, default: 0.0
+    t.decimal  "service_fee",                  precision: 10, scale: 2, default: 0.0
+    t.decimal  "reimbursement",                precision: 10, scale: 2, default: 0.0
+    t.decimal  "meal_allowance",               precision: 10, scale: 2, default: 0.0
+    t.decimal  "travel_allowance",             precision: 10, scale: 2, default: 0.0
+    t.integer  "project_id",         limit: 4
+    t.integer  "period_id",          limit: 4
+    t.integer  "person_id",          limit: 4
+    t.decimal  "PFA_of_service_fee",           precision: 10, scale: 2, default: 0.0
   end
 
   create_table "prj_expense_logs", force: :cascade do |t|

@@ -17,4 +17,8 @@ class Period < ActiveRecord::Base
     period_sql = " 1 and '#{today}' <= ending_date and '#{today}' >= starting_date"
     return where(period_sql).first || order(number: :desc).first
   end
+
+  def name
+    number
+  end
 end

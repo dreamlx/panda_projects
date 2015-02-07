@@ -23,4 +23,10 @@ class Project < ActiveRecord::Base
   belongs_to  :referring,                                             class_name: "Person", foreign_key: "referring_id"
   belongs_to  :billing_partner,                                       class_name: "Person", foreign_key: "billing_partner_id"  
   belongs_to  :billing_manager,                                       class_name: "Person", foreign_key: "billing_manager_id"
+
+  scope :num_projects,     ->  {where("job_code REGEXP '^[0-9]'")}
+  scope :char_projects,  ->  {where("job_code REGEXP '^[a-z]'")}
+  def name
+    job_code
+  end
 end

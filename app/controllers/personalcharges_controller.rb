@@ -1,7 +1,11 @@
 class PersonalchargesController < ApplicationController
   def index
     @q = Personalcharge.search(params[:q])
-    @personalcharges = @q.result.order(:project_id).page(params[:page])
+    @personalcharges = @q.result.page(params[:page])
+
+    @personalcharges_num    = @q.result.joins(:project).where("job_code REGEXP '^[0-9]'")
+    @personalcharges_char   = @q.result.joins(:project).where("job_code REGEXP '^[a-z]'")
+    @personalcharges_total  = @q.result
   end
 
   def show
@@ -15,15 +19,14 @@ class PersonalchargesController < ApplicationController
   def create
     @personalcharge = Personalcharge.new(personalcharge_params)
     if @personalcharge.save
-      @personalcharge.update(service_fee: (hours * @personalcharge.person.charge_rate))  if @personalcharge.person.charge_rate
-      redirect_to personalcharges_url, notice: 'Personalcharge was successfully created.'
+      @personalcharge.update(service_fee: (@personalcharge.hours * @personalcharge.person.charge_rate))  if @personalcharge.person.charge_rate
+      redirect_to @personalcharges, notice: 'Personalcharge was successfully created.'
     else
       render 'new'
     end
   end
 
   def edit
-    init_set
     @personalcharge = Personalcharge.find(params[:id])
   end
 

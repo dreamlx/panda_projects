@@ -21,4 +21,8 @@ class Person < ActiveRecord::Base
   def self.selected_users
     workings.order("english_name").map {|p| [ "#{p.english_name} || #{p.employee_number}", p.id ]}
   end
+
+  def name
+    english_name
+  end
 end
