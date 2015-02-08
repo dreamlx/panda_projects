@@ -1,8 +1,7 @@
 class ClientsController < ApplicationController
   def index
     @q = Client.ransack(params[:q])
-    @clients = @q.result.order('client_code').page(params[:page])
-    @statuses = Dict.where(category: 'client_status')
+    @clients = @q.result.page(params[:page])
   end
   
   def new

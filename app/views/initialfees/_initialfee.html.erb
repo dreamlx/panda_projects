@@ -1,5 +1,5 @@
 <tr>
-  <td><%= initialfee.project.job_code %></td>
+  <td><%= link_to initialfee.project.job_code, initialfee.project if initialfee.project %></td>
   <td><%= initialfee.service_fee %></td>
   <td><%= initialfee.commission %></td>
   <td><%= initialfee.outsourcing %></td>
