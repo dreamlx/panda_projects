@@ -8,17 +8,17 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= "job_code" %></th>
-      <th><%= "commission" %></th>
-      <th><%= "outsourcing" %></th>
-      <th><%= "tickets" %></th>
-      <th><%= "courrier" %></th>
-      <th><%= "postage" %></th>
-      <th><%= "stationery" %></th>
-      <th><%= "report_binding" %></th>
-      <th><%= "cash_advance" %></th>
-      <th><%= "payment_on_be_half" %></th>
-      <th><%= "memo" %></th>
+      <th><%= sort_link(@q, :project_job_code) %></th>
+      <th><%= sort_link(@q, :commission) %></th>
+      <th><%= sort_link(@q, :outsourcing) %></th>
+      <th><%= sort_link(@q, :tickets) %></th>
+      <th><%= sort_link(@q, :courrier) %></th>
+      <th><%= sort_link(@q, :postage) %></th>
+      <th><%= sort_link(@q, :stationery) %></th>
+      <th><%= sort_link(@q, :report_binding) %></th>
+      <th><%= sort_link(@q, :cash_advance) %></th>
+      <th><%= sort_link(@q, :payment_on_be_half) %></th>
+      <th><%= sort_link(@q, :memo) %></th>
       <th colspan="3">Operation</th>
     </tr>
   </thead>
@@ -26,15 +26,15 @@
     <%= render @expenses %>
     <tr>
       <td>sum:</td>
-      <td><%= @expenses.sum(:commission) %></td>
-      <td><%= @expenses.sum(:outsourcing) %></td>
-      <td><%= @expenses.sum(:tickets) %></td>
-      <td><%= @expenses.sum(:courrier) %></td>
-      <td><%= @expenses.sum(:postage) %></td>
-      <td><%= @expenses.sum(:stationery) %></td>
-      <td><%= @expenses.sum(:report_binding) %></td>
-      <td><%= @expenses.sum(:cash_advance) %></td>
-      <td><%= @expenses.sum(:payment_on_be_half) %></td>
+      <td><%= @expenses_total.sum(:commission) %></td>
+      <td><%= @expenses_total.sum(:outsourcing) %></td>
+      <td><%= @expenses_total.sum(:tickets) %></td>
+      <td><%= @expenses_total.sum(:courrier) %></td>
+      <td><%= @expenses_total.sum(:postage) %></td>
+      <td><%= @expenses_total.sum(:stationery) %></td>
+      <td><%= @expenses_total.sum(:report_binding) %></td>
+      <td><%= @expenses_total.sum(:cash_advance) %></td>
+      <td><%= @expenses_total.sum(:payment_on_be_half) %></td>
       <td></td>
       <td colspan="3"></td>
     </tr>

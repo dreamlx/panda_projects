@@ -2,6 +2,8 @@ class ExpensesController < ApplicationController
   def index
     @q = Expense.ransack(params[:q])
     @expenses = @q.result.includes(:project, :period).order(updated_on: :desc).page(params[:page])
+
+    @expenses_total = @q.result
   end
 
   def show
@@ -22,7 +24,7 @@ class ExpensesController < ApplicationController
     @expense = Expense.new(expense_params)
 
     if @expense.save
-      redirect_to @expense, notice: _('%s was successfully created.', Expense.human_name)
+      redirect_to @expense, notice: 'Expense successfully created.'
     else
       render "new"
     end
@@ -31,7 +33,7 @@ class ExpensesController < ApplicationController
   def update
     @expense = Expense.find(params[:id])
     if @expense.update(expense_params)
-      redirect_to @expense, notice: _('%s was successfully updated.', Expense.human_name)
+      redirect_to @expense, notice: 'Expense was successfully updated.'
     else
       render "edit"
     end

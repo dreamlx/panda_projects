@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150207122450) do
+ActiveRecord::Schema.define(version: 20150208163609) do
 
   create_table "billings", force: :cascade do |t|
     t.datetime "created_on"
@@ -141,17 +141,17 @@ ActiveRecord::Schema.define(version: 20150207122450) do
   create_table "expenses", force: :cascade do |t|
     t.datetime "created_on"
     t.datetime "updated_on"
-    t.decimal  "commission",                     precision: 10, scale: 2
-    t.decimal  "outsourcing",                    precision: 10, scale: 2
-    t.decimal  "tickets",                        precision: 10, scale: 2
-    t.decimal  "courrier",                       precision: 10, scale: 2
-    t.decimal  "postage",                        precision: 10, scale: 2
-    t.decimal  "stationery",                     precision: 10, scale: 2
-    t.decimal  "report_binding",                 precision: 10, scale: 2
-    t.decimal  "cash_advance",                   precision: 10, scale: 2
+    t.decimal  "commission",                     precision: 10, scale: 2, default: 0.0
+    t.decimal  "outsourcing",                    precision: 10, scale: 2, default: 0.0
+    t.decimal  "tickets",                        precision: 10, scale: 2, default: 0.0
+    t.decimal  "courrier",                       precision: 10, scale: 2, default: 0.0
+    t.decimal  "postage",                        precision: 10, scale: 2, default: 0.0
+    t.decimal  "stationery",                     precision: 10, scale: 2, default: 0.0
+    t.decimal  "report_binding",                 precision: 10, scale: 2, default: 0.0
+    t.decimal  "cash_advance",                   precision: 10, scale: 2, default: 0.0
     t.integer  "period_id",          limit: 4
     t.integer  "project_id",         limit: 4
-    t.decimal  "payment_on_be_half",             precision: 10, scale: 2
+    t.decimal  "payment_on_be_half",             precision: 10, scale: 2, default: 0.0
     t.string   "memo",               limit: 255
   end
 

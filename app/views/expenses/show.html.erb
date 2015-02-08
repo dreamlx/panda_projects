@@ -6,7 +6,7 @@
 
   <p>
     <label for="Expense_project">Project</label>
-    <%=h @expense.project.job_code %>
+    <%=h @expense.project.job_code if @expense.project %>
   </p>
   <p>
     <label for="Expense_created_on"><%= Expense.human_attribute_name("created_on") %></label>
