@@ -1,0 +1,47 @@
+<tr>
+  <th colspan="3"></th> 
+  <th>Hours</th>
+  <th>Service fee</th>
+  <th>PFA%</th>
+  <th>PFA of service fee</th>
+  <th>Reimbursement</th>
+  <th>Meal allowance</th>
+  <th>Travel allowance</th>
+  
+  <th colspan="4">Expense sum</th>
+</tr>
+<tr>
+  <td COLSPAN=3>subtotal</td>
+  <td><%= @personalcharges_num.sum(:hours) %></td>
+  <td><%= @personalcharges_num.sum(:service_fee) %></td>
+  <td />
+  <td>0</td>
+  <td><%= @personalcharges_num.sum(:reimbursement) %></td>
+  <td><%= @personalcharges_num.sum(:meal_allowance) %></td>
+  <td><%= @personalcharges_num.sum(:travel_allowance) %></td>
+  <td><%= @personalcharges_num.sum(:reimbursement) + @personalcharges_num.sum(:meal_allowance) + @personalcharges_num.sum(:travel_allowance) %></td>
+</tr>
+
+<tr>
+  <td COLSPAN=3>subtotal</td>
+  <td><%= @personalcharges_char.sum(:hours) %></td>
+  <td><%= @personalcharges_char.sum(:service_fee) %></td>
+  <td />
+  <td><%= @personalcharges_char.sum(:PFA_of_service_fee) %></td>
+  <td><%= @personalcharges_char.sum(:reimbursement) %></td>
+  <td><%= @personalcharges_char.sum(:meal_allowance) %></td>
+  <td><%= @personalcharges_char.sum(:travel_allowance) %></td>
+  <td><%= @personalcharges_char.sum(:reimbursement) + @personalcharges_char.sum(:meal_allowance) + @personalcharges_char.sum(:travel_allowance) %></td>
+</tr>
+
+<tr bgcolor=yellow>
+  <td COLSPAN=3>All total</td>
+  <td><%= @personalcharges_total.sum(:hours) %></td>
+  <td><%= @personalcharges_total.sum(:service_fee) %></td>
+  <td />
+  <td><%= @personalcharges_char.sum(:PFA_of_service_fee) %></td>
+  <td><%= @personalcharges_total.sum(:reimbursement) %></td>
+  <td><%= @personalcharges_total.sum(:meal_allowance) %></td>
+  <td><%= @personalcharges_total.sum(:travel_allowance) %></td>
+  <td><%= @personalcharges_total.sum(:reimbursement) + @personalcharges.sum(:meal_allowance) + @personalcharges.sum(:travel_allowance) %></td>
+</tr>

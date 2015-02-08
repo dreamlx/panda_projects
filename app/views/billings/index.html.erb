@@ -2,28 +2,47 @@
 <div>
   <%= link_to 'New billing', new_billing_path %>
 </div>
+<%= render 'search' %>
 <%= paginate @billings %>
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Job code</th>
-      <th>Number</th>
-      <th>Billing_date</th>
-      <th>Amount</th>
-      <th>Outstanding</th>
-      <th>Service billing</th>
-      <th>Expense billing</th>
-      <th>Days of ageing</th>
-      <th>Business tax</th>
-      <th>Status</th>
-      <th>Collection days</th>
-      <th>Write off</th>
-      <th>Provision</th>
+      <th><%= sort_link(@q, :project_job_code, t('job_code')) %></th>
+      <th><%= sort_link(@q, :project_referring_english_name) %></th>
+      <th><%= sort_link(@q, :project_billing_partner_english_name) %></th>
+      <th><%= sort_link(@q, :project_billing_manager_english_name) %></th>
+      <th><%= sort_link(@q, :number) %></th>
+      <th><%= sort_link(@q, :billing_date) %></th>
+      <th><%= sort_link(@q, :service_billing) %></th>
+      <th><%= sort_link(@q, :expense_billing) %></th>
+      <th><%= sort_link(@q, :amount) %></th>
+      <th>Received</th>
+      <th><%= sort_link(@q, :outstanding) %></th>
+      <th><%= sort_link(@q, :write_off) %></th>
+      <th>Outstanding Net</th>
+      <th><%= sort_link(@q, :provision) %></th>
+      <th><%= sort_link(@q, :days_of_ageing) %></th>
+      <th><%= sort_link(@q, :status) %></th>
+      <th><%= sort_link(@q, :business_tax) %></th>
+      <th><%= sort_link(@q, :collection_days) %></th>
       <th colspan="2">Operation</th>
     </tr>
   </thead>
   <tbody>
     <%= render @billings %>
+
+    <tr bgcolor = yellow>
+      <td COLSPAN="6">Total</td>
+      <td><%= @b_total.sum(:service_billing) %></td>
+      <td><%= @b_total.sum(:expense_billing) %></td>
+      <td><%= @b_total.sum(:amount) %></td>
+      <td><%#= @r_total %></td>
+      <td><%= @b_total.sum(:outstanding) %></td>
+      <td><%= @b_total.sum(:write_off) %></td>
+      <td><%= @b_total.sum(:outstanding) - @b_total.sum(:write_off) %></td>
+      <td><%= @b_total.sum(:provision) %></td>
+      <td COLSPAN="5"></td>
+    </tr>
   </tbody>
 </table>
 <%= paginate @billings %>

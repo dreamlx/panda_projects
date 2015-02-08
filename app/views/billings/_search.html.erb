@@ -1,0 +1,32 @@
+<%= search_form_for(@q, html: { class: 'form-horizontal' }, 
+    wrapper: :horizontal_form,
+    wrapper_mappings: {
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean}) do |f| %>
+  <%= f.input :number_cont, 
+              required: false %>
+  <%= f.input :project_job_code_eq, 
+              collection: Project.order(:job_code).pluck(:job_code),
+              required: false,
+              label: 'Project' %>
+  <%= f.input :status_eq, 
+              collection: [["outstanding", "0"],["received", "1"]],
+              required: false %>
+  <%= f.input :person_english_name_eq, 
+              collection: Person.pluck(:english_name),
+              required: false,
+              label: 'Person' %>
+  <%= f.input :period_number_gteq, 
+              as: :date,
+              html5: true,
+              required: false,
+              label: 'Period From' %>
+  <%= f.input :period_number_lteq, 
+              as: :date,
+              html5: true,
+              required: false,
+              label: 'Period To' %>
+  <%= f.button :submit %>
+<% end %>

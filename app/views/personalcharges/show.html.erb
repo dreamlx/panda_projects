@@ -5,9 +5,9 @@ period : <%=@personalcharge.period.number%>
 Employee:<%=@personalcharge.person.english_name %>
 <hr>
 <% for column in Personalcharge.content_columns %>
-<p>
-  <b><%= column.human_name %>:</b> <%=h @personalcharge.send(column.name) %>
-</p>
+  <p>
+    <b><%= column.human_name %>:</b> <%=h @personalcharge.send(column.name) %>
+  </p>
 <% end %>
 
 <%= link_to 'Edit', edit_personalcharge_path(@personalcharge) if @personalcharge.project && @personalcharge.project.status.title == 'Active'%> |

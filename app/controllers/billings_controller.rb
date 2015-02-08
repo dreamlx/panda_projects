@@ -1,6 +1,12 @@
 class BillingsController < ApplicationController
   def index
-    @billings = Billing.page(params[:page])
+    @q = Billing.search(params[:q])
+    @billings = @q.result.page(params[:page])
+    @b_total = @q.result
+    # @r_total = 0
+    # @b_total.each do |b|
+    #   @r_total += b.receive_amounts.sum(:receive_amount)
+    # end
   end
 
   def show
