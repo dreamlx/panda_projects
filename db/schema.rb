@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150208163609) do
+ActiveRecord::Schema.define(version: 20150209064825) do
 
   create_table "billings", force: :cascade do |t|
     t.datetime "created_on"
@@ -123,12 +123,12 @@ ActiveRecord::Schema.define(version: 20150208163609) do
   create_table "deductions", force: :cascade do |t|
     t.datetime "created_on"
     t.datetime "updated_on"
-    t.decimal  "service_PFA",               precision: 10, scale: 2
-    t.decimal  "service_UFA",               precision: 10, scale: 2
-    t.decimal  "service_billing",           precision: 10, scale: 2
-    t.decimal  "expense_PFA",               precision: 10, scale: 2
-    t.decimal  "expense_UFA",               precision: 10, scale: 2
-    t.decimal  "expense_billing",           precision: 10, scale: 2
+    t.decimal  "service_PFA",               precision: 10, scale: 2, default: 0.0
+    t.decimal  "service_UFA",               precision: 10, scale: 2, default: 0.0
+    t.decimal  "service_billing",           precision: 10, scale: 2, default: 0.0
+    t.decimal  "expense_PFA",               precision: 10, scale: 2, default: 0.0
+    t.decimal  "expense_UFA",               precision: 10, scale: 2, default: 0.0
+    t.decimal  "expense_billing",           precision: 10, scale: 2, default: 0.0
     t.integer  "project_id",      limit: 4
   end
 

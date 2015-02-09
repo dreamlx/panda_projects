@@ -6,6 +6,7 @@
     <%= f.input :expense_PFA %>
     <%= f.input :expense_UFA %>
     <%= f.input :expense_billing %>
+    <%= f.input :period_id, collection: Period.all %>
     <%= f.input :project_id, collection: Project.all %>
     <%= f.button :submit %>
   <% end %>

@@ -1,6 +1,7 @@
 class InitialfeesController < ApplicationController
   def index
-    @initialfees = Initialfee.joins("inner join projects on initialfees.project_id = projects.id ").order("projects.job_code").page(params[:page])
+    @q = Initialfee.search(params[:q])
+    @initialfees = @q.result.page(params[:page])
   end
 
   def show

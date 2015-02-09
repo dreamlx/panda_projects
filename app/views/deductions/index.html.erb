@@ -6,10 +6,16 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Job code</th>
-      <% for column in Deduction.content_columns %>
-        <th><%= column.human_name %></th>
-      <% end %>
+      <th><%= sort_link(@q, :project_job_code) %></th>
+      <th><%= sort_link(@q, :period_number) %></th>
+      <th><%= sort_link(@q, :created_on) %></th>
+      <th><%= sort_link(@q, :updated_on) %></th>
+      <th><%= sort_link(@q, :service_PFA) %></th>
+      <th><%= sort_link(@q, :service_UFA) %></th>
+      <th><%= sort_link(@q, :service_billing) %></th>
+      <th><%= sort_link(@q, :expense_PFA) %></th>
+      <th><%= sort_link(@q, :expense_UFA) %></th>
+      <th><%= sort_link(@q, :expense_billing) %></th>
       <th colspan="3">Operation</th>
     </tr>
   </thead>
@@ -17,9 +23,14 @@
     <% @deductions.each do |deduction| %>
       <tr>
         <td><%= link_to deduction.project.job_code, deduction.project if deduction.project %></td>    
-        <% for column in Deduction.content_columns %>
-          <td><%=h deduction.send(column.name) %></td>
-        <% end %>
+        <td><%= deduction.created_on %></td>
+        <td><%= deduction.updated_on %></td>
+        <td><%= deduction.service_PFA %></td>
+        <td><%= deduction.service_UFA %></td>
+        <td><%= deduction.service_billing %></td>
+        <td><%= deduction.expense_PFA %></td>
+        <td><%= deduction.expense_UFA %></td>
+        <td><%= deduction.expense_billing %></td>
         <td><%= link_to 'Show', deduction %></td>
         <td><%= link_to 'Edit', edit_deduction_path(deduction) if deduction.project &&  deduction.project.status.title == 'Active' %></td>
         <td><%= link_to 'Destroy', deduction, method: :delete, data: {confirm: 'Are you sure?'} if deduction.project && deduction.project.status.title == 'Active'%></td>
