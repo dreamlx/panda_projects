@@ -3,11 +3,7 @@ class InitialfeesController < ApplicationController
     @q = Initialfee.search(params[:q])
     @initialfees = @q.result.page(params[:page])
   end
-
-  def show
-    @initialfee = Initialfee.find(params[:id])
-  end
-
+  
   def new
     @initialfee = Initialfee.new(project_id: params[:id])
   end
@@ -27,10 +23,15 @@ class InitialfeesController < ApplicationController
 
   def update
     @initialfee = Initialfee.find(params[:id])
-    if @initialfee.update(initialfee_params)
-      redirect_to @initialfee, notice: 'Initialfee was successfully updated.'
-    else
-      render 'edit'
+
+    respond_to do |format|
+      if @initialfee.update(initialfee_params)
+        format.html { redirect_to @initialfee, notice: 'Initialfee was successfully updated.' }
+        format.json { respond_with_bip(@initialfee) }
+      else
+        format.html { render :action => "edit" }
+        format.json { respond_with_bip(@initialfee) }
+      end
     end
   end
 

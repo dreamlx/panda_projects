@@ -1,15 +1,7 @@
 class ReceiveAmountsController < ApplicationController
-  def index
-    @receive_amount_pages, @receive_amounts = paginate :receive_amounts
-  end
-
-  def show
-    @receive_amount = ReceiveAmount.find(params[:id])
-  end
-
   def new
     @billing = Billing.find(params[:billing_id])
-    @receive_amount = ReceiveAmount.new
+    @receive_amount = @billing.receive_amounts.build
   end
 
   def create
@@ -23,22 +15,24 @@ class ReceiveAmountsController < ApplicationController
   end
 
   def edit
-    @receive_amount = ReceiveAmount.find(params[:id])
-    @billing = Billing.find(@receive_amount.billing_id)
+    @billing = Billing.find(params[:billing_id])
+    @receive_amount = @billing.receive_amounts.find(params[:id])
   end
 
   def update
-    @receive_amount = ReceiveAmount.find(params[:id])
+    @billing = Billing.find(params[:billing_id])
+    @receive_amount = @billing.receive_amounts.find(params[:id])
     if @receive_amount.update(receive_amount_params)
-      redirect_to :controller => 'billings', :action =>'show', :id => @receive_amount.billing_id, notice: 'ReceiveAmount was successfully updated.'
+      redirect_to @billing, notice: 'ReceiveAmount was successfully updated.'
     else
       render 'edit'
     end
   end
 
   def destroy
-    ReceiveAmount.find(params[:id]).destroy
-    redirect_to :controller => 'billings', :action =>'show', :id => @receive_amount.billing_id
+    @billing = Billing.find(params[:billing_id])
+    @billing.receive_amounts.find(params[:id]).destroy
+    redirect_to @billing
   end
 
   private

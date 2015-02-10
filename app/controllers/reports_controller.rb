@@ -6,20 +6,19 @@ class ReportsController < ApplicationController
 
   def print
     init_set #people period project
-    @periods2 = Period.find(:all, :order => 'number desc')
+    @periods2 = Period.order('number desc')
     @personalcharge = Personalcharge.new
     @now_user = session[:user_id]
     if @now_user == 0 
-      @projects = Project.find( :all, 
-        :order=>'job_code')
+      @projects = Project.order(:job_code)
     end
     @ptrs =Project.find_by_sql("select distinct partner_id as id from projects;")
     @refs=Project.find_by_sql("select distinct referring_id as id from projects;")
     @mgrs=Project.find_by_sql("select distinct manager_id as id from projects;")
-    @GMUs = Dict.find(:all, :conditions =>"category = 'GMU' ")
-    @services = Dict.find(:all, :conditions =>"category = 'service_code' ")
-    @clients = Client.find(:all, :order => "english_name")
-    @statuses = Dict.find(:all, :conditions =>"category ='prj_status'")
+    @GMUs     = Dict.where("category = 'GMU' ")
+    @services = Dict.where("category = 'service_code' ")
+    @clients  = Client.order("english_name")
+    @statuses = Dict.where("category ='prj_status'")
     @contractNumbers = Project.find_by_sql("select distinct contract_number from projects order by contract_number;")
   end
   

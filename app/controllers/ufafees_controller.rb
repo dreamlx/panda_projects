@@ -4,10 +4,6 @@ class UfafeesController < ApplicationController
     @ufafees = @q.result.page(params[:page])
   end
 
-  def show
-    @ufafee = Ufafee.find(params[:id])
-  end
-
   def new
     @ufafee = Ufafee.new
   end

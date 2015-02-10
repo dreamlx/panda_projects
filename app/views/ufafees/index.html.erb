@@ -9,15 +9,15 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Job code</th>
-      <th>Period</th>
-      <th>created_on</th>
-      <th>updated_on</th>
-      <th>number</th>
-      <th>amount</th>
-      <th>service_UFA</th>
-      <th>expense_UFA</th>
-      <th colspan="2"></th>
+      <th><%= sort_link(@q, :project_job_code )%></th>
+      <th><%= sort_link(@q, :period_number )%></th>
+      <th><%= sort_link(@q, :created_on) %></th>
+      <th><%= sort_link(@q, :updated_on) %></th>
+      <th><%= sort_link(@q, :number) %></th>
+      <th><%= sort_link(@q, :amount) %></th>
+      <th><%= sort_link(@q, :service_UFA) %></th>
+      <th><%= sort_link(@q, :expense_UFA) %></th>
+      <th colspan="2">Operation</th>
     </tr>
   </thead>
   <tbody>
@@ -27,7 +27,7 @@
         <td><%= ufafee.period.number %></td>
         <td><%= ufafee.created_on %></td>
         <td><%= ufafee.updated_on %></td>
-        <td><%= link_to ufafee.number, ufafee %></td>
+        <td><%= ufafee.number %></td>
         <td><%= ufafee.amount %></td>
         <td><%= ufafee.service_UFA %></td>
         <td><%= ufafee.expense_UFA %></td>

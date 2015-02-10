@@ -1,7 +1,7 @@
 class DictsController < ApplicationController
   def index
     @q = Dict.search(params[:q])
-    @dicts = @q.result.order(:category)
+    @dicts = @q.result
   end
 
   def new

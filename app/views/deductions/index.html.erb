@@ -16,13 +16,14 @@
       <th><%= sort_link(@q, :expense_PFA) %></th>
       <th><%= sort_link(@q, :expense_UFA) %></th>
       <th><%= sort_link(@q, :expense_billing) %></th>
-      <th colspan="3">Operation</th>
+      <th colspan="2">Operation</th>
     </tr>
   </thead>
   <tbody>
     <% @deductions.each do |deduction| %>
       <tr>
-        <td><%= link_to deduction.project.job_code, deduction.project if deduction.project %></td>    
+        <td><%= link_to deduction.project.job_code, deduction.project if deduction.project %></td> 
+        <td><%= deduction.period.number if deduction.period %></td>   
         <td><%= deduction.created_on %></td>
         <td><%= deduction.updated_on %></td>
         <td><%= deduction.service_PFA %></td>
@@ -31,7 +32,6 @@
         <td><%= deduction.expense_PFA %></td>
         <td><%= deduction.expense_UFA %></td>
         <td><%= deduction.expense_billing %></td>
-        <td><%= link_to 'Show', deduction %></td>
         <td><%= link_to 'Edit', edit_deduction_path(deduction) if deduction.project &&  deduction.project.status.title == 'Active' %></td>
         <td><%= link_to 'Destroy', deduction, method: :delete, data: {confirm: 'Are you sure?'} if deduction.project && deduction.project.status.title == 'Active'%></td>
       </tr>

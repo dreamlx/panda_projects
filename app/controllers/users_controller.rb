@@ -50,8 +50,7 @@ class UsersController < ApplicationController
         session[:login_user_id] = logged_in_user.id
         session[:other1]        = logged_in_user.other1
         
-          
-        redirect_to users_url
+        redirect_to(:action => 'index')
         #expense 在每月一号需要创建一个report_biding项目 100元
         #1判断当前period是否已经创建过update日志
         now_period = Period.today_period

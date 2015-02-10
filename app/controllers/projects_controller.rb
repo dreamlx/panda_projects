@@ -6,6 +6,8 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.find(params[:id])
+    @initialfee = @project.initialfee ? @project.initialfee : @project.create_initialfee
+    @deduction  = @project.deduction ? @project.deduction : @project.create_deduction
   end
 
   def new

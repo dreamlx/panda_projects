@@ -22,15 +22,6 @@ class ApplicationController < ActionController::Base
       end
     end
     
-    def redirect_to_index(msg = nil)
-      flash[:notice] = msg if msg
-      redirect_to(:action => 'index')
-    end
-    
-    def get_cookie
-      return cookies[:the_time]
-    end
-    
     def get_now_period
       cookie_period_id = cookies[:the_time]
       if cookie_period_id != "" 

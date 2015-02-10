@@ -13,7 +13,6 @@
   <td><%= initialfee.stationery %></td>
   <td><%= initialfee.report_binding %></td>    
   <td><%= initialfee.payment_on_be_half %></td>
-  <td><%= link_to 'Show', initialfee %></td>
   <td><%= link_to 'Edit', edit_initialfee_path(initialfee) if initialfee.project.status.title == 'Active'%></td>
   <td><%= link_to 'Destroy', initialfee, method: :delete, data: {confirm: 'Are you sure?'} if initialfee.project.status.title == 'Active'%></td>
 </tr>

@@ -4,10 +4,6 @@ class DeductionsController < ApplicationController
     @deductions = @q.result.page(params[:page])
   end
 
-  def show
-    @deduction = Deduction.find(params[:id])
-  end
-
   def new
     @deduction = Deduction.new
   end
@@ -27,10 +23,15 @@ class DeductionsController < ApplicationController
 
   def update
     @deduction = Deduction.find(params[:id])
-    if @deduction.update(deduction_params)
-      redirect_to @deduction, notice: 'Deduction was successfully updated.'
-    else
-      render :action => 'edit'
+
+    respond_to do |format|
+      if @deduction.update(deduction_params)
+        format.html { redirect_to @deduction, notice: 'Deduction was successfully updated.' }
+        format.json { respond_with_bip(@deduction) }
+      else
+        format.html { render :action => "edit" }
+        format.json { respond_with_bip(@deduction) }
+      end
     end
   end
 
