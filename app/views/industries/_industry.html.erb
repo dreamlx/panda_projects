@@ -1,6 +1,6 @@
 <tr>
-  <td><%= best_in_place industry, :code, type: :input %></td>
-  <td><%= best_in_place industry, :title, type: :input %></td>
+  <td><%= best_in_place industry, :code, as: :input %></td>
+  <td><%= best_in_place industry, :title, as: :input %></td>
   <td><%= link_to t('destroy'), industry, 
                   data: {confirm: t('are_you_sure')}, 
                   method: :delete %></td>
