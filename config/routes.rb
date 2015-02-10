@@ -28,7 +28,9 @@ Rails.application.routes.draw do
   resources :personalcharges
   resources :reports do
     get :print, on: :collection
-    get :summary, on: :collection
+    post :summary, on: :collection
+    get :summary_by_user, on: :collection
+    post :time_report, on: :collection
   end
   resources :people
   resources :periods

@@ -5,7 +5,12 @@ class ReportsController < ApplicationController
   end
 
   def print
-    init_set #people period project
+    prj_status = Dict.find_by_title_and_category("Active","prj_status")
+    person_status = Dict.find_by_title_and_category("Resigned","person_status")
+    @people = Person.where("status_id != '#{person_status.id}' ").order('english_name')
+     
+    @projects = Project.where(" status_id =#{prj_status.id}").order('job_code')
+    @periods = Period.order('number DESC') 
     @periods2 = Period.order('number desc')
     @personalcharge = Personalcharge.new
     @now_user = session[:user_id]
@@ -24,7 +29,7 @@ class ReportsController < ApplicationController
   
   def time_report
     @info = Personalcharge.new(params[:personalcharge])
-    @statuses   = Dict.find(:all,      :conditions =>"category ='prj_status' and code = '1'")# 1 open, 0 close
+    @statuses   = Dict.where("category ='prj_status' and code = '1'")# 1 open, 0 close
                    
     @project = Project.find(@info.project_id)
     @now_period = Period.find(@info.period_id)
@@ -250,15 +255,14 @@ class ReportsController < ApplicationController
     headers['Content-Disposition'] = 'attachment; filename="excel-export.xls"'
     headers['Cache-Control'] = ''
     prj_status = Dict.find_by_title_and_category("Active","prj_status")
-    @people = Person.find(:all, :order => 'english_name')
+    @people = Person.order('english_name')
      
     
     @info = Project.new(params[:project])
     @start_period = Period.find(params[:start_period_id])
     @end_period = Period.find(params[:end_period_id])
     
-    @projects = Project.find( :all,
-      :order=>'job_code')
+    @projects = Project.order('job_code')
 
     project_sql = [" GMU_id =?", @info.GMU_id]
  
