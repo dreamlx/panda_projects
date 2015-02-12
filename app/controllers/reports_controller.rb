@@ -28,7 +28,7 @@ class ReportsController < ApplicationController
   end
   
   def time_report
-    @info = Personalcharge.new(params[:personalcharge])
+    @info = Personalcharge.new(personalcharge_params)
     @statuses   = Dict.where("category ='prj_status' and code = '1'")# 1 open, 0 close
                    
     @project = Project.find(@info.project_id)
@@ -87,7 +87,7 @@ class ReportsController < ApplicationController
      
     service_total_charges = @p_total.service_fee + @initialfee.service_fee + @e_cumulative.outsourcing + @e_cumulative.commission
     expense_total_charges = @sum_e_total  +@total_reimbs + @sum_initialfee + @initialfee.meal_allowance + @initialfee.travel_allowance + @initialfee.reimbursement 
-    
+    byebug
     service_PFA = (@p_total.service_fee )*@project.service_PFA/100 +@initialdeduction.service_PFA
     expense_PFA = (@total_reimbs+@sum_e_total-@e_cumulative.payment_on_be_half)*@project.expense_PFA/100 +@initialdeduction.expense_PFA
     
@@ -626,6 +626,9 @@ class ReportsController < ApplicationController
   end
   
   private
+    def personalcharge_params
+      params.require(:personalcharge).permit(:hours, :service_fee, :reimbursement, :meal_allowance, :travel_allowance, :project_id, :period_id, :PFA_of_service_fee, :person_id)
+    end
     def get_summary_record(params_info,period)
       summary_record = {
         'id'  => "",

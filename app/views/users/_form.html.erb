@@ -1,0 +1,7 @@
+<%= simple_form_for @user do |f| %>
+  <%= f.input :name %>
+  <%= f.input :password %>
+  <%= f.input :person_id, collection: Person.all %>
+  <%= f.input :other1 %>
+  <%= f.button :submit %>
+<% end %>

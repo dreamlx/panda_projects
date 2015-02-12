@@ -1,7 +1,7 @@
 class PeopleController < ApplicationController
   def index
     @q = Person.ransack(params[:q])
-    @people = @q.result.order(:employee_number).page(params[:page])
+    @people = @q.result.page(params[:page])
   end
 
   def create

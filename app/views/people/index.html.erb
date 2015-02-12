@@ -15,10 +15,11 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Employee number</th>
-      <th>Chinese name</th>
-      <th>English name</th>
-      <th>Charge rate</th>
+      <th><%= sort_link(@q, :employee_number) %></th>
+      <th><%= sort_link(@q, :chinese_name) %></th>
+      <th><%= sort_link(@q, :english_name) %></th>
+      <th><%= sort_link(@q, :charge_rate) %></th>
+      <th><%= sort_link(@q, :grade) %></th>
       <th colspan="2">Operation</th>
     </tr>
   </thead>
@@ -28,7 +29,8 @@
         <td><%= link_to person.employee_number, person %></td>
         <td><%= person.chinese_name%></td>
         <td><%= person.english_name%></td>
-        <td><%=person.charge_rate%></td>
+        <td><%= person.charge_rate%></td>
+        <td><%= person.grade %></td>
         <td><%= link_to 'Edit', edit_person_path(person) %></td>
         <td><%= link_to 'Destroy', person, method: :delete, data: {:confirm => 'Are you sure?'} %></td>
       </tr>

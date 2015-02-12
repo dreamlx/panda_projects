@@ -1,19 +1,29 @@
-<form action="/login/create_cookie" method="POST">
-  <P>
-    <select name="period">
-    <option value="0">ALL</option>
-      <%@periods.each do |period| %>
-         <option value="<%= period.id %>" 
-           <%=period.number %>
-         </option>
-      <% end %>
-     </select>
-   <input type="submit" value="set current period" />
-   </p> 
-
-  <p id = "notice">
-    Login time:<%= @last_login.title %> || 
-    Now period:<%= @now_period.number if not @now_period.nil? %>||
-    Now user<%= ss = Person.find(session[:user_id]).grade %>
-  </p>
-</form>
+<h1>Listing users</h1>
+<div>
+  <%= link_to 'new user', new_user_path %>
+</div>
+<%= paginate @users %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= sort_link(@q, :name) %></th>
+      <th><%= sort_link(@q, :auth) %></th>
+      <th><%= sort_link(@q, :other1) %></th>
+      <th><%= sort_link(@q, :other2) %></th>
+      <th colspan="2">Operation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.auth %></td>
+        <td><%= user.other1 %></td>
+        <td><%= user.other2 %></td>
+        <td><%= link_to 'Edit', :action => 'edit', :id => user %></td>
+        <td><%= link_to 'Del', { :action => 'destroy', :id => user }, :confirm => 'Are you sure?', :post => true %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @users %>
