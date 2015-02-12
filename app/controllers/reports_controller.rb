@@ -87,7 +87,6 @@ class ReportsController < ApplicationController
      
     service_total_charges = @p_total.service_fee + @initialfee.service_fee + @e_cumulative.outsourcing + @e_cumulative.commission
     expense_total_charges = @sum_e_total  +@total_reimbs + @sum_initialfee + @initialfee.meal_allowance + @initialfee.travel_allowance + @initialfee.reimbursement 
-    byebug
     service_PFA = (@p_total.service_fee )*@project.service_PFA/100 +@initialdeduction.service_PFA
     expense_PFA = (@total_reimbs+@sum_e_total-@e_cumulative.payment_on_be_half)*@project.expense_PFA/100 +@initialdeduction.expense_PFA
     

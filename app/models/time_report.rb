@@ -34,18 +34,16 @@ class TimeReport
   end
   
   def for_report(project, period)
-    sql_condition     = " project_id = #{project.id} and period_id ='#{period.id}' "
-    sql_condition2     = " project_id = #{project.id} and periods.ending_date <= '#{period.ending_date}' "
-    sql_all_by_project    = " project_id = #{project.id} "
-    sql_join          = " inner join people on personalcharges.person_id = people.id inner join periods on periods.id = period_id "
-    sql_order         = " english_name "
-    #" and billing_date <= '#{@period.ending_date}' and billing_date >= '#{@period.starting_date}' "
+    sql_condition       = " project_id = #{project.id} and period_id ='#{period.id}' "
+    sql_condition2      = " project_id = #{project.id} and periods.ending_date <= '#{period.ending_date}' "
+    sql_all_by_project  = " project_id = #{project.id} "
+    sql_join            = " inner join people on personalcharges.person_id = people.id inner join periods on periods.id = period_id "
+    sql_order           = " english_name "
     #person charges
     @personalcharges  = Personalcharge.where(sql_condition2)
     @user_list = Personalcharge.find_by_sql("select distinct person_id, english_name, charge_rate, employee_number from personalcharges " + sql_join + 
         " where " + sql_all_by_project + " order by english_name" )
     for user in @user_list
-      #flag = 1 is current, flag = 0 is cumulatives
       @p_currents     << sum_personalcharge(project.id, user.person_id, period, 1)
       @p_cumulatives  << sum_personalcharge(project.id, user.person_id, period, 0)   
     end                       
@@ -56,33 +54,24 @@ class TimeReport
     @e_cumulative  = sum_expense(project.id, period, 0)
 
   
-    #billings  
-    #@billings =Billing.find_by_sql("select billings.* from billings " + "inner join periods on periods.id = period_id " + " where 1 and " + sql_condition2 +" order by billings.number" )
-    @billings = Billing.where(sql_condition2)
-    @b_total.service_billing  = Billing.sum("service_billing",                                             
-      :include =>:period, 
-      :conditions => sql_condition2)||0
-    @b_total.expense_billing  = Billing.sum("expense_billing",
-      :include =>:period, 
-      :conditions => sql_condition2)||0  
-  
-    @bt["current"]     = Billing.sum( "business_tax",        
-      :conditions => sql_condition)||0
-    @bt["cumulative"]  = Billing.sum(         "business_tax",                                                    
-      :include =>:period, 
-      :conditions => sql_condition2)||0 
+    #billings
+    @billings =               = Billing.where(sql_condition2)
+    @b_total.service_billing  = Billing.sum("service_billing",  :include =>:period, :conditions => sql_condition2)||0
+    @b_total.expense_billing  = Billing.sum("expense_billing",  :include =>:period, :conditions => sql_condition2)||0    
+    @bt["current"]            = Billing.sum( "business_tax",                        :conditions => sql_condition)||0
+    @bt["cumulative"]         = Billing.sum( "business_tax",    :include =>:period, :conditions => sql_condition2)||0 
     #initialfees
     @initialfee = Initialfee.where(sql_all_by_project).first || Initialfee.new
-    @deduction  = Deduction.where(sql_all_by_project) || Deduction.new
+    @deduction  = Deduction.where(sql_all_by_project).first || Deduction.new
   
     #PFA and UFA
     @UFA_fees   = Ufafee.where(sql_condition2)
     @UFA_total.service_UFA  = Ufafee.sum("service_UFA", :include =>:period, :conditions => sql_condition2)||0
     @UFA_total.expense_UFA  = Ufafee.sum("expense_UFA", :include =>:period, :conditions => sql_condition2)||0
   end
+
   private  
   def sum_personalcharge(project_id = nil, person_id=nil, period=nil, flag = nil )
-    #flag = 1 is current, flag = 0 is cumulatives
     sql_join          = " inner join periods on periods.id = period_id "
     sql_condition = " 1 "
     sql_condition += " and project_id = #{project_id}" unless project_id.nil?
@@ -105,7 +94,6 @@ class TimeReport
     @p.meal_allowance   = Personalcharge.sum("meal_allowance",      :joins => sql_join,:conditions => sql_condition) ||0
     @p.travel_allowance = Personalcharge.sum("travel_allowance",    :joins => sql_join,:conditions => sql_condition) ||0
     @p.updated_on       = Personalcharge.maximum("updated_on",      :joins => sql_join,:conditions => sql_condition)|| nil
-    #@p.period_id = period.id||nil
     return @p
   end
     
@@ -122,19 +110,16 @@ class TimeReport
       sql_condition += " and periods.ending_date <= '#{period.ending_date}' " unless period.nil?
     end
     @e            = Expense.new
-    #@e.period_id  = period_id
     @e.project_id = project_id                           
-    @e.tickets            = Expense.sum("tickets",      :joins => sql_join,:conditions => sql_condition )||0
-    @e.courrier           = Expense.sum("courrier",     :joins => sql_join,:conditions => sql_condition )||0
-    @e.postage            = Expense.sum("postage",      :joins => sql_join,:conditions => sql_condition )||0
+    @e.tickets            = Expense.sum("tickets",            :joins => sql_join,:conditions => sql_condition )||0
+    @e.courrier           = Expense.sum("courrier",           :joins => sql_join,:conditions => sql_condition )||0
+    @e.postage            = Expense.sum("postage",            :joins => sql_join,:conditions => sql_condition )||0
     @e.stationery         = Expense.sum("stationery",         :joins => sql_join, :conditions => sql_condition )||0
     @e.report_binding     = Expense.sum("report_binding",     :joins => sql_join, :conditions => sql_condition )||0
     @e.payment_on_be_half = Expense.sum("payment_on_be_half", :joins => sql_join, :conditions => sql_condition )||0
     @e.commission         = Expense.sum("commission",         :joins => sql_join, :conditions => sql_condition )||0
     @e.outsourcing        = Expense.sum("outsourcing",        :joins => sql_join, :conditions => sql_condition )||0
     @e.updated_on         = Expense.maximum("updated_on",     :joins => sql_join, :conditions => sql_condition)|| nil
-    
     return @e
   end
-  
 end

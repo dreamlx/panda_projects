@@ -501,30 +501,30 @@ td
   </tr>
   <% @sum_current_service_billing =0
   	@sum_current_expense_billing = 0   %>
-  <%for billing in @billings%>
+  <% @billings.each do |billing| %>
   <tr class="xl26" height=20>
     <td colspan=3 height=20 class=xl28><%=billing.number||"--"%></td>
     <td colspan=3 class=xl28>
-	<% if billing.status == '0' 
-		@status ='outstanding'
-		else
-		@status ='received'
-		end
+  	<% if billing.status == '0' 
+  		@status ='outstanding'
+  		else
+  		@status ='received'
+  		end
 
-	%>
-	<%=@status%>
-	</td>
-    <td class=xl26>(<%=sprintf("%0.0f" ,billing.service_billing)  if billing.period_id == @now_period.id%>)</td>
-    <td colspan=3 class=xl28>&nbsp;</td>
-    <td class=xl26>(<%=sprintf("%0.0f" ,billing.expense_billing ) if billing.period_id == @now_period.id%>)</td>
-    <td colspan=2 class=xl28>&nbsp;</td>
-    <td class=xl26>(<%=sprintf("%0.0f" ,billing.service_billing)%>)</td>
-    <td colspan=3 class=xl28>&nbsp;</td>
-    <td class=xl26>(<%=sprintf("%0.0f" ,billing.expense_billing)%>)</td>
-    <td class=xl26><%=Time.at(billing.updated_on).strftime("%y-%m-%d")%></td>
-  </tr>
-  <% @sum_current_service_billing += billing.service_billing if billing.period_id == @now_period.id %>
-  <% @sum_current_expense_billing += billing.expense_billing if billing.period_id == @now_period.id %>
+  	%>
+  	<%=@status%>
+  	</td>
+      <td class=xl26>(<%=sprintf("%0.0f" ,billing.service_billing)  if billing.period_id == @now_period.id%>)</td>
+      <td colspan=3 class=xl28>&nbsp;</td>
+      <td class=xl26>(<%=sprintf("%0.0f" ,billing.expense_billing ) if billing.period_id == @now_period.id%>)</td>
+      <td colspan=2 class=xl28>&nbsp;</td>
+      <td class=xl26>(<%=sprintf("%0.0f" ,billing.service_billing)%>)</td>
+      <td colspan=3 class=xl28>&nbsp;</td>
+      <td class=xl26>(<%=sprintf("%0.0f" ,billing.expense_billing)%>)</td>
+      <td class=xl26><%=Time.at(billing.updated_on).strftime("%y-%m-%d")%></td>
+    </tr>
+    <% @sum_current_service_billing += billing.service_billing if billing.period_id == @now_period.id %>
+    <% @sum_current_expense_billing += billing.expense_billing if billing.period_id == @now_period.id %>
   <% end %>
   <tr class=xl38 height=20>
     <td colspan=3 height=20 class=xl50>Subtotal of billings</td>
@@ -588,80 +588,8 @@ td
     <td class=xl30> <%= sprintf("%0.0f" ,(total_charges -( expense_PFA + @billing_total.expense_billing + @initialdeduction.expense_billing + @UFA_total.expense_UFA + @initialdeduction.expense_UFA )))%> </td>
     <td class=xl30>&nbsp;</td>
   </tr>
-  <!--
-  <tr height=20>
-    <td colspan=3 height=20 class=xl50>Beginning balance</td>
-    <td colspan=3 class=xl43>��</td>
-    <td class=xl26>��</td>
-    <td colspan=3 class=xl28>��</td>
-    <td class=xl26>��</td>
-    <td colspan=2 class=xl27>��</td>
-    <td class=xl26>��</td>
-    <td colspan=3 class=xl28>��</td>
-    <td class=xl35>��</td>
-    <td class=xl28>--</td>
-  </tr>
-  <tr height=20>
-    <td colspan=3 height=20 class=xl43>200702270006</td>
-    <td colspan=3 class=xl43>��</td>
-    <td class=xl26>��</td>
-    <td colspan=3 class=xl28>��</td>
-    <td class=xl26>��</td>
-    <td colspan=2 class=xl27>��</td>
-    <td class=xl26>(40000.0)</td>
-    <td colspan=3 class=xl28>��</td>
-    <td class=xl26>(200)</td>
-    <td class=xl28>2006-10-28</td>
-  </tr>
-  <tr class=xl38 height=20>
-    <td colspan=3 height=20 class=xl32>Subtotal of UFA</td>
-    <td colspan=3 class=xl43>��</td>
-    <td class=xl31>(40000.0)</td>
-    <td colspan=3 class=xl32>��</td>
-    <td class=xl31>(200)</td>
-    <td colspan=2 class=xl46>��</td>
-    <td class=xl31>(120000.0)</td>
-    <td colspan=3 class=xl32>��</td>
-    <td class=xl31>(600)</td>
-    <td class=xl32>2006-10-28</td>
-  </tr>
-  <tr height=18>
-    <td colspan=19 height=18 class=xl53 >��</td>
-  </tr>
-  <tr class=xl37 height=20>
-    <td colspan=3 height=20 class=xl69 >TOTAL INV BALANCE</td>
-    <td class=xl30>��</td>
-    <td colspan=2 class=xl50>��</td>
-    <td class=xl30>3600.0</td>
-    <td colspan=3 class=xl50>��</td>
-    <td class=xl30>300</td>
-    <td colspan=2 class=xl50>��</td>
-    <td class=xl30>42800</td>
-    <td colspan=3 class=xl30>��</td>
-    <td class=xl39>4206.0</td>
-    <td class=xl30>--</td>
-  </tr>
-  -->
   <tr height=0>
-    <td ></td>
-    <td ></td>
-    <td ></td>
-    <td ></td>
-    <td ></td>
-    <td ></td>
-    <td ></td>
-    <td ></td>
-    <td ></td>
-    <td ></td>
-    <td></td>
-    <td ></td>
-    <td ></td>
-    <td ></td>
-    <td></td>
-    <td ></td>
-    <td></td>
-    <td ></td>
-    <td ></td>
+    <td colspan="19"></td>
   </tr>
 </table>
 </body>
