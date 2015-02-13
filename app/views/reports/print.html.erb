@@ -4,72 +4,53 @@
 <%=@now_period%>
 <% partner = get_role(session[:user_id],'partner') %>
 <%= form_tag('/reports/time_report', :method => :post) do %>
-  <table>
-    <tr>
-      <td>
-        <p><b>Job_code:</b><br>
-          <% #如果当前用户为项目负责人或者管理员，则显示项目
-          if @admin #superuser
-            sql_conditions = "  1 "
-          else
-            sql_conditions = " 0 "
-            sql_conditions += " or partner_id = "+ session[:user_id].to_s           #if @now_user == project.partner_id
-            sql_conditions += " or manager_id = "+ session[:user_id].to_s           #if @now_user == project.manager_id
-            sql_conditions += " or referring_id = "+ session[:user_id].to_s         #if @now_user == project.referring_id
-            sql_conditions += " or billing_partner_id = "+ session[:user_id].to_s   #if @now_user == project.billing_partner_id
-            sql_conditions += " or billing_manager_id = "+ session[:user_id].to_s   #if @now_user == project.billing_manager_id
-          end
-          sql_conditions = "("+sql_conditions+")"
-        %>
-          <%= select("personalcharge", "project_id", Project.where(sql_conditions).collect {|p| [ p.job_code, p.id ] }) %>
-      </td>
-      <td>
-        <p><b>Period:</b><br>
-          <%= select("personalcharge", "period_id", Period.order('number desc').collect {|p| [ p.number, p.id ] }) %>
-        </p>
-      </td>
-      <td>
-        <br>
-        <input type="submit" value="REPORT" />
-      </td>
-    </tr>
-  </table>
+  <b>Job_code:</b>
+    <% #如果当前用户为项目负责人或者管理员，则显示项目
+    if @admin #superuser
+      sql_conditions = "  1 "
+    else
+      sql_conditions = " 0 "
+      sql_conditions += " or partner_id = "+ session[:user_id].to_s           #if @now_user == project.partner_id
+      sql_conditions += " or manager_id = "+ session[:user_id].to_s           #if @now_user == project.manager_id
+      sql_conditions += " or referring_id = "+ session[:user_id].to_s         #if @now_user == project.referring_id
+      sql_conditions += " or billing_partner_id = "+ session[:user_id].to_s   #if @now_user == project.billing_partner_id
+      sql_conditions += " or billing_manager_id = "+ session[:user_id].to_s   #if @now_user == project.billing_manager_id
+    end
+    sql_conditions = "("+sql_conditions+")"
+  %>
+    <%= select("personalcharge", "project_id", Project.where(sql_conditions).order(job_code: :desc).collect {|p| [ p.job_code, p.id ] }) %>
+  <b>Period:</b>
+    <%= select("personalcharge", "period_id", Period.order('number desc').collect {|p| [ p.number, p.id ] }) %>
+  <input type="submit" value="REPORT" />
 <% end  %>
 
 <% if partner or @admin%>
   <h3>Summary</h3>
   <%= form_tag :action => 'summary' do %>
-    <table>
-      <tr>
-        <td>Period:</td>
-        <td>
-          <select name="start_period_id">
-            from:
-            <% @periods.each do |period| %>
-              <option value="<%= period.id %>"
-                      <%= ' selected' if period.id == @now_period %>>
-                        <%=period.number %>
-              </option>
-            <% end %>
-          </select>
-          to:
-          <select name="end_period_id">
-            <% @periods.each do |period| %>
-              <option value="<%= period.id %>"
-                      <%= ' selected' if period.id == @now_period %>>
-                        <%=period.number %>
-              </option>
-            <% end %>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td colspan='2'><%= submit_tag 'summary' %></td>
-      </tr>
-    </table>
+    Period:
+      <select name="start_period_id">
+        from:
+        <% @periods.each do |period| %>
+          <option value="<%= period.id %>"
+                  <%= ' selected' if period.id == @now_period %>>
+                    <%=period.number %>
+          </option>
+        <% end %>
+      </select>
+      to:
+      <select name="end_period_id">
+        <% @periods.each do |period| %>
+          <option value="<%= period.id %>"
+                  <%= ' selected' if period.id == @now_period %>>
+                    <%=period.number %>
+          </option>
+        <% end %>
+      </select>
+    <%= submit_tag 'summary' %>
   <% end %>
 <% end %>
-<hr>
+
+
 <h3>Summary by user</h3>
 <%= form_tag({:action => 'summary_by_user'},{:target=>"_blank"} ) do %>
 <table>

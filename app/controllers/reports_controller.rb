@@ -250,20 +250,11 @@ class ReportsController < ApplicationController
   end
   
   def summary
-    headers['Content-Type'] = "application/vnd.ms-excel"
-    headers['Content-Disposition'] = 'attachment; filename="excel-export.xls"'
-    headers['Cache-Control'] = ''
-    prj_status = Dict.find_by_title_and_category("Active","prj_status")
-    @people = Person.order('english_name')
-     
-    
-    @info = Project.new(params[:project])
+    prj_status    = Dict.find_by_title_and_category("Active","prj_status")
+    @people       = Person.order('english_name')
     @start_period = Period.find(params[:start_period_id])
-    @end_period = Period.find(params[:end_period_id])
-    
-    @projects = Project.order('job_code')
-
-    project_sql = [" GMU_id =?", @info.GMU_id]
+    @end_period   = Period.find(params[:end_period_id])
+    @projects     = Project.order('job_code')
  
     reimb_sql = "select 	 PRJ.id as prj_id, PRJ.job_code as job_code,                          "+
       "          0 as Beg_travel,                 "+
@@ -373,21 +364,21 @@ class ReportsController < ApplicationController
     @i=0
     for record in @projects
     
-      summaryRecord = Summary.new
-      summaryRecord.id = record.id.to_s
-      summaryRecord.GMU = record.GMU.title
-      summaryRecord.job_code = record.job_code
-      summaryRecord.clien_name = record.client.english_name unless record.client.nil?
-      summaryRecord.job_Ref = record.referring.english_name unless record.referring.nil?
-      summaryRecord.job_Ptr = record.partner.english_name unless record.partner.nil?
-      summaryRecord.job_Mgr = record.manager.english_name unless record.manager.nil?
-      summaryRecord.service_line = record.service_code.code
-      summaryRecord.service_PFA = record.service_PFA
-      summaryRecord.expense_PFA = record.expense_PFA
+      summaryRecord                 = Summary.new
+      summaryRecord.id              = record.id.to_s
+      summaryRecord.GMU             = record.GMU.title
+      summaryRecord.job_code        = record.job_code
+      summaryRecord.clien_name      = record.client.english_name unless record.client.nil?
+      summaryRecord.job_Ref         = record.referring.english_name unless record.referring.nil?
+      summaryRecord.job_Ptr         = record.partner.english_name unless record.partner.nil?
+      summaryRecord.job_Mgr         = record.manager.english_name unless record.manager.nil?
+      summaryRecord.service_line    = record.service_code.code
+      summaryRecord.service_PFA     = record.service_PFA
+      summaryRecord.expense_PFA     = record.expense_PFA
       summaryRecord.contract_number = record.contract_number
-      summaryRecord.contracted_fee = record.contracted_service_fee
+      summaryRecord.contracted_fee  = record.contracted_service_fee
       summaryRecord.contracted_expense = record.contracted_expense
-      summaryRecord.project_status = record.status.title
+      summaryRecord.project_status  = record.status.title if record.status
     
       for fee in @service_pfa
         if record.id.to_s == fee.prj_id.to_s
@@ -415,7 +406,7 @@ class ReportsController < ApplicationController
       #summaryRecord.INVPER = 0
       summaryRecord.INVENTORY_BALANCE = summaryRecord.fees_Cum.to_i - summaryRecord.PFA_Cum.to_i - summaryRecord.Billing_Cum.to_i
     
-      if summaryRecord.contracted_fee == 0
+      if summaryRecord.contracted_fee == 0 || summaryRecord.Billing_Cum
         summaryRecord.INVPER = 0
       else  
         summaryRecord.INVPER = (summaryRecord.Billing_Cum.to_i / summaryRecord.contracted_fee )* 100 
@@ -423,7 +414,6 @@ class ReportsController < ApplicationController
       @srecords["#{@i}"] = summaryRecord
       @i = @i +1
     end
- 
   end
   
   def summary_by_user

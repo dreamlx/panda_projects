@@ -40,7 +40,7 @@ class TimeReport
     sql_join            = " inner join people on personalcharges.person_id = people.id inner join periods on periods.id = period_id "
     sql_order           = " english_name "
     #person charges
-    @personalcharges  = Personalcharge.where(sql_condition2)
+    @personalcharges  = Personalcharge.joins(:period).where(sql_condition2)
     @user_list = Personalcharge.find_by_sql("select distinct person_id, english_name, charge_rate, employee_number from personalcharges " + sql_join + 
         " where " + sql_all_by_project + " order by english_name" )
     for user in @user_list
@@ -55,19 +55,20 @@ class TimeReport
 
   
     #billings
-    @billings =               = Billing.where(sql_condition2)
-    @b_total.service_billing  = Billing.sum("service_billing",  :include =>:period, :conditions => sql_condition2)||0
-    @b_total.expense_billing  = Billing.sum("expense_billing",  :include =>:period, :conditions => sql_condition2)||0    
-    @bt["current"]            = Billing.sum( "business_tax",                        :conditions => sql_condition)||0
-    @bt["cumulative"]         = Billing.sum( "business_tax",    :include =>:period, :conditions => sql_condition2)||0 
+    @billings                 = Billing.joins(:period).where(sql_condition2)
+    @b_total.service_billing  = Billing.includes(:period).where(sql_condition2).sum("service_billing") ||0
+    @b_total.expense_billing  = Billing.includes(:period).where(sql_condition2).sum("expense_billing") ||0    
+    @bt["current"]            = Billing.where(sql_condition).sum("business_tax")||0
+    @bt["cumulative"]         = Billing.includes(:period).where(sql_condition2).sum("business_tax")||0 
     #initialfees
+    byebug
     @initialfee = Initialfee.where(sql_all_by_project).first || Initialfee.new
     @deduction  = Deduction.where(sql_all_by_project).first || Deduction.new
   
     #PFA and UFA
-    @UFA_fees   = Ufafee.where(sql_condition2)
-    @UFA_total.service_UFA  = Ufafee.sum("service_UFA", :include =>:period, :conditions => sql_condition2)||0
-    @UFA_total.expense_UFA  = Ufafee.sum("expense_UFA", :include =>:period, :conditions => sql_condition2)||0
+    @UFA_fees   = Ufafee.joins(:period).where(sql_condition2)
+    @UFA_total.service_UFA  = Ufafee.includes(:period).where(sql_condition2).sum("service_UFA")||0
+    @UFA_total.expense_UFA  = Ufafee.includes(:period).where(sql_condition2).sum("expense_UFA")||0
   end
 
   private  
@@ -88,12 +89,12 @@ class TimeReport
     @p.person_id = person_id
     
     @p.project_id = project_id                           
-    @p.service_fee      = Personalcharge.sum("service_fee",         :joins => sql_join,:conditions => sql_condition) ||0 
-    @p.hours            = Personalcharge.sum("hours",               :joins => sql_join,:conditions => sql_condition) ||0                    
-    @p.reimbursement    = Personalcharge.sum("reimbursement",       :joins => sql_join,:conditions => sql_condition) ||0
-    @p.meal_allowance   = Personalcharge.sum("meal_allowance",      :joins => sql_join,:conditions => sql_condition) ||0
-    @p.travel_allowance = Personalcharge.sum("travel_allowance",    :joins => sql_join,:conditions => sql_condition) ||0
-    @p.updated_on       = Personalcharge.maximum("updated_on",      :joins => sql_join,:conditions => sql_condition)|| nil
+    @p.service_fee      = Personalcharge.joins(sql_join).where(sql_condition).sum("service_fee") ||0 
+    @p.hours            = Personalcharge.joins(sql_join).where(sql_condition).sum("hours") ||0
+    @p.reimbursement    = Personalcharge.joins(sql_join).where(sql_condition).sum("reimbursement") ||0
+    @p.meal_allowance   = Personalcharge.joins(sql_join).where(sql_condition).sum("meal_allowance") ||0
+    @p.travel_allowance = Personalcharge.joins(sql_join).where(sql_condition).sum("travel_allowance") ||0
+    @p.updated_on       = Personalcharge.joins(sql_join).where(sql_condition).sum("updated_on") || nil
     return @p
   end
     
@@ -111,15 +112,15 @@ class TimeReport
     end
     @e            = Expense.new
     @e.project_id = project_id                           
-    @e.tickets            = Expense.sum("tickets",            :joins => sql_join,:conditions => sql_condition )||0
-    @e.courrier           = Expense.sum("courrier",           :joins => sql_join,:conditions => sql_condition )||0
-    @e.postage            = Expense.sum("postage",            :joins => sql_join,:conditions => sql_condition )||0
-    @e.stationery         = Expense.sum("stationery",         :joins => sql_join, :conditions => sql_condition )||0
-    @e.report_binding     = Expense.sum("report_binding",     :joins => sql_join, :conditions => sql_condition )||0
-    @e.payment_on_be_half = Expense.sum("payment_on_be_half", :joins => sql_join, :conditions => sql_condition )||0
-    @e.commission         = Expense.sum("commission",         :joins => sql_join, :conditions => sql_condition )||0
-    @e.outsourcing        = Expense.sum("outsourcing",        :joins => sql_join, :conditions => sql_condition )||0
-    @e.updated_on         = Expense.maximum("updated_on",     :joins => sql_join, :conditions => sql_condition)|| nil
+    @e.tickets            = Expense.joins(sql_join).where(sql_condition).sum("tickets") ||0
+    @e.courrier           = Expense.joins(sql_join).where(sql_condition).sum("courrier") ||0
+    @e.postage            = Expense.joins(sql_join).where(sql_condition).sum("postage") ||0
+    @e.stationery         = Expense.joins(sql_join).where(sql_condition).sum("stationery") ||0
+    @e.report_binding     = Expense.joins(sql_join).where(sql_condition).sum("report_binding") ||0
+    @e.payment_on_be_half = Expense.joins(sql_join).where(sql_condition).sum("payment_on_be_half") ||0
+    @e.commission         = Expense.joins(sql_join).where(sql_condition).sum("commission") ||0
+    @e.outsourcing        = Expense.joins(sql_join).where(sql_condition).sum("outsourcing") ||0
+    @e.updated_on         = Expense.joins(sql_join).where(sql_condition).sum("updated_on") || nil
     return @e
   end
 end
