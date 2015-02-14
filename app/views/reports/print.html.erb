@@ -1,212 +1,47 @@
-<% @admin = get_role(session[:user_id],'admin') %>
-<% partner = get_role(session[:user_id],'partner') %>
-<% manager = get_role(session[:user_id],'manager') %>
-<%=@now_period%>
-<% partner = get_role(session[:user_id],'partner') %>
+<!-- time report -->
 <%= form_tag('/reports/time_report', :method => :post) do %>
   <b>Job_code:</b>
-    <% #如果当前用户为项目负责人或者管理员，则显示项目
-    if @admin #superuser
-      sql_conditions = "  1 "
-    else
-      sql_conditions = " 0 "
-      sql_conditions += " or partner_id = "+ session[:user_id].to_s           #if @now_user == project.partner_id
-      sql_conditions += " or manager_id = "+ session[:user_id].to_s           #if @now_user == project.manager_id
-      sql_conditions += " or referring_id = "+ session[:user_id].to_s         #if @now_user == project.referring_id
-      sql_conditions += " or billing_partner_id = "+ session[:user_id].to_s   #if @now_user == project.billing_partner_id
-      sql_conditions += " or billing_manager_id = "+ session[:user_id].to_s   #if @now_user == project.billing_manager_id
-    end
-    sql_conditions = "("+sql_conditions+")"
-  %>
-    <%= select("personalcharge", "project_id", Project.where(sql_conditions).order(job_code: :desc).collect {|p| [ p.job_code, p.id ] }) %>
+  <%= collection_select(:personalcharge, :project_id, Project.all, :id, :job_code) %>
   <b>Period:</b>
-    <%= select("personalcharge", "period_id", Period.order('number desc').collect {|p| [ p.number, p.id ] }) %>
+  <%= collection_select(:personalcharge, :period_id, Period.all, :id, :number) %>
   <input type="submit" value="REPORT" />
 <% end  %>
+<!-- end of time report -->
 
-<% if partner or @admin%>
-  <h3>Summary</h3>
-  <%= form_tag :action => 'summary' do %>
-    Period:
-      <select name="start_period_id">
-        from:
-        <% @periods.each do |period| %>
-          <option value="<%= period.id %>"
-                  <%= ' selected' if period.id == @now_period %>>
-                    <%=period.number %>
-          </option>
-        <% end %>
-      </select>
-      to:
-      <select name="end_period_id">
-        <% @periods.each do |period| %>
-          <option value="<%= period.id %>"
-                  <%= ' selected' if period.id == @now_period %>>
-                    <%=period.number %>
-          </option>
-        <% end %>
-      </select>
-    <%= submit_tag 'summary' %>
-  <% end %>
+
+<!-- summary -->
+<h3>Summary</h3>
+<%= form_tag :action => 'summary', method: :post do %>
+  Period:
+  <%= collection_select(:period, :start_period_id, Period.all, :id, :number) %>
+  <%= collection_select(:period, :end_period_id, Period.all, :id, :number) %>
+  <%= submit_tag 'summary' %>
 <% end %>
+<!-- end of summary -->
 
-
+<!-- summary by user -->
 <h3>Summary by user</h3>
-<%= form_tag({:action => 'summary_by_user'},{:target=>"_blank"} ) do %>
-<table>
-  <tr>
-    <% if @admin%>
-      <td>Partner:<td/><td>
-        <select name="project[partner_id]">
-          <option value="-1">
-            all
-          </option>
-          <% @people.each do |person| %>
-            <% @ptrs.each do |tmp_p| %>
-              <% if tmp_p.id == person.id %>
-                <option value="<%= person.id %>">
-                  <%=person.english_name %>
-                </option>
-              <% end %>
-            <% end %>
-          <% end %>
-       </select>
-      </td>
-    <%else%>
-      <td>PM<td/><td>
-        <select name="pm_select">
-          <option value="p">
-            partner
-          </option>
-          <option value="m">
-            Manager
-          </option>
-        </select>
-      </td>
-    <%end%>
-    <td >
-      Contract Number:<td/><td>
-      <select name="project[contract_number]">
-        <option value="-1">
-          all
-        </option>
-        <% @contractNumbers.each do |cNumber| %>
-          <option value="<%= cNumber.contract_number %>">
-            <%=cNumber.contract_number %>
-          </option>
-        <% end %>
-      </select>
-    </td>
-    <td>ServiceLine:<td/><td>
-      <select name="project[service_id]">
-        <option value="-1">
-          all
-        </option>
-        <% @services.each do |service| %>
-          <option value="<%= service.id %>">
-            <%=service.code %>
-          </option>
-        <% end %>
-      </select>
-    </td>
-  </tr>
-  <tr>
-    <td>Job Ref:<td/><td>
-      <select name="project[referring_id]">
-        <option value="-1">
-          all
-        </option>
-        <% @people.each do |person| %>
-          <% @refs.each do |tmp_p| %>
-            <% if tmp_p.id == person.id %>
-              <option value="<%= person.id %>">
-                <%=person.english_name %>
-              </option>
-            <% end %>
-          <% end %>
-        <% end %>
-      </select>
-    </td>
-    <td >Prj found:<td/><td>from
-      <select name="period_id2">
-
-        <% @periods2.each do |period| %>
-          <option value="<%= period.id %>"
-                  <%= ' selected' if period.id == @now_period %>>
-                    <%=period.number %>
-          </option>
-        <% end %>
-      </select>
-      to
-      <select name="period_id">
-        <% @periods.each do |period| %>
-          <option value="<%= period.id %>"
-                  <%= ' selected' if period.id == @now_period %>>
-                    <%=period.number %>
-          </option>
-        <% end %>
-      </select>
-    </td>
-    <td>GMU:<td/><td>
-      <select name="project[GMU_id]">
-        <option value="-1">
-          all
-        </option>
-        <% @GMUs.each do |gmu| %>
-          <option value="<%= gmu.id %>">
-            <%=gmu.title %>
-          </option>
-        <% end %>
-      </select>
-    </td>
-  </tr>
-  <tr>
-    <td>Manager:<td/>
-    <td>
-      <select name="project[manager_id]">
-        <% if @admin or partner%>
-          <option value="-1">
-            all
-          </option>
-        <%end%>
-        <% @people.each do |person| %>
-          <% if @admin or partner%>
-            <% @mgrs.each do |tmp_p| %>
-              <% if tmp_p.id == person.id %>
-                <option value="<%= person.id %>" >
-                  <%=person.english_name %>
-                </option>
-              <% end %>
-            <% end %>
-          <%else%>
-            <% if @now_user == person.id %>
-              <option value="<%= person.id %>" >
-                <%=person.english_name %>
-              </option>
-            <% end %>
-          <%end%>
-        <% end %>
-      </select>
-    </td>
-    <td >
-      Job Code:<td/><td><%= text_field("project", "job_code") %>
-    </td>
-    <td >
-      Status:<td/><td>
-      <select name="project[status_id]">
-        <option value="-1">
-          all
-        </option>
-        <% @statuses.each do |status| %>
-          <option value="<%= status.id %>">
-            <%=status.title %>
-          </option>
-        <% end %>
-      </select>
-    </td>
-  </tr>
-  <tr>
-    <td colspan='6'><%= submit_tag 'summary_by_user' %></td>
-  </tr>
-</table>
+<%= form_tag :action => 'summary_by_user' do %>
+  <label>Partner</label>
+  <%= collection_select(:project, :partner_id, Person.all, :id, :english_name) %><br>
+  <label>Contract Number</label>
+  <%= collection_select(:project, :contract_number, Project.all, :id, :contract_number) %><br>
+  <label>ServiceLine</label>
+  <%= select(:project, :service_id, Dict.selected_service_codes) %><br>
+  <label>Jon Ref</label>
+  <%= collection_select(:project, :referring_id, Person.all, :id, :english_name) %><br>
+  <label>Prj found</label>
+  <%= collection_select(:project, :period_id2, Period.all, :id, :number) %>
+  <label>To</label>
+  <%= collection_select(:project, :period_id, Period.all, :id, :number) %><br>
+  <label>GMU</label>
+  <%= select(:project, :GMU_id, Dict.selected_gmus) %><br>
+  <label>Manager</label>
+  <%= collection_select(:project, :manager_id, Person.all, :id, :english_name) %><br>
+  <label>Job Code</label>
+  <%= text_field(:project, :job_code) %><br>
+  <label>Status</label>
+  <%= select(:project, :status_id, Dict.selected_statuses) %><br>
+  <%= submit_tag 'summary_by_user' %>
 <% end %>
+<!-- end of summary by user -->

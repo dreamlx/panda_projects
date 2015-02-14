@@ -1,30 +1,10 @@
 class ReportsController < ApplicationController
   layout "layouts/application" ,  :except => [:export, :time_report,:expense_export, :personalcharge_export, :billing_export, :summary, :summary_by_user]
   def index
-    redirect_to :action => 'print'
+    redirect_to 'print'
   end
 
   def print
-    prj_status = Dict.find_by_title_and_category("Active","prj_status")
-    person_status = Dict.find_by_title_and_category("Resigned","person_status")
-    @people = Person.where("status_id != '#{person_status.id}' ").order('english_name')
-     
-    @projects = Project.where(" status_id =#{prj_status.id}").order('job_code')
-    @periods = Period.order('number DESC') 
-    @periods2 = Period.order('number desc')
-    @personalcharge = Personalcharge.new
-    @now_user = session[:user_id]
-    if @now_user == 0 
-      @projects = Project.order(:job_code)
-    end
-    @ptrs =Project.find_by_sql("select distinct partner_id as id from projects;")
-    @refs=Project.find_by_sql("select distinct referring_id as id from projects;")
-    @mgrs=Project.find_by_sql("select distinct manager_id as id from projects;")
-    @GMUs     = Dict.where("category = 'GMU' ")
-    @services = Dict.where("category = 'service_code' ")
-    @clients  = Client.order("english_name")
-    @statuses = Dict.where("category ='prj_status'")
-    @contractNumbers = Project.find_by_sql("select distinct contract_number from projects order by contract_number;")
   end
   
   def time_report
@@ -105,155 +85,11 @@ class ReportsController < ApplicationController
       true
     end
   end
-
-
-  def export
-    headers['Content-Type'] = "application/vnd.ms-excel" 
-    headers['Content-Disposition'] = 'attachment; filename="excel-export.xls"'
-    headers['Cache-Control'] = ''
-    @records = Personalcharge.find_by_sql(params[:sql])
-    @total = Personalcharge.new(params[:total])
-  end
-  
-  def hours_export
-    init_set
-    headers['Content-Type'] = "application/vnd.ms-excel" 
-    headers['Content-Disposition'] = 'attachment; filename="hours-export.xls"'
-    headers['Cache-Control'] = ''    
-    sql_str ="select P.job_code, D.code as Service_line, E.english_name, sum(C.hours) as hours from personalcharges as C "
-    + " inner join projects as P on C.project_id = P.id "
-    + " inner join people as E on C.person_id = E.id "
-    + " inner join dicts as D on P.service_id = D.id "
-    + " group by english_name, job_code "
-    + " order by english_name, job_code "
-    @records = Personalcharge.sum_by_sql(sql_str)
-  end
-  
-  def expense_export
-    init_set #people period project
-    @expense    = Expense.new
-    @expense.project_id = params[:project]
-    @expense.period_id = params[:period]
-    @col_lists  = %w[commission outsourcing tickets courrier postage stationery report_binding cash_advance payment_on_be_half ]
-    @col_list   = params[:col_list]
-    
-    sql_str = " select D.job_code, C.number, A.* from "+
-      " expenses as A, periods as C, projects as D " +
-      " where A.period_id = C.id and A.project_id = D.id and "
-
-    sql_condition = " 1 "
-  
-    sql_order = " order by D.job_code "
-
-    if not @expense.project_id.nil?
-      sql_condition += " and project_id =#{ @expense.project_id} "
-    end
-    if not @expense.period_id.nil?       
-      sql_condition += " and period_id = #{@expense.period_id} "
-    end    
-    
-    if @col_list != "" and @col_list != nil
-      sql_condition += " and not #{@col_list} = 0 " 
-    end
-      
-    @expenses = Expense.find_by_sql( sql_str + sql_condition + sql_order )
-    @sql = sql_str + sql_condition + sql_order
-    
-    @e_total =Expense.new
-    @e_total.commission = Expense.sum("commission", :conditions => sql_condition)
-    @e_total.outsourcing = Expense.sum("outsourcing", :conditions => sql_condition)
-    @e_total.tickets = Expense.sum("tickets", :conditions => sql_condition)
-    @e_total.courrier = Expense.sum("courrier", :conditions => sql_condition)
-    @e_total.postage = Expense.sum("postage", :conditions => sql_condition)
-    @e_total.stationery = Expense.sum("stationery", :conditions => sql_condition)
-    @e_total.report_binding = Expense.sum("report_binding", :conditions => sql_condition)
-    @e_total.cash_advance = Expense.sum("cash_advance", :conditions => sql_condition)
-    @e_total.payment_on_be_half = Expense.sum("payment_on_be_half", :conditions => sql_condition)
-    @e_count = Expense.count(:conditions =>sql_condition)
-  
-  end
-  
-  def personalcharge_export
-    @personalcharge = Personalcharge.new
-    @personalcharge.person_id = params[:person]
-    @personalcharge.period_id= params[:period]
-    @personalcharge.project_id = params[:project]
-    @p_total = Personalcharge.new
-    init_set #people period project
-    
-    sql_condition = " 1 "
-    if not @personalcharge.period_id.nil?       
-      sql_condition += " and period_id = #{ @personalcharge.period_id} "
-    end
-    
-    if not @personalcharge.person_id .nil?
-      sql_condition += " and person_id = #{ @personalcharge.person_id} "
-    end
-    
-    if not @personalcharge.project_id.nil? and not ( @personalcharge.project_id == -1 or  @personalcharge.project_id == -2 )
-      sql_condition += " and project_id =#{ @personalcharge.project_id} "
-    
-    end
-    
-    # select the frist char of jobCode in 0-9  
-    if @personalcharge.project_id == -1
-      sql_condition += " AND left( job_code, 1 )IN ( 01, 2, 3, 4, 5, 6, 7, 8, 9 )  "
-    end
-    
-    # select the frist char of jobCode not in 0-9 
-    if @personalcharge.project_id == -2
-      sql_condition += " AND left( job_code, 1 )NOT IN ( 01, 2, 3, 4, 5, 6, 7, 8, 9 )"
-    end
-      
-    sql_str ="select D.job_code, C.number, B.english_name, A.* from "+
-      "personalcharges as A, people as B,periods as C, projects as D "+
-      " where A.person_id = B.id and A.period_id = C.id and A.project_id = D.id and "
-     
-    sql_order =" order by D.job_code,  C.number, B.english_name "       
-    #@personalcharges = Personalcharge.find(:all, :conditions =>sql_condition)
-    @personalcharges        = Personalcharge.find_by_sql(sql_str + sql_condition + sql_order)
-    @tempsql =sql_str + sql_condition + sql_order
-    @p_total.hours          = Personalcharge.sum("hours",       :joins =>" inner join projects on personalcharges.project_id = projects.id",      :conditions =>sql_condition)
-    @p_total.service_fee    = Personalcharge.sum("service_fee",       :joins =>" inner join projects on personalcharges.project_id = projects.id",      :conditions =>sql_condition)                      
-    @p_total.reimbursement  = Personalcharge.sum("reimbursement",       :joins =>" inner join projects on personalcharges.project_id = projects.id",      :conditions =>sql_condition)
-    @p_total.meal_allowance = Personalcharge.sum("meal_allowance",       :joins =>" inner join projects on personalcharges.project_id = projects.id",      :conditions =>sql_condition)
-    @p_total.travel_allowance = Personalcharge.sum("travel_allowance",       :joins =>" inner join projects on personalcharges.project_id = projects.id",      :conditions =>sql_condition)
-    @p_count = Personalcharge.count(      :joins =>" inner join projects on personalcharges.project_id = projects.id",      :conditions =>sql_condition)
-    @pfa_fee = [0,0]
-    
-    @p_t1 = Personalcharge.new
-    @p_t0 = Personalcharge.new
-  
-  end
-  
-  def billing_export
-    sql_str = params[:p_sql]
-    sql_condition = params[:p_condition]
-    sql_order = params[:p_order]
-    
-    @billings = Billing.find_by_sql(sql_str + sql_condition + sql_order )
-    @sql=sql_str + sql_condition + sql_order
-
-    
-    join_sql =' inner join projects on projects.id = billings.project_id'
-    @b_total = Billing.new
-   
-    @b_total.amount = Billing.sum("amount", :joins=>join_sql, :conditions => sql_condition)||0
-    @b_total.outstanding = Billing.sum("outstanding", :joins=>join_sql, :conditions => sql_condition)||0
-    @b_total.service_billing = Billing.sum("service_billing",:joins=>join_sql, :conditions => sql_condition)||0
-    @b_total.expense_billing = Billing.sum("expense_billing",:joins=>join_sql, :conditions => sql_condition)||0
-    @b_total.business_tax = Billing.sum("business_tax",:joins=>join_sql, :conditions => sql_condition)||0
-    @b_total.write_off = Billing.sum("write_off",:joins=>join_sql, :conditions => sql_condition)||0
-    @b_total.provision = Billing.sum("provision",:joins=>join_sql, :conditions => sql_condition)||0
-    @b_count = Billing.count(:joins=>join_sql,:conditions =>sql_condition)    ||0
-   
-  end
   
   def summary
-    prj_status    = Dict.find_by_title_and_category("Active","prj_status")
     @people       = Person.order('english_name')
-    @start_period = Period.find(params[:start_period_id])
-    @end_period   = Period.find(params[:end_period_id])
+    @start_period = Period.find(params[:period][:start_period_id])
+    @end_period   = Period.find(params[:period][:end_period_id])
     @projects     = Project.order('job_code')
  
     reimb_sql = "select 	 PRJ.id as prj_id, PRJ.job_code as job_code,                          "+
@@ -362,7 +198,7 @@ class ReportsController < ApplicationController
   
     @srecords ={}
     @i=0
-    for record in @projects
+    for record in Project.order('job_code')
     
       summaryRecord                 = Summary.new
       summaryRecord.id              = record.id.to_s
@@ -416,13 +252,10 @@ class ReportsController < ApplicationController
     end
   end
   
-  def summary_by_user
-    #headers['Content-Type'] = "application/vnd.ms-excel" 
-    #headers['Content-Disposition'] = 'attachment; filename="excel-export.xls"'
-    #headers['Cache-Control'] = ''  
+  def summary_by_user 
     prj_status = Dict.find_by_title_and_category("Active","prj_status")
     
-    @people = Person.find(:all, :order => 'english_name')  
+    @people = Person.order('english_name')  
     @info = Project.new(params[:project])
     @pm =params[:pm_select]
     @now_user = session[:user_id]

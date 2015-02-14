@@ -61,7 +61,6 @@ class TimeReport
     @bt["current"]            = Billing.where(sql_condition).sum("business_tax")||0
     @bt["cumulative"]         = Billing.includes(:period).where(sql_condition2).sum("business_tax")||0 
     #initialfees
-    byebug
     @initialfee = Initialfee.where(sql_all_by_project).first || Initialfee.new
     @deduction  = Deduction.where(sql_all_by_project).first || Deduction.new
   
