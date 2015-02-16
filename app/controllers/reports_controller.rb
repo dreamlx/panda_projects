@@ -206,7 +206,7 @@ class ReportsController < ApplicationController
       summaryRecord.id                  = record.id.to_s
       summaryRecord.GMU                 = record.GMU.title
       summaryRecord.job_code            = record.job_code
-      summaryRecord.clien_name          = record.client.english_name if record.client
+      summaryRecord.client_name         = record.client.english_name if record.client
       summaryRecord.job_Ref             = record.referring.english_name if record.referring
       summaryRecord.job_Ptr             = record.partner.english_name if record.partner
       summaryRecord.job_Mgr             = record.manager.english_name if record.manager
