@@ -1,21 +1,14 @@
 class ReportsController < ApplicationController
   layout "layouts/application" ,  :except => [:export, :time_report,:expense_export, :personalcharge_export, :billing_export, :summary, :summary_by_user]
   def index
-    redirect_to 'print'
-  end
-
-  def print
   end
   
-  def time_report
-    @info = Personalcharge.new(personalcharge_params)
-    @statuses   = Dict.where("category ='prj_status' and code = '1'")# 1 open, 0 close
-                   
-    @project = Project.find(@info.project_id)
-    @now_period = Period.find(@info.period_id)
+  def time_report                   
+    @project = Project.find(params[:personalcharge][:project_id])
+    @period = Period.find(params[:personalcharge][:period_id])
     
     @report = TimeReport.new
-    @report.for_report(@project, @now_period)
+    @report.for_report(@project, @period)
     #charges
     @personalcharges = @report.personalcharges
     @p_currents = @report.p_currents
@@ -252,86 +245,11 @@ class ReportsController < ApplicationController
     end
   end
   
-  def summary_by_user 
-    prj_status = Dict.find_by_title_and_category("Active","prj_status")
-    
-    @people = Person.order('english_name')  
-    @info = Project.new(params[:project])
-    @pm =params[:pm_select]
-    @now_user = session[:user_id]
-    @period = Period.find(params[:period_id]) 
-    @period2 = Period.find(params[:period_id2]) 
-    sql_condition = " 1 "
-    
-    sql_condition += " AND GMU_id = #{@info.GMU_id} " if @info.GMU_id != -1
-    sql_condition += " AND service_id = #{@info.service_id} " if @info.service_id != -1
+  def summary_by_user
+    @q = Project.search(params[:q])
+    @projects = @q.result      
 
-    if @pm == 'p'
-      sql_condition += " AND partner_id = #{@info.partner_id} "
-    elsif @pm =='m'
-      sql_condition += " AND manager_id = #{@info.manager_id} "
-    else
-      sql_condition += " AND partner_id = #{@info.partner_id} " if @info.partner_id != -1 and not @info.partner_id.blank?
-      sql_condition += " AND manager_id = #{@info.manager_id} " if @info.manager_id != -1 and not @info.manager_id.blank?
-    end
-
-    sql_condition += " AND referring_id = #{@info.referring_id} " if @info.referring_id != -1
-    sql_condition += " AND job_code like '#{@info.job_code}%' " if @info.job_code != ""
-    sql_condition += " AND contract_number = '#{@info.contract_number}' " if @info.contract_number != '-1'
-    sql_condition += " AND status_id = #{@info.status_id} " if @info.status_id != -1
-    sql_condition += " and starting_date >='#{@period2.starting_date}'" 
-    @tmp_sql = sql_condition 
-    @projects = Project.find( :all,             
-      :conditions => sql_condition,               
-      :order=>'job_code')
-
-
-    #period_sql  = [" periods.ending_date <= ?", @period.ending_date]
-    project_sql = [" GMU_id =?", @info.GMU_id]
- 
-    reimb_sql = "select 	 PRJ.id as prj_id, PRJ.job_code as job_code,                          "+
-      "          I_FEE.reimbursement as Beg_travel,                 "+
-      "	         I_FEE.meal_allowance as Beg_meal,                  "+
-      "	         I_FEE.travel_allowance as Beg_per_dium,            "+
-      "	sum(CHARGE.reimbursement) as cum_travel,                    "+
-      "	sum(CHARGE.meal_allowance) as cum_meal,                     "+
-      "	sum(CHARGE.travel_allowance) as cum_per_dium                "+
-
-      " from projects 		as PRJ                                  "+
-      " left join initialfees 	  as I_FEE  on I_FEE.project_id = PRJ.id            "+
-      " left join personalcharges as CHARGE on CHARGE.project_id = PRJ.id           "+
-      " right join periods on periods.id = CHARGE.period_id                         "+
-      " where periods.ending_date <='#{@period.ending_date}'                        "+
-      " group by PRJ.id                                                       "+
-      " order by job_code; "
-    @reimbs = Expense.find_by_sql(reimb_sql)
-  
-    expense_sql = " select 	PRJ.id as prj_id, "+
-      "           PRJ.job_code as job_code,                         "+
-      "	( 	I_FEE.tickets + I_FEE.courrier + I_FEE.postage +      "+
-      "		I_FEE.stationery + I_FEE.report_binding +             "+
-      "		I_FEE.payment_on_be_half + I_FEE.business_tax         "+
-      "	) as Beg_expense,                                         "+
-      "	sum(E.tickets) as Ticket,                                 "+
-      "	sum(E.courrier) as Courrier,                              "+
-      "	sum(E.postage) as Postage,                                "+
-      "	sum(E.stationery) as Stationery,                          "+
-      "	sum(E.report_binding) as Report_binding,                  "+
-      "	sum(E.payment_on_be_half) as Payment_on_be_half,          "+
-      "	(	sum(E.tickets) + sum(E.courrier) +                    "+
-      "		sum(E.postage) + sum(E.stationery) +                  "+
-      "		sum(E.report_binding) + sum(E.payment_on_be_half)     "+
-      "	) as Sub_expense                                          "+
-      " from projects 		as PRJ                                "+
-      " left join initialfees 	  as I_FEE  on I_FEE.project_id = PRJ.id   "+
-      " left join expenses 	  as E      on E.project_id = PRJ.id           "+
-      " right join periods on periods.id = E.period_id                       "+
-      " where periods.ending_date <='#{@period.ending_date}'                                      "+
-
-      " group by PRJ.id                                                       "+
-      " order by job_code;                                                          "
-    @expenses = Expense.find_by_sql(expense_sql)            
-
+    @period = Period.find_by_number(params[:q][:starting_date_gteq])
     billing_sql =   " select	PRJ.id as prj_id, PRJ.job_code            as job_code, "+
       "	        I_D.service_billing     as Beg_service, "+
       "	        sum(B.service_billing)  as Service_billing,	"+  
@@ -347,18 +265,6 @@ class ReportsController < ApplicationController
       " order by PRJ.job_code; "
     @billings = Billing.find_by_sql(billing_sql)
 
-    ufa_sql = "select 	PRJ.id as prj_id, PRJ.job_code as job_code,     "+
-      "	I_D.service_UFA as Beg_service,           "+
-      "	sum(U.service_UFA) as Service_UFA,     "+
-      "	I_D.expense_UFA as Beg_expense,           "+
-      "	sum(U.expense_UFA) as Expense_UFA     "+
-      " from projects 		as PRJ            "+
-      " left join deductions 	  as I_D    on I_D.project_id = PRJ.id  "+
-      " left join ufafees 	as U	on U.project_id = PRJ.id            "+
-
-      " group by PRJ.id "+
-      " order by job_code; "
-    @ufas = Ufafee.find_by_sql(ufa_sql)
   
     fee_PFA_sql =
       " select 	PRJ.id as prj_id, PRJ.job_code as job_code, "+
@@ -377,18 +283,7 @@ class ReportsController < ApplicationController
       " group by PRJ.id"+
       " order by job_code;"
     @service_pfa = Project.find_by_sql(fee_PFA_sql)
-  
-    co_sql = 
-      " select PRJ.id as prj_id, PRJ.job_code, "+
-      " I_FEE.commission + I_FEE.outsourcing as CO_Beg, "+
-      " sum(E.commission)       as commission, sum(E.outsourcing) as outsourcing"+
-      " from projects as PRJ"+
-      " left join initialfees     as I_FEE on I_FEE.project_id = PRJ.id"+
-      " left join expenses        as E on E.project_id = PRJ.id "+
-      " where  1 "+    
-      " group by PRJ.id"+
-      " order by job_code;"
-    @co_fees = Commission.find_by_sql(co_sql)
+
   
     @srecords ={}
     @i=0
@@ -398,10 +293,10 @@ class ReportsController < ApplicationController
       summaryRecord.id = record.id.to_s
       summaryRecord.GMU = record.GMU.title||""
       summaryRecord.job_code = record.job_code||""
-      summaryRecord.clien_name = record.client.english_name||""
-      summaryRecord.job_Ref = record.referring.english_name||""
-      summaryRecord.job_Ptr = record.partner.english_name||""
-      summaryRecord.job_Mgr = record.manager.english_name||""
+      summaryRecord.clien_name = record.client.english_name||"" if record.client
+      summaryRecord.job_Ref = record.referring.english_name||"" if record.referring
+      summaryRecord.job_Ptr = record.partner.english_name||"" if record.partner
+      summaryRecord.job_Mgr = record.manager.english_name||"" if record.manager
       summaryRecord.service_line = record.service_code.code||""
       summaryRecord.service_PFA = record.service_PFA||0
       summaryRecord.expense_PFA = record.expense_PFA||0
@@ -432,8 +327,7 @@ class ReportsController < ApplicationController
           summaryRecord.BT = billing.BT||0
         end
       end
-      #summaryRecord.INVENTORY_BALANCE = 0
-      #summaryRecord.INVPER = 0
+
       summaryRecord.INVENTORY_BALANCE = summaryRecord.fees_Cum.to_i - summaryRecord.PFA_Cum.to_i - summaryRecord.Billing_Cum.to_i
     
       if summaryRecord.contracted_fee == 0

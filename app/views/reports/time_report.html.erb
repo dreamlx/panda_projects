@@ -158,7 +158,7 @@ td
     <td colspan=19 height=20 class=xl58>PROJECT SUMMARY</td>
   </tr>
   <tr height=20>
-    <td colspan=19 height=20 class=xl58>Period: <%=@now_period.number%></td>
+    <td colspan=19 height=20 class=xl58>Period: <%=@period.number%></td>
   </tr>
 
   <tr class="xl28" height=20>
@@ -514,17 +514,17 @@ td
   	%>
   	<%=@status%>
   	</td>
-      <td class=xl26>(<%=sprintf("%0.0f" ,billing.service_billing)  if billing.period_id == @now_period.id%>)</td>
+      <td class=xl26>(<%=sprintf("%0.0f" ,billing.service_billing)  if billing.period_id == @period.id%>)</td>
       <td colspan=3 class=xl28>&nbsp;</td>
-      <td class=xl26>(<%=sprintf("%0.0f" ,billing.expense_billing ) if billing.period_id == @now_period.id%>)</td>
+      <td class=xl26>(<%=sprintf("%0.0f" ,billing.expense_billing ) if billing.period_id == @period.id%>)</td>
       <td colspan=2 class=xl28>&nbsp;</td>
       <td class=xl26>(<%=sprintf("%0.0f" ,billing.service_billing)%>)</td>
       <td colspan=3 class=xl28>&nbsp;</td>
       <td class=xl26>(<%=sprintf("%0.0f" ,billing.expense_billing)%>)</td>
       <td class=xl26><%=Time.at(billing.updated_on).strftime("%y-%m-%d")%></td>
     </tr>
-    <% @sum_current_service_billing += billing.service_billing if billing.period_id == @now_period.id %>
-    <% @sum_current_expense_billing += billing.expense_billing if billing.period_id == @now_period.id %>
+    <% @sum_current_service_billing += billing.service_billing if billing.period_id == @period.id %>
+    <% @sum_current_expense_billing += billing.expense_billing if billing.period_id == @period.id %>
   <% end %>
   <tr class=xl38 height=20>
     <td colspan=3 height=20 class=xl50>Subtotal of billings</td>

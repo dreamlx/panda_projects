@@ -1,0 +1,44 @@
+<%= search_form_for(@q, url: summary_by_user_reports_url, html: { class: 'form-horizontal' }, 
+    wrapper: :horizontal_form,
+    wrapper_mappings: {
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean}) do |f| %>
+  <%= f.input :partner_english_name_eq, 
+              collection: Person.all, 
+              required: false,
+              label: 'Partner' %>
+  <%= f.input :contract_number_eq, 
+              collection: Project.pluck(:contract_number), 
+              required: false,
+              label: 'Contact Number' %>
+  <%= f.input :service_id_eq, 
+              collection: Project.pluck(:service_id),
+              required: false,
+              label: 'ServiceLine' %>
+  <%= f.input :referring_english_name_eq,
+              collection: Person.all,
+              required: false,
+              label: 'Job Ref'%>
+  <%= f.input :starting_date_gteq,
+              collection: Period.order(number: :desc).pluck(:number),
+              required: false,
+              label: 'Project starting date' %>
+  <%= f.input :GMU_id_eq,
+              collection: Dict.selected_gmus,
+              required: false,
+              label: 'GMU' %>
+  <%= f.input :manager_english_name_eq, 
+              collection: Person.all, 
+              required: false,
+              label: 'Manager' %>
+  <%= f.input :job_code_cont, 
+              required: false,
+              label: 'Job Code' %>
+  <%= f.input :status_id_eq,
+              collection: Dict.selected_statuses,
+              required: false,
+              label: 'Status' %>
+  <%= f.button :submit %>
+<% end %>
