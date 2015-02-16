@@ -1,6 +1,6 @@
 class Summary
   attr_accessor :id,          :GMU,   
-                :job_code,    :clien_name,  
+                :job_code,    :client_name,  
                 :job_Ref,     :job_Ptr,
                 :job_Mgr,     :service_line,            
                 :service_PFA, :expense_PFA,
@@ -14,7 +14,10 @@ class Summary
                 :Billing_Beg, :Billing_Cum,
                 :Billing_Sub, :BT,
                 :INVENTORY_BALANCE,
-                :INVPER    
+                :INVPER,
+                :budgeted_service_fee, :budgeted_expense,
+                :estimated_commision, :estimated_outsorcing, :created_on, :Expense_Cum
+
   def initialize
     @id  = ""
     @GMU = ""
@@ -38,11 +41,18 @@ class Summary
     @PFA_Sub = 0
     @Billing_Beg = 0
     @Billing_Cum = 0
+    @Expense_Cum = 0
     @Billing_Sub = 0
     @BT = 0
         
     @INVENTORY_BALANCE = 0
     @INVPER= 0
+
+    @estimated_commision = 0
+    @budgeted_expense = 0
+    @estimated_commision = 0
+    @estimated_outsorcing = 0
+    @created_on
   end
  
 end

@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     post :time_report, on: :collection
   end
   resources :people
-  resources :periods
+  resources :periods, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :prj_expense_logs, only: [:index, :destroy]
   resources :ufafees
 end

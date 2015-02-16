@@ -1,6 +1,7 @@
 class PeriodsController < ApplicationController
   def index
-    @periods = Period.order(:number).page(params[:page])
+    @q = Period.search(params[:q])
+    @periods = @q.result
   end
 
   def show

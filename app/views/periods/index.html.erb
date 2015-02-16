@@ -2,20 +2,21 @@
 <div>
   <%= link_to "New Period", new_period_path %>
 </div>
-<%= paginate @periods %>
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= Period.human_attribute_name("number") %></th>
-      <th><%= Period.human_attribute_name("starting_date") %></th>
-      <th><%= Period.human_attribute_name("ending_date") %></th>
+      <th><%= sort_link(@q, :id) %></th>
+      <th><%= sort_link(@q, :number) %></th>
+      <th><%= sort_link(@q, :starting_date) %></th>
+      <th><%= sort_link(@q, :ending_date) %></th>
       <th colspan="2">Operation</th>
     </tr>
   </thead>
   <tbody>
     <% for period in @periods %>
       <tr>
-        <td><%= link_to period.number, period %></td>
+        <td><%= period.id %></td>
+        <td><%= period.number %></td>
         <td><%= period.starting_date %></td>
         <td><%= period.ending_date %></td>
         <td><%= link_to 'Edit', edit_period_path(period) %></td>
@@ -24,4 +25,3 @@
     <% end %>
   </tbody>
 </table>
-<%= paginate @periods %>

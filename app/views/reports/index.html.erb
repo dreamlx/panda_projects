@@ -1,9 +1,9 @@
 <!-- time report -->
 <%= form_tag('/reports/time_report', :method => :post) do %>
   <b>Job_code:</b>
-  <%= collection_select(:personalcharge, :project_id, Project.live, :id, :job_code) %>
+  <%= collection_select(:personalcharge, :project_id, Project.all, :id, :job_code) %>
   <b>Period:</b>
-  <%= collection_select(:personalcharge, :period_id, Period.order(number: :desc), :id, :number) %>
+  <%= collection_select(:personalcharge, :period_id, Period.all, :id, :number) %>
   <input type="submit" value="REPORT" />
 <% end  %>
 <!-- end of time report -->
@@ -19,4 +19,5 @@
 <% end %>
 <!-- end of summary -->
 
-<%= link_to 'Summary by User', summary_by_user_reports_path %>
+<h3>Summary by user</h3>
+<%= render 'search' %>

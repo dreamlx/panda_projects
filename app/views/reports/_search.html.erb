@@ -22,9 +22,15 @@
               required: false,
               label: 'Job Ref'%>
   <%= f.input :starting_date_gteq,
-              collection: Period.order(number: :desc).pluck(:number),
+              as: :date,
+              html5: true,
               required: false,
-              label: 'Project starting date' %>
+              label: 'Project From date' %>
+  <%= f.input :starting_date_lteq,
+              as: :date,
+              html5: true,
+              required: false,
+              label: 'Project To date' %>
   <%= f.input :GMU_id_eq,
               collection: Dict.selected_gmus,
               required: false,
