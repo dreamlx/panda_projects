@@ -2,6 +2,7 @@
   <table border="1">
     <thead>
       <tr>
+        <!-- project -->
         <th>GMU</th>
         <th>Job code</th>
         <th>Client(Eng)</th>
@@ -20,6 +21,8 @@
         <th>created_on</th>
         <th>Service Line</th>
         <th>Project status</th>
+
+        <!-- pfa -->
         <th>Fee Beg</th>
         <th>Fee Cum</th>
         <th>Fee Sub</th>
@@ -27,13 +30,19 @@
         <th>PFA Beg</th>
         <th>PFA Cum</th>
         <th>PFA Sub</th>
+
+        <!-- co-fee -->
         <th>commission+outsourcing Beg</th>
         <th>commission</th>
         <th>outsourcing</th>
         <th>Sub</th>
+
+        <!-- reibur -->
         <th>Travel Cum</th>
         <th>Meal Cum</th>
         <th>Per dium Cum</th>
+
+        <!-- expense -->
         <th>Expense Beg</th>
         <th>Ticket</th>
         <th>Courrier</th>
@@ -41,11 +50,15 @@
         <th>Postage</th>
         <th>Report binding</th>
         <th>Payment on be half</th>
+
+        <!-- billing -->
         <th>Billing Beg</th>
         <th>Service Billing Cum</th>
         <th>Expense Billing Cum</th>
         <th>BT</th>
         <th>Billing Sub</th>
+
+        <!-- ufa fee -->
         <th>UFA Beg</th>
         <th>Service UFA Cum</th>
         <th>Expense UFA Cum</th>
@@ -107,15 +120,13 @@
               <td><%=reimb.cum_travel||0%></td>
               <td><%=reimb.cum_meal||0%></td>
               <td><%=reimb.cum_per_dium||0%></td>
-              <td>0<%@show=1%></td>
+              <%@show=1%>
             <%end #if%>
           <%end #for %>
           <%if @show == 0 %>
             <td>0</td>
             <td>0</td>
             <td>0</td>
-            <td>0</td>
-
           <%else @show =0%>
           <%end%>
 
