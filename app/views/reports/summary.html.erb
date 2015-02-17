@@ -1,5 +1,5 @@
 <div>
-  <table border="1">
+  <table class="table table-striped">
     <thead>
       <tr>
         <!-- project -->
@@ -82,7 +82,7 @@
           <td><%=record.estimated_outsorcing%></td>
           <td><%=record.contracted_fee%></td>
           <td><%=record.contracted_expense%></td>
-          <td><%=record.created_on%></td>
+          <td><%=record.created_on.to_date %></td>
           <td><%=record.service_line%></td>
           <td><%=record.project_status%></td>
 

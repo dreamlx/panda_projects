@@ -1,5 +1,5 @@
 <tr>
-  <td><%= billing.project.job_code if billing.project %></td>
+  <td><%= link_to billing.project.job_code, billing.project if billing.project %></td>
   <td><%= billing.project.referring.english_name if billing.project && billing.project.referring %></td>
   <td><%= billing.project.billing_partner.english_name if billing.project && billing.project.billing_partner %></td>
   <td><%= billing.project.billing_manager.english_name if billing.project && billing.project.billing_manager %></td>
