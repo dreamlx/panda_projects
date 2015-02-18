@@ -8,10 +8,6 @@ class PersonalchargesController < ApplicationController
     @personalcharges_total  = @q.result
   end
 
-  def show
-    @personalcharge = Personalcharge.find(params[:id])
-  end
-
   def new
     @personalcharge = Personalcharge.new
   end
@@ -19,8 +15,7 @@ class PersonalchargesController < ApplicationController
   def create
     @personalcharge = Personalcharge.new(personalcharge_params)
     if @personalcharge.save
-      @personalcharge.update(service_fee: (@personalcharge.hours * @personalcharge.person.charge_rate))  if @personalcharge.person.charge_rate
-      redirect_to @personalcharges, notice: 'Personalcharge was successfully created.'
+      redirect_to personalcharges_url, notice: 'Personalcharge was successfully created.'
     else
       render 'new'
     end
@@ -33,8 +28,7 @@ class PersonalchargesController < ApplicationController
   def update
     @personalcharge = Personalcharge.find(params[:id])
     if @personalcharge.update(personalcharge_params)
-      @personalcharge.update(service_fee: @personalcharge.hours * @personalcharge.person.charge_rate ) if @personalcharge.person.charge_rate
-      redirect_to @personalcharge, notice: 'Personalcharge was successfully updated.'
+      redirect_to personalcharges_url, notice: 'Personalcharge was successfully updated.'
     else
       render 'edit'
     end
@@ -48,7 +42,7 @@ class PersonalchargesController < ApplicationController
   private
     def personalcharge_params
       params.require(:personalcharge).permit(
-        :created_on, :updated_on, :hours, :service_fee, :reimbursement, :meal_allowance,
+        :created_on, :updated_on, :hours, :reimbursement, :meal_allowance,
         :travel_allowance, :project_id, :period_id, :person_id)
     end
 end

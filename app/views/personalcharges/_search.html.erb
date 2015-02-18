@@ -2,11 +2,25 @@
   <%= f.input :person_english_name_eq, 
               collection: Person.pluck(:english_name),
               required: false,
-              label: 'Person' %>
+              label: 'Person Select' %>
+  <%= f.input :person_english_name_cont, 
+              required: false,
+              label: 'Person Cont' %>
   <%= f.input :project_job_code_eq, 
               collection: Project.order(:job_code).pluck(:job_code),
               required: false,
-              label: 'Project' %>
+              label: 'Project Select' %>
+  <%= f.input :project_job_code_cont, 
+              required: false,
+              label: 'Project Cont' %>
+  <%= f.input :period_number_gteq, 
+              collection: Period.all,
+              required: false,
+              label: 'Period From' %>
+  <%= f.input :period_number_lteq, 
+              collection: Period.all,
+              required: false,
+              label: 'Period To' %>
   <%= f.input :period_number_gteq, 
               as: :date,
               html5: true,
@@ -16,6 +30,6 @@
               as: :date,
               html5: true,
               required: false,
-              label: 'Period To' %>
+              label: 'Period To' %>  
   <%= f.button :submit %>
 <% end %>

@@ -18,5 +18,8 @@ class Personalcharge < ActiveRecord::Base
       if self.project && (self.project.service_PFA != 0)
         self.PFA_of_service_fee = (self.service_fee / 100) * self.project.service_PFA
       end
+      if self.person && self.person.charge_rate
+        self.service_fee = @personalcharge.hours * @personalcharge.person.charge_rate
+      end
     end
 end

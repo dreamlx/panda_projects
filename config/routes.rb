@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   resources :items
   resources :expenses
   resources :initialfees
-  resources :personalcharges
+  resources :personalcharges, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :reports do
     get :print, on: :collection
     post :summary, on: :collection

@@ -1,6 +1,6 @@
 <tr>
   <td><%= link_to personalcharge.project.job_code, personalcharge.project if personalcharge.project %></td>
-  <td><%= personalcharge.person.english_name if personalcharge.person%></td>
+  <td><%= link_to personalcharge.person.english_name, personalcharge.person if personalcharge.person%></td>
   <td><%= personalcharge.period.number if personalcharge.period %></td>
   <td><%= personalcharge.hours %></td>
   <td><%= personalcharge.service_fee %></td>
@@ -11,6 +11,6 @@
   <td><%= personalcharge.travel_allowance %></td>
   <td><%= personalcharge.created_on.to_date %></td>
   <td><%= personalcharge.updated_on.to_date %></td>
-  <td><%= link_to 'Edit', edit_personalcharge_path(personalcharge) if personalcharge.project && personalcharge.project.status && personalcharge.project.status.title == 'Active'%></td>
-  <td><%= link_to 'Destroy', personalcharge, method: :delete, data: {confirm: 'Are you sure?'} if personalcharge.project && personalcharge.project.status && personalcharge.project.status.title == 'Active'%></td>
+  <td><%= link_to 'Edit', edit_personalcharge_path(personalcharge) %></td>
+  <td><%= link_to 'Destroy', personalcharge, method: :delete, data: {confirm: t('are_you_sure')} %></td>
 </tr>

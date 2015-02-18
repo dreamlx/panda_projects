@@ -3,13 +3,17 @@
     <%= f.input :person_id, collection: Person.all %>
     <%= f.input :project_id, collection: Project.all %>
     <%= f.input :period_id, collection: Period.all %>
-    <%= f.input :created_on, as: :date, html5: true  %>
-    <%= f.input :updated_on, as: :date, html5: true  %>
+    <%= f.input :created_on, as: :date, html5: true, disabled: true  %>
+    <%= f.input :updated_on, as: :date, html5: true, disabled: true  %>
     <%= f.input :hours  %>
     <%= f.input :service_fee, disabled: true  %>
+    <%= f.input :PFA_of_service_fee, disabled: true  %>
     <%= f.input :reimbursement  %>
     <%= f.input :meal_allowance  %>
     <%= f.input :travel_allowance  %>
     <%= f.button :submit %>
   <% end %>
+</div>
+<div class="col-md-12">
+  <%= link_to 'Back', personalcharges_url %>
 </div>
