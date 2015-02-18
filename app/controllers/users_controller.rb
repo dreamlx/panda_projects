@@ -65,7 +65,6 @@ class UsersController < ApplicationController
           end
           flash[:notice] = "expenses updated by auto_add_observer|" + now_period.number.to_s+"|records="+ prj_count.to_s
         end
-        #add_expense_observer(job_code,100,"job_code in 60-68 add 100")
       else
         flash[:notice] = "Invalid user/password combination"
       end

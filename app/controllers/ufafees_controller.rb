@@ -9,7 +9,18 @@ class UfafeesController < ApplicationController
   end
 
   def create
-    billing_number_set
+    @billing_number = Dict.find_by_category('billing_number')
+    @number = @billing_number.code.to_i + 1
+    
+    if @number <10 
+      @str_number = "000" + @number.to_s
+    elsif @number <100
+      @str_number = "00" + @number.to_s
+    elsif @number <1000
+      @str_number = "0" + @number.to_s
+    else 
+      @str_number = @number.to_s
+    end 
     # update billing_number
     billing_number = Dict.find_by_category('billing_number')
     billing_number.update(code: (billing_number.code.to_i + 1).to_s)
