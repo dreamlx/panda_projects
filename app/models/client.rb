@@ -1,7 +1,13 @@
 class Client < ActiveRecord::Base
   validates :client_code,   uniqueness: true
+  validates :client_code,   presence: true
+  validates :region_id,     presence: true
+  validates :status_id,     presence: true
+  validates :category_id,   presence: true
+  validates :industry_id,   presence: true
 
   has_many    :projects
+  has_many    :contacts, dependent: :destroy
   belongs_to  :industry
   belongs_to  :person
   belongs_to  :category,  -> { where category: 'client_category' }, class_name: "Dict",   foreign_key: "category_id"

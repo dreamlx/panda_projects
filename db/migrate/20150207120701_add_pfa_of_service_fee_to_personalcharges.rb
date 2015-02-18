@@ -10,6 +10,6 @@ class AddPfaOfServiceFeeToPersonalcharges < ActiveRecord::Migration
   end
 
   def down
-    remove_column :personalcharges, :PFA_of_service_fee
+    remove_column :personalcharges, :PFA_of_service_fee, :decimal
   end
 end

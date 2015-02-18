@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150213154240) do
+ActiveRecord::Schema.define(version: 20150218061632) do
 
   create_table "billings", force: :cascade do |t|
     t.datetime "created_on"
@@ -19,12 +19,12 @@ ActiveRecord::Schema.define(version: 20150213154240) do
     t.string   "number",          limit: 255
     t.date     "billing_date"
     t.integer  "person_id",       limit: 4
-    t.decimal  "amount",                      precision: 10, scale: 2
-    t.decimal  "outstanding",                 precision: 10, scale: 2
-    t.decimal  "service_billing",             precision: 10, scale: 2
-    t.decimal  "expense_billing",             precision: 10, scale: 2
+    t.decimal  "amount",                      precision: 10, scale: 2, default: 0.0
+    t.decimal  "outstanding",                 precision: 10, scale: 2, default: 0.0
+    t.decimal  "service_billing",             precision: 10, scale: 2, default: 0.0
+    t.decimal  "expense_billing",             precision: 10, scale: 2, default: 0.0
     t.integer  "days_of_ageing",  limit: 4,                            default: 0
-    t.decimal  "business_tax",                precision: 10, scale: 2
+    t.decimal  "business_tax",                precision: 10, scale: 2, default: 0.0
     t.string   "status",          limit: 255
     t.integer  "collection_days", limit: 4,                            default: 0
     t.integer  "project_id",      limit: 4
@@ -98,15 +98,19 @@ ActiveRecord::Schema.define(version: 20150213154240) do
   end
 
   create_table "contacts", force: :cascade do |t|
-    t.integer "client_id", limit: 4
-    t.string  "name",      limit: 255
-    t.string  "title",     limit: 255
-    t.boolean "gender",    limit: 1
-    t.string  "mobile",    limit: 255
-    t.string  "tel",       limit: 255
-    t.string  "fax",       limit: 255
-    t.string  "email",     limit: 255
-    t.string  "other",     limit: 255
+    t.integer "client_id",  limit: 4
+    t.string  "name",       limit: 255
+    t.string  "title",      limit: 255
+    t.string  "gender",     limit: 255
+    t.string  "mobile",     limit: 255
+    t.string  "tel",        limit: 255
+    t.string  "fax",        limit: 255
+    t.string  "email",      limit: 255
+    t.string  "address",    limit: 255
+    t.string  "city",       limit: 255
+    t.string  "state",      limit: 255
+    t.string  "country",    limit: 255
+    t.string  "postalcode", limit: 255
   end
 
   create_table "costs", force: :cascade do |t|
@@ -312,7 +316,7 @@ ActiveRecord::Schema.define(version: 20150213154240) do
     t.integer  "billing_id",     limit: 4
     t.string   "invoice_no",     limit: 255
     t.string   "receive_date",   limit: 255
-    t.decimal  "receive_amount",             precision: 10, scale: 2
+    t.decimal  "receive_amount",             precision: 10, scale: 2, default: 0.0
     t.string   "job_code",       limit: 255
   end
 

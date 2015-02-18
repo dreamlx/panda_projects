@@ -1,0 +1,22 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= sort_link(@q, :client_client_code) %></th>
+      <th><%= sort_link(@q, :name) %></th>
+      <th><%= sort_link(@q, :title) %></th>
+      <th><%= sort_link(@q, :gender) %></th>
+      <th><%= sort_link(@q, :mobile) %></th>
+      <th><%= sort_link(@q, :tel) %></th>
+      <th><%= sort_link(@q, :fax) %></th>
+      <th><%= sort_link(@q, :email) %></th>
+      <th><%= sort_link(@q, :address) %></th>
+      <th><%= sort_link(@q, :city) %></th>
+      <th><%= sort_link(@q, :state) %></th>
+      <th><%= sort_link(@q, :country) %></th>
+      <th><%= sort_link(@q, :postalcode) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render @contacts %>
+  </tbody>
+</table>

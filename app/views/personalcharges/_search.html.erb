@@ -1,4 +1,10 @@
-<%= search_form_for(@q) do |f| %>
+<%= search_form_for(@q, html: { class: 'form-horizontal' }, 
+    wrapper: :horizontal_form,
+    wrapper_mappings: {
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean}) do |f| %>
   <%= f.input :person_english_name_eq, 
               collection: Person.pluck(:english_name),
               required: false,

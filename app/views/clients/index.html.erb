@@ -13,8 +13,15 @@
       <th><%= sort_link(@q, :client_code) %></th>
       <th><%= sort_link(@q, :chinese_name) %></th>
       <th><%= sort_link(@q, :english_name) %></th>
-      <th><%= sort_link(@q, :person_english_name) %></th>
-      <th colspan="2"></th>
+      <th><%= sort_link(@q, :person_english_name, 'Person English name') %></th>
+      <th><%= sort_link(@q, :category_title, 'Category') %></th>
+      <th><%= sort_link(@q, :status_title, 'Status') %></th>
+      <th><%= sort_link(@q, :region_title, 'Region') %></th>
+      <th><%= sort_link(@q, :industry_title, 'Industry') %></th>
+      <th><%= sort_link(@q, :description) %></th>
+      <th><%= sort_link(@q, :created_on) %></th>
+      <th><%= sort_link(@q, :updated_on) %></th>
+      <th colspan="2">Operation</th>
     </tr>
   </thead>
   <tbody>
@@ -24,6 +31,13 @@
         <td><%= client.chinese_name %></td>
         <td><%= client.english_name %></td>
         <td><%= client.person.english_name if client.person %></td>
+        <td><%= client.category.title if client.category %></td>
+        <td><%= client.status.title if client.status %></td>
+        <td><%= client.region.title if client.region %></td>
+        <td><%= client.industry.title if client.industry %></td>
+        <td><%= client.description %></td>
+        <td><%= client.created_on.to_date %></td>
+        <td><%= client.updated_on.to_date %></td>
         <td><%= link_to 'Edit', edit_client_path(client) %></td>
         <td><%= link_to 'Destroy', client, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>

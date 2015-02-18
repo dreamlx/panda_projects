@@ -1,220 +1,124 @@
-<table>
-  <tr>
-    <td><b>client code</b></td>
-    <td><%=  @client.client_code%></td>
-  </tr>
-    
-  <tr>
-    <td><b>chinese name</b></td>
-    <td><%=@client.chinese_name%></td>
-  </tr>
-  
-  <tr>
-    <td><b>English name</b></td>
-    <td><%=@client.english_name%></td>
-  </tr>
+<div class="col-md-6">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">General Information</h3>
+    </div>
+    <div class="panel-body">
+      <dl class="dl-horizontal">
+        <dt>client code</dt>
+        <dd><%= @client.client_code %></dd>
 
-  <tr>
-    <td><b>Account Owner</b></td>
-    <td><%=@client.person.english_name%></td>
-  </tr>
-    
-  <tr><td colspan=2><hr></td></tr> 
-    
-  <tr>
-    <td><b>Contact Person 1</b></td>
-    <td><%=@client.person1%></td>
-  </tr>      
+        <dt>chinese name</dt>
+        <dd><%= @client.chinese_name %></dd>
 
-  <tr>
-    <td><b>Title</b></td>
-    <td><%=@client.title_1%></td>
-  </tr>
+        <dt>English name</dt>
+        <dd><%= @client.english_name %></dd>
 
-  <tr>
-    <td><b>Gender</b></td>
-    <td><%=@client.gender1.title%></td>
-  </tr>
-    
-  <tr>
-    <td><b>Mobile</b></td>
-    <td><%=@client.mobile_1%></td>
-  </tr>
+        <dt>Account Owner</dt>
+        <dd><%= @client.person.english_name %></dd>
 
-  <tr>
-    <td><b>Tel</b></td>
-    <td><%=@client.tel_1%></td>
-  </tr>
-  
-  <tr>
-    <td><b>Fax</b></td>
-    <td><%=@client.fax_1%></td>
-  </tr>  
+        <dt>Client category</dt>
+        <dd><%= @client.category.title %></dd>
 
-  <tr>
-    <td><b>Email</b></td>
-    <td><%=@client.email_1%></td>
-  </tr>
-  
-    <tr>
-    <td><b>Address1</b></td>
-    <td><%=@client.address_1%></td>
-  </tr>
-  
-  <tr>
-    <td><b>City1</b></td>
-    <td><%=@client.city_1%></td>
-  </tr>
-  
-  <tr>
-    <td><b>state1</b></td>
-    <td><%=@client.state_1%></td>
-  </tr>
-   
-  <tr>
-    <td><b>Country1</b></td>
-    <td><%=@client.country_1%></td>
-  </tr>     
-  <tr>
-    <td><b>Postalcode1</b></td>
-    <td><%=@client.postalcode_1%></td>
-  </tr>
-<!--=====================person 2====================-->
-  <tr><td colspan=2><hr></td></tr> 
-    
-  <tr>
-    <td><b>Contact Person 2</b></td>
-    <td><%=@client.person2%></td>
-  </tr>      
+        <dt>Client status</dt>
+        <dd><%= @client.status.title %></dd>
 
-  <tr>
-    <td><b>Title</b></td>
-    <td><%=@client.title_2%></td>
-  </tr>
+        <dt>Client Region of origin</dt>
+        <dd><%= @client.region.title %></dd>
 
-  <tr>
-    <td><b>Gender</b></td>
-    <td><%=@client.gender2.title%></td>
-  </tr>
-    
-  <tr>
-    <td><b>Mobile</b></td>
-    <td><%=@client.mobile_2%></td>
-  </tr>
+        <dt>Industry</dt>
+        <dd><%= @client.industry.title %></dd>
 
-  <tr>
-    <td><b>Tel</b></td>
-    <td><%=@client.tel_2%></td>
-  </tr>
-  
-  <tr>
-    <td><b>Fax</b></td>
-    <td><%=@client.fax_2%></td>
-  </tr>  
+        <dt>Client code</dt>
+        <dd><%= @client.client_code %></dd>
 
-  <tr>
-    <td><b>Email</b></td>
-    <td><%=@client.email_2%></td>
-  </tr>
-  <tr>
-    <td><b>Address2</b></td>
-    <td><%=@client.address_2%></td>
-  </tr>
-  
-  <tr>
-    <td><b>City2</b></td>
-    <td><%=@client.city_2%></td>
-  </tr>
-  
-  <tr>
-    <td><b>state2</b></td>
-    <td><%=@client.state_2%></td>
-  </tr>
-   
-  <tr>
-    <td><b>Country2</b></td>
-    <td><%=@client.country_2%></td>
-  </tr>     
-  <tr>
-    <td><b>Postalcode2</b></td>
-    <td><%=@client.postalcode_2%></td>
-  </tr>
-   
-<!--=====================person 3====================-->
-  <tr><td colspan=2><hr></td></tr> 
-    
-  <tr>
-    <td><b>Contact Person 3</b></td>
-    <td><%=@client.person3%></td>
-  </tr>      
+        <dt>Last modiffied</dt>
+        <dd><%= @client.updated_on %></dd>
+      </dl>
+    </div>
+  </div>
 
-  <tr>
-    <td><b>Title</b></td>
-    <td><%=@client.title_3%></td>
-  </tr>
+  <% @client.contacts.each do |contact| %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+      <%= contact.name %><small><%= link_to 'Destroy', [contact.client, contact], data: {confirm: t('are_you_sure'), method: :delete} %></small>
+      </h3>
+    </div>
+    <div class="panel-body">
+      <dl class="dl-horizontal">
+        <dt>name</dt>
+        <dd><%= best_in_place contact, :name %></dd>
 
-  <tr>
-    <td><b>Gender</b></td>
-    <td><%=@client.gender3.title%></td>
-  </tr>
-    
-  <tr>
-    <td><b>Mobile</b></td>
-    <td><%=@client.mobile_3%></td>
-  </tr>
+        <dt>title</dt>
+        <dd><%= best_in_place contact, :title %></dd>
 
-  <tr>
-    <td><b>Tel</b></td>
-    <td><%=@client.tel_3%></td>
-  </tr>
-  
-  <tr>
-    <td><b>Fax</b></td>
-    <td><%=@client.fax_3%></td>
-  </tr>  
+        <dt>gender</dt>
+        <dd><%= best_in_place contact, :gender %></dd>
 
-  <tr>
-    <td><b>Email</b></td>
-    <td><%=@client.email_3%></td>
-  </tr>
+        <dt>mobile</dt>
+        <dd><%= best_in_place contact, :mobile %></dd>
 
-  <tr><td colspan=2><hr></td></tr> 
-    
-  <tr>
-    <th colspan=2>General Information</th>
-  </tr>  
-  
-  <tr>
-    <td><b>Client category</b></td>
-    <td><%=@client.category.title%></td>
-  </tr>
-  
-  <tr>
-    <td><b>Client status</b></td>
-    <td><%=@client.status.title%></td>
-  </tr>
-  
-  <tr>
-    <td><b>Client Region of origin</b></td>
-    <td><%=@client.region.title%></td>
-  </tr>
-  
-  <tr>
-    <td><b>Industry</b></td>
-    <td><%=@client.industry.title%></td>
-  </tr>
-  
-  <tr>
-    <td><b>Client code</b></td>
-    <td><%=@client.client_code%></td>
-  </tr>    
-  
-  <tr>
-    <td><b>Last modiffied</b></td>
-    <td><%=@client.updated_on%></td>
-  </tr>
-      
-</table>
+        <dt>tel</dt>
+        <dd><%= best_in_place contact, :tel %></dd>
 
-<%= link_to 'Edit', edit_client_path(@client)  %> |
-<%= link_to 'Back', clients_url %>
+        <dt>fax</dt>
+        <dd><%= best_in_place contact, :fax %></dd>
+
+        <dt>email</dt>
+        <dd><%= best_in_place contact, :email %></dd>
+
+        <dt>address</dt>
+        <dd><%= best_in_place contact, :address %></dd>
+
+        <dt>city</dt>
+        <dd><%= best_in_place contact, :city %></dd>
+
+        <dt>state</dt>
+        <dd><%= best_in_place contact, :state %></dd>
+
+        <dt>country</dt>
+        <dd><%= best_in_place contact, :country %></dd>
+
+        <dt>postalcode</dt>
+        <dd><%= best_in_place contact, :postalcode %></dd>
+      </dl>
+    </div>
+  </div>
+  <% end %>
+</div>
+
+<div class="col-md-6">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">New Contact</h3>
+    </div>
+    <div class="panel-body">
+    <%= simple_form_for([@client, @client.contacts.build], html: { class: 'form-horizontal' }, 
+    wrapper: :horizontal_form,
+    wrapper_mappings: {
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean}) do |f|%>
+      <%= f.input :name %>
+      <%= f.input :title %>
+      <%= f.input :gender %>
+      <%= f.input :mobile %>
+      <%= f.input :tel %>
+      <%= f.input :fax %>
+      <%= f.input :email %>
+      <%= f.input :address %>
+      <%= f.input :city %>
+      <%= f.input :country %>
+      <%= f.input :postalcode %>
+      <%= f.button :submit %>
+    <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12">
+  <%= link_to 'Edit', edit_client_path(@client)  %> |
+  <%= link_to 'Back', clients_url %>
+</div>

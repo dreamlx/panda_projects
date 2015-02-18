@@ -1,55 +1,13 @@
  <div class="col-md-6">
    <%= simple_form_for @client do |f| %>  
-    <p><h>Contact Information</h><p>
-    <hr>
     <%= f.input :client_code %>
     <%= f.input :chinese_name %>
     <%= f.input :english_name %>
     <%= f.input :person_id, collection: Person.all, label: 'Account Owner' %>
-    <hr>
-    <%= f.input :person1 %>
-    <%= f.input :title_1 %>
-    <%= f.input :mobile_1 %>
-    <%= f.input :tel_1 %>
-    <%= f.input :fax_1 %>
-    <%= f.input :email_1 %>
-    <%= f.input :gender1_id, collection: Dict.selected_genders %>
-    <%= f.input :address_1 %>
-    <%= f.input :city_1 %>
-    <%= f.input :state_1 %>
-    <%= f.input :country_1 %>
-    <%= f.input :postalcode_1 %>
-    <hr>
-    <%= f.input :person2 %>
-    <%= f.input :title_2 %>
-    <%= f.input :mobile_2 %>
-    <%= f.input :tel_2 %>
-    <%= f.input :fax_2 %>
-    <%= f.input :email_2 %>
-    <%= f.input :gender2_id, collection: Dict.selected_genders %>
-    <%= f.input :address_2 %>
-    <%= f.input :city_2 %>
-    <%= f.input :state_2 %>
-    <%= f.input :country_2 %>
-    <%= f.input :postalcode_2 %>
-    <hr>
-    <%= f.input :person3 %>
-    <%= f.input :title_3 %>
-    <%= f.input :mobile_3 %>
-    <%= f.input :tel_3 %>
-    <%= f.input :fax_3 %>
-    <%= f.input :email_3 %>
-    <%= f.input :gender3_id, collection: Dict.selected_genders %>
-    <hr>
-    <p><h>General Informaiton</h></p>
     <%= f.input :industry_id, collection: Industry.all %>
     <%= f.input :category_id, collection: Dict.selected_categories %>
     <%= f.input :status_id, collection: Dict.selected_client_statuses %>
     <%= f.input :region_id, collection: Dict.selected_regions %>
-    
     <%= f.button :submit %>
-    
-    <p><b>Create date</b><%=@client.created_on%></p>
-    <p><b>Update date</b><%=@client.updated_on%></p>
   <% end %>
 </div>

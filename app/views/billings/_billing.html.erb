@@ -1,9 +1,15 @@
 <tr>
   <td><%= link_to billing.project.job_code, billing.project if billing.project %></td>
-  <td><%= billing.project.referring.english_name if billing.project && billing.project.referring %></td>
-  <td><%= billing.project.billing_partner.english_name if billing.project && billing.project.billing_partner %></td>
-  <td><%= billing.project.billing_manager.english_name if billing.project && billing.project.billing_manager %></td>
+  <td><%= link_to billing.project.referring.english_name, 
+                  billing.project.referring if billing.project && billing.project.referring %></td>
+  <td><%= link_to billing.project.billing_partner.english_name,
+          billing.project.billing_partner if billing.project && billing.project.billing_partner %></td>
+  <td><%= link_to billing.project.billing_manager.english_name,
+          billing.project.billing_manager if billing.project && billing.project.billing_manager %></td>
+  <td><%= link_to billing.person.english_name,
+          billing.person if billing.person %></td>
   <td><%= link_to billing.number, billing %></td>
+  <td><%= billing.period.number if billing.period %></td>
   <td><%= billing.billing_date %></td>
   <td><%= billing.service_billing %></td>
   <td><%= billing.expense_billing %></td>
@@ -17,6 +23,8 @@
   <td><%= billing.status == "0" ? "outstanding" : "received" %></td>
   <td><%= billing.business_tax %></td>
   <td><%= billing.collection_days %></td>
+  <td><%= billing.created_on.to_date %></td>
+  <td><%= billing.updated_on.to_date %></td>
   <td><%= link_to 'Edit', edit_billing_path(billing) if billing.status == '0'%></td>
   <td><%= link_to 'Destroy', billing, method: :delete, data: {confirm: 'Are you sure ?'} if billing.status == '0' %></td>
 </tr>

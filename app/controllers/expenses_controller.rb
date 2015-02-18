@@ -6,14 +6,10 @@ class ExpensesController < ApplicationController
     @expenses_total = @q.result
   end
 
-  def show
-    @expense = Expense.find(params[:id])
-  end
-
   def new
     @expense = Expense.new
-    @expense.project_id = params[:prj_id]
-    @expense.period_id = Period.order(number: :desc).first.id if Period.first
+    @expense.project_id = params[:project_id]
+    @expense.period_id = Period.last.id if Period.last
   end
 
   def edit
@@ -24,7 +20,7 @@ class ExpensesController < ApplicationController
     @expense = Expense.new(expense_params)
 
     if @expense.save
-      redirect_to @expense, notice: 'Expense successfully created.'
+      redirect_to expenses_url, notice: 'Expense successfully created.'
     else
       render "new"
     end
@@ -33,7 +29,7 @@ class ExpensesController < ApplicationController
   def update
     @expense = Expense.find(params[:id])
     if @expense.update(expense_params)
-      redirect_to @expense, notice: 'Expense was successfully updated.'
+      redirect_to expenses_url notice: 'Expense was successfully updated.'
     else
       render "edit"
     end

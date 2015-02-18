@@ -9,7 +9,9 @@ Rails.application.routes.draw do
   resources :billings do
     resources :receive_amounts, only: [:new, :create, :edit, :update, :destroy]
   end
-  resources :clients
+  resources :clients do
+    resources :contacts
+  end
   resources :deductions
   resources :projects do
     post :close, on: :member
@@ -17,7 +19,7 @@ Rails.application.routes.draw do
   resources :dicts, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :industries
   resources :items
-  resources :expenses
+  resources :expenses, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :initialfees
   resources :personalcharges, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :reports do
@@ -27,6 +29,7 @@ Rails.application.routes.draw do
     post :time_report, on: :collection
   end
   resources :people
+  resources :contacts, only: [:index, :create, :update] 
   resources :periods, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :prj_expense_logs, only: [:index, :destroy]
   resources :ufafees

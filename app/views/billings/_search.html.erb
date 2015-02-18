@@ -5,19 +5,28 @@
     radio_buttons: :horizontal_radio_and_checkboxes,
     file: :horizontal_file_input,
     boolean: :horizontal_boolean}) do |f| %>
+  <%= f.input :number_eq,
+              collection: Billing.pluck(:number),
+              required: false %>
   <%= f.input :number_cont, 
               required: false %>
   <%= f.input :project_job_code_eq, 
               collection: Project.order(:job_code).pluck(:job_code),
               required: false,
-              label: 'Project' %>
+              label: 'Project eq' %>
+  <%= f.input :project_job_code_cont, 
+              required: false,
+              label: 'Project Cont' %>
   <%= f.input :status_eq, 
               collection: [["outstanding", "0"],["received", "1"]],
               required: false %>
   <%= f.input :person_english_name_eq, 
               collection: Person.pluck(:english_name),
               required: false,
-              label: 'Person' %>
+              label: 'Person eq' %>
+  <%= f.input :person_english_name_cont, 
+              required: false,
+              label: 'Person Cont' %>
   <%= f.input :period_number_gteq, 
               as: :date,
               html5: true,

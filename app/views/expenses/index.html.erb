@@ -9,6 +9,7 @@
   <thead>
     <tr>
       <th><%= sort_link(@q, :project_job_code) %></th>
+      <th><%= sort_link(@q, :period_number) %></th>
       <th><%= sort_link(@q, :commission) %></th>
       <th><%= sort_link(@q, :outsourcing) %></th>
       <th><%= sort_link(@q, :tickets) %></th>
@@ -18,8 +19,10 @@
       <th><%= sort_link(@q, :report_binding) %></th>
       <th><%= sort_link(@q, :cash_advance) %></th>
       <th><%= sort_link(@q, :payment_on_be_half) %></th>
+      <th><%= sort_link(@q, :created_on) %></th>
+      <th><%= sort_link(@q, :updated_on) %></th>
       <th><%= sort_link(@q, :memo) %></th>
-      <th colspan="3">Operation</th>
+      <th colspan="2">Operation</th>
     </tr>
   </thead>
   <tbody>
@@ -36,7 +39,7 @@
       <td><%= @expenses_total.sum(:cash_advance) %></td>
       <td><%= @expenses_total.sum(:payment_on_be_half) %></td>
       <td></td>
-      <td colspan="3"></td>
+      <td colspan="2"></td>
     </tr>
   </tbody>
 </table>

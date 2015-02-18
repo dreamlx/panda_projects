@@ -15,13 +15,11 @@ class BillingsController < ApplicationController
 
   def new
     @billing    = Billing.new
+    @billing.project_id = params[:project_id]
   end
 
   def create
     @billing              = Billing.new(billing_params)
-    @billing_number       = Dict.find_by_category('billing_number')
-    @billing_number.code  = (@billing_number.code.to_i + 1).to_s
-        
     if @billing.status == "1"
       @billing.collection_days = @billing.days_of_ageing
       @billing.outstanding =@billing.amount
@@ -32,7 +30,11 @@ class BillingsController < ApplicationController
     @billing.outstanding  = @billing.amount
     
     if @billing.save
+      # update billing_number
+      @billing_number       = Dict.find_by_category('billing_number')
+      @billing_number.code  = (@billing_number.code.to_i + 1).to_s
       @billing_number.save
+      # end of update billing_number
       redirect_to billings_url, id: @billing.project_id, notice: "#{@billing.project.job_code} -- Billing was successfully updated."
     else
       render 'new'

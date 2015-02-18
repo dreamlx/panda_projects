@@ -2,8 +2,8 @@
   <%= simple_form_for @expense do |f| %>
     <%= f.input :project_id, collection: Project.order(:job_code) %>
     <%= f.input :period_id, collection: Period.order(:number) %>
-    <%= f.input :created_on, as: :date, html5: true %>
-    <%= f.input :updated_on, as: :date, html5: true %>
+    <%= f.input :created_on, as: :date, html5: true, disabled: true %>
+    <%= f.input :updated_on, as: :date, html5: true, disabled: true %>
     <%= f.input :commission %>
     <%= f.input :outsourcing %>
     <%= f.input :tickets %>

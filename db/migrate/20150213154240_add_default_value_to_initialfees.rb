@@ -14,6 +14,7 @@ class AddDefaultValueToInitialfees < ActiveRecord::Migration
     change_column_default(:initialfees, :report_binding, 0)
     change_column_default(:initialfees, :payment_on_be_half, 0)
     change_column_default(:initialfees, :cash_advance, 0)
+    change_column_default(:receive_amounts, :receive_amount, 0)
   end
 
   def down
@@ -31,5 +32,6 @@ class AddDefaultValueToInitialfees < ActiveRecord::Migration
     change_column_default(:initialfees, :report_binding, nil)
     change_column_default(:initialfees, :payment_on_be_half, nil)
     change_column_default(:initialfees, :cash_advance, nil)
+    change_column_default(:receive_amounts, :receive_amount, nil)
   end
 end

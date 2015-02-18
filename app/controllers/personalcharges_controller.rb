@@ -10,6 +10,7 @@ class PersonalchargesController < ApplicationController
 
   def new
     @personalcharge = Personalcharge.new
+    @personalcharge.project_id = params[:project_id]
   end
 
   def create
