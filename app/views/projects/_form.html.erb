@@ -32,9 +32,9 @@
       <div class="panel panel-default">
         <div class="panel-heading">Estimated and Budgeted</div>
         <div class="panel-body">
-          <%= f.input :partner_id,    collection: Person.selected_users, label: 'Engagement partner' %>
-          <%= f.input :manager_id,    collection: Person.selected_users, label: 'Engagement manager' %>
-          <%= f.input :referring_id,  collection: Person.selected_users, label: 'Job source' %>
+          <%= f.input :partner_id,    collection: User.all, label: 'Engagement partner' %>
+          <%= f.input :manager_id,    collection: User.all, label: 'Engagement manager' %>
+          <%= f.input :referring_id,  collection: User.all, label: 'Job source' %>
           <%= f.input :contracted_service_fee %>
           <%= f.input :estimated_commision %>
           <%= f.input :estimated_outsorcing %>
@@ -51,8 +51,8 @@
       <div class="panel panel-default">
         <div class="panel-heading">Billing Responsibility</div>
         <div class="panel-body">
-          <%= f.input :billing_partner_id, collection: Person.selected_users, label: "Partner" %>
-          <%= f.input :billing_manager_id, collection: Person.selected_users, label: "Manager" %>
+          <%= f.input :billing_partner_id, collection: User.all, label: "Partner" %>
+          <%= f.input :billing_manager_id, collection: User.all, label: "Manager" %>
         </div>
       </div>
     </div>

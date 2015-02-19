@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   validates :charge_rate, numericality: true
-
+  belongs_to :person
 
   scope :employed, -> {where(status: 'Employed')}
 end

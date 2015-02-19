@@ -1,0 +1,10 @@
+<tr>
+  <td><%= receive_amount.invoice_no %></td>
+  <td><%= receive_amount.receive_date %></td>
+  <td><%= receive_amount.receive_amount %></td>
+  <td><%= receive_amount.billing.number if receive_amount.billing %></td>
+  <td><%= receive_amount.billing.user.english_name if receive_amount.billing && receive_amount.billing.user %></td>
+  <td><%= receive_amount.billing.project.job_code if receive_amount.billing && receive_amount.billing.project %></td>
+  <td><%= link_to 'Edit', edit_billing_receive_amount_path(id: receive_amount, billing_id: @billing) if @billing.status !='1' %></td>
+  <td><%= link_to 'Destroy', [@billing, receive_amount], method: :delete, data: { confirm:  'Are you sure?' } if @billing.status !='1' %></td>
+</tr>

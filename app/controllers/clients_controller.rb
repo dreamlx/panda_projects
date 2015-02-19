@@ -38,6 +38,6 @@ class ClientsController < ApplicationController
         :title_1, :title_2, :gender1_id, :gender2_id, :mobile_1, :mobile_2, :tel_1, :tel_2, 
         :fax_1, :fax_2, :email_1, :email_2, :description, :category_id, :status_id, :region_id,
         :industry_id, :client_code, :person3, :title_3, :gender3_id, :mobile_3, :tel_3, :fax_3,
-        :email_3, :created_on, :updated_on)
+        :email_3, :created_on, :updated_on, :user_id)
     end
 end

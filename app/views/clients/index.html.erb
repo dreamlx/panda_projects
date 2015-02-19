@@ -1,7 +1,7 @@
 <h1>Listing clients</h1>
 <%= link_to 'New client', new_client_path %>
 <%= search_form_for @q do |f| %>
-  <%= f.input :chinese_name_or_english_name_or_client_code_or_person_english_name_cont, 
+  <%= f.input :chinese_name_or_english_name_or_client_code_or_user_english_name_cont, 
               label: 'Any word or letter',
               required: false %>
   <%= f.button :submit %>
@@ -13,7 +13,7 @@
       <th><%= sort_link(@q, :client_code) %></th>
       <th><%= sort_link(@q, :chinese_name) %></th>
       <th><%= sort_link(@q, :english_name) %></th>
-      <th><%= sort_link(@q, :person_english_name, 'Person English name') %></th>
+      <th><%= sort_link(@q, :user_english_name, 'User English name') %></th>
       <th><%= sort_link(@q, :category_title, 'Category') %></th>
       <th><%= sort_link(@q, :status_title, 'Status') %></th>
       <th><%= sort_link(@q, :region_title, 'Region') %></th>
@@ -30,7 +30,7 @@
         <td><%= link_to client.client_code, client %></td>
         <td><%= client.chinese_name %></td>
         <td><%= client.english_name %></td>
-        <td><%= client.person.english_name if client.person %></td>
+        <td><%= client.user.english_name if client.user %></td>
         <td><%= client.category.title if client.category %></td>
         <td><%= client.status.title if client.status %></td>
         <td><%= client.region.title if client.region %></td>

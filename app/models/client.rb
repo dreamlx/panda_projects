@@ -10,6 +10,7 @@ class Client < ActiveRecord::Base
   has_many    :contacts, dependent: :destroy
   belongs_to  :industry
   belongs_to  :person
+  belongs_to  :user
   belongs_to  :category,  -> { where category: 'client_category' }, class_name: "Dict",   foreign_key: "category_id"
   belongs_to  :status,    -> { where category: 'client_status' },   class_name: "Dict",   foreign_key: "status_id"   
   belongs_to  :region,    -> { where category: 'region' },          class_name: "Dict",   foreign_key: "region_id"   

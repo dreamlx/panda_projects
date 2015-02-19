@@ -20,13 +20,13 @@
   <%= f.input :status_eq, 
               collection: [["outstanding", "0"],["received", "1"]],
               required: false %>
-  <%= f.input :person_english_name_eq, 
-              collection: Person.pluck(:english_name),
+  <%= f.input :user_english_name_eq, 
+              collection: User.pluck(:english_name),
               required: false,
-              label: 'Person eq' %>
-  <%= f.input :person_english_name_cont, 
+              label: 'User eq' %>
+  <%= f.input :user_english_name_cont, 
               required: false,
-              label: 'Person Cont' %>
+              label: 'User Cont' %>
   <%= f.input :period_number_gteq, 
               as: :date,
               html5: true,

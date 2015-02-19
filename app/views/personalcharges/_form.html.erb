@@ -1,6 +1,6 @@
 <div class="col-md-6">
   <%= simple_form_for @personalcharge do |f| %>
-    <%= f.input :person_id, collection: Person.all %>
+    <%= f.input :user_id, collection: User.all %>
     <%= f.input :project_id, collection: Project.all %>
     <%= f.input :period_id, collection: Period.all %>
     <%= f.input :created_on, as: :date, html5: true, disabled: true  %>

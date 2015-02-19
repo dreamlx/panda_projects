@@ -11,6 +11,7 @@ class Personalcharge < ActiveRecord::Base
   belongs_to :project
   belongs_to :period
   belongs_to :person
+  belongs_to :user
   before_save :save_PFA_of_service_fee
 
   private 

@@ -239,6 +239,8 @@ class ReportsController < ApplicationController
   
   private
     def personalcharge_params
-      params.require(:personalcharge).permit(:hours, :service_fee, :reimbursement, :meal_allowance, :travel_allowance, :project_id, :period_id, :PFA_of_service_fee, :person_id)
+      params.require(:personalcharge).permit(
+        :hours, :service_fee, :reimbursement, :meal_allowance, :travel_allowance, 
+        :project_id, :period_id, :PFA_of_service_fee, :person_id, :user_id)
     end
 end

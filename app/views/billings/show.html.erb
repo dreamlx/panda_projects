@@ -8,7 +8,7 @@
 </p>
 <p>
 <b>Prepared by</b>
-  <td><%=@billing.person.english_name%></td>
+  <td><%=@billing.user.english_name%></td>
 </p>
 
 <%= link_to 'Edit', edit_billing_path(@billing) if @billing.status == '0'%> |
@@ -27,16 +27,5 @@
     <th colspan="2">Operation</th>
   </tr>
   
-  <% @billing.receive_amounts.each do |receive_amount| %>
-    <tr>
-      <td><%= receive_amount.invoice_no %></td>
-      <td><%= receive_amount.receive_date %></td>
-      <td><%= receive_amount.receive_amount %></td>
-      <td><%= receive_amount.billing.number %></td>
-      <td><%= receive_amount.billing.person.english_name %></td>
-      <td><%= receive_amount.billing.project.job_code%></td>
-      <td><%= link_to 'Edit', edit_billing_receive_amount_path(id: receive_amount, billing_id: @billing) if @billing.status !='1' %></td>
-      <td><%= link_to 'Destroy', [@billing, receive_amount], method: :delete, data: { confirm:  'Are you sure?' } if @billing.status !='1' %></td>
-    </tr>
-  <% end %>
+  <%= render @billing.receive_amounts %>
 </table>

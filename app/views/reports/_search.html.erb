@@ -6,7 +6,7 @@
     file: :horizontal_file_input,
     boolean: :horizontal_boolean}) do |f| %>
   <%= f.input :partner_english_name_eq, 
-              collection: Person.all, 
+              collection: User.all, 
               required: false,
               label: 'Partner' %>
   <%= f.input :contract_number_eq, 
@@ -18,7 +18,7 @@
               required: false,
               label: 'ServiceLine' %>
   <%= f.input :referring_english_name_eq,
-              collection: Person.all,
+              collection: User.all,
               required: false,
               label: 'Job Ref'%>
   <%= f.input :starting_date_gteq,
@@ -36,7 +36,7 @@
               required: false,
               label: 'GMU' %>
   <%= f.input :manager_english_name_eq, 
-              collection: Person.all, 
+              collection: User.all, 
               required: false,
               label: 'Manager' %>
   <%= f.input :job_code_cont, 

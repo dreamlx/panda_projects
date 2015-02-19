@@ -5,13 +5,13 @@
     radio_buttons: :horizontal_radio_and_checkboxes,
     file: :horizontal_file_input,
     boolean: :horizontal_boolean}) do |f| %>
-  <%= f.input :person_english_name_eq, 
-              collection: Person.pluck(:english_name),
+  <%= f.input :user_english_name_eq, 
+              collection: User.pluck(:english_name),
               required: false,
-              label: 'Person Select' %>
-  <%= f.input :person_english_name_cont, 
+              label: 'User Select' %>
+  <%= f.input :user_english_name_cont, 
               required: false,
-              label: 'Person Cont' %>
+              label: 'User Cont' %>
   <%= f.input :project_job_code_eq, 
               collection: Project.order(:job_code).pluck(:job_code),
               required: false,

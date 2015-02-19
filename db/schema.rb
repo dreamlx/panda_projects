@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150219065314) do
+ActiveRecord::Schema.define(version: 20150219090833) do
 
   create_table "billings", force: :cascade do |t|
     t.datetime "created_on"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20150219065314) do
     t.integer  "period_id",       limit: 4
     t.decimal  "write_off",                   precision: 10,           default: 0
     t.decimal  "provision",                   precision: 10,           default: 0
+    t.integer  "user_id",         limit: 4
   end
 
   create_table "clients", force: :cascade do |t|
@@ -76,6 +77,7 @@ ActiveRecord::Schema.define(version: 20150219065314) do
     t.string   "email_3",      limit: 255
     t.datetime "created_on"
     t.datetime "updated_on"
+    t.integer  "user_id",      limit: 4
   end
 
   create_table "commissions", force: :cascade do |t|
@@ -87,6 +89,7 @@ ActiveRecord::Schema.define(version: 20150219065314) do
     t.decimal  "amount",                 precision: 10, scale: 2
     t.integer  "project_id", limit: 4
     t.integer  "period_id",  limit: 4
+    t.integer  "user_id",    limit: 4
   end
 
   create_table "common_fees", force: :cascade do |t|
@@ -270,6 +273,7 @@ ActiveRecord::Schema.define(version: 20150219065314) do
     t.integer  "period_id",          limit: 4
     t.integer  "person_id",          limit: 4
     t.decimal  "PFA_of_service_fee",           precision: 10, scale: 2, default: 0.0
+    t.integer  "user_id",            limit: 4
   end
 
   create_table "prj_expense_logs", force: :cascade do |t|

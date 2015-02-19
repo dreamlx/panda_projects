@@ -44,6 +44,6 @@ class PersonalchargesController < ApplicationController
     def personalcharge_params
       params.require(:personalcharge).permit(
         :created_on, :updated_on, :hours, :reimbursement, :meal_allowance,
-        :travel_allowance, :project_id, :period_id, :person_id)
+        :travel_allowance, :project_id, :period_id, :person_id, :user_id)
     end
 end

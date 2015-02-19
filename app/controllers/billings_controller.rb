@@ -74,6 +74,6 @@ class BillingsController < ApplicationController
         :created_on, :updated_on, :number, :billing_date,
         :person_id, :amount, :outstanding, :service_billing, :expense_billing,
         :days_of_ageing, :business_tax, :status, :collection_days, :project_id,
-        :period_id, :write_off, :provision)
+        :period_id, :write_off, :provision, :user_id)
     end
 end

@@ -6,8 +6,8 @@
           billing.project.billing_partner if billing.project && billing.project.billing_partner %></td>
   <td><%= link_to billing.project.billing_manager.english_name,
           billing.project.billing_manager if billing.project && billing.project.billing_manager %></td>
-  <td><%= link_to billing.person.english_name,
-          billing.person if billing.person %></td>
+  <td><%= link_to billing.user.english_name,
+          billing.user if billing.user %></td>
   <td><%= link_to billing.number, billing %></td>
   <td><%= billing.period.number if billing.period %></td>
   <td><%= billing.billing_date %></td>
