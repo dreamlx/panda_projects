@@ -24,8 +24,8 @@
       <tr>
         <td><%= link_to deduction.project.job_code, deduction.project if deduction.project %></td> 
         <td><%= deduction.period.number if deduction.period %></td>   
-        <td><%= deduction.created_on %></td>
-        <td><%= deduction.updated_on %></td>
+        <td><%= deduction.created_on.to_date %></td>
+        <td><%= deduction.updated_on.to_date %></td>
         <td><%= deduction.service_PFA %></td>
         <td><%= deduction.service_UFA %></td>
         <td><%= deduction.service_billing %></td>

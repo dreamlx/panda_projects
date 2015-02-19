@@ -1,0 +1,41 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Estimated and Budgeted</h3>
+  </div>
+  <div class="panel-body">
+    <dl class="dl-horizontal">
+      <dt><%= t('partner') %></dt>
+      <dd><%= @project.partner.english_name if @project.partner %></dd>
+
+      <dt><%= t('manager') %></dt>
+      <dd><%= @project.manager.english_name if @project.manager %></dd>
+
+      <dt><%= t('referring') %></dt>
+      <dd><%= @project.referring.english_name if @project.referring %></dd>
+
+      <dt><%= t('contracted_service_fee') %></dt>
+      <dd><%= @project.contracted_service_fee %></dd>
+
+      <dt><%= t('estimated_commision') %></dt>
+      <dd><%= @project.estimated_commision %></dd>
+
+      <dt><%= t('estimated_outsorcing') %></dt>
+      <dd><%= @project.estimated_outsorcing %></dd>
+
+      <dt><%= t('budgeted_service_fee') %></dt>
+      <dd><%= @project.budgeted_service_fee %></dd>
+
+      <dt><%= t('service_PFA') %></dt>
+      <dd><%= @project.service_PFA %></dd>
+
+      <dt><%= t('expense_PFA') %></dt>
+      <dd><%= @project.expense_PFA %></dd>
+
+      <dt><%= t('contracted_expense') %></dt>
+      <dd><%= @project.contracted_expense %></dd>
+
+      <dt><%= t('budgeted_expense') %></dt>
+      <dd><%= @project.budgeted_expense %></dd>
+    </dl>
+  </div>
+</div>

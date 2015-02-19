@@ -23,10 +23,10 @@
   <tbody>
     <% for ufafee in @ufafees %>
       <tr>
-        <td><%= ufafee.project.job_code %></td>
+        <td><%= link_to ufafee.project.job_code, ufafee.project if ufafee.project %></td>
         <td><%= ufafee.period.number %></td>
-        <td><%= ufafee.created_on %></td>
-        <td><%= ufafee.updated_on %></td>
+        <td><%= ufafee.created_on.to_date %></td>
+        <td><%= ufafee.updated_on.to_date %></td>
         <td><%= ufafee.number %></td>
         <td><%= ufafee.amount %></td>
         <td><%= ufafee.service_UFA %></td>

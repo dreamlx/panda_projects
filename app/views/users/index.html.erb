@@ -1,29 +1,60 @@
-<h1>Listing users</h1>
-<div>
-  <%= link_to 'new user', new_user_path %>
-</div>
-<%= paginate @users %>
 <table class="table table-striped">
   <thead>
     <tr>
+      <th><%= sort_link(@q, :email) %></th>
       <th><%= sort_link(@q, :name) %></th>
-      <th><%= sort_link(@q, :auth) %></th>
-      <th><%= sort_link(@q, :other1) %></th>
-      <th><%= sort_link(@q, :other2) %></th>
-      <th colspan="2">Operation</th>
+      <th><%#= sort_link(@q, :auth) %></th>
+      <th><%#= sort_link(@q, :other1) %></th>
+      <th><%#= sort_link(@q, :other2) %></th>
+      <th><%#= sort_link(@q, :created_on) %></th>
+      <th><%#= sort_link(@q, :updated_on) %></th>
+      <th><%= sort_link(@q, :chinese_name) %></th>
+      <th><%= sort_link(@q, :english_name) %></th>
+      <th><%= sort_link(@q, :employee_number) %></th>
+      <th><%= sort_link(@q, :department) %></th>
+      <th><%= sort_link(@q, :grade) %></th>
+      <th><%= sort_link(@q, :charge_rate) %></th>
+      <th><%= sort_link(@q, :employeement_date) %></th>
+      <th><%= sort_link(@q, :address) %></th>
+      <th><%= sort_link(@q, :postalcode) %></th>
+      <th><%= sort_link(@q, :mobile) %></th>
+      <th><%= sort_link(@q, :tel) %></th>
+      <th><%= sort_link(@q, :extension) %></th>
+      <th><%= sort_link(@q, :gender) %></th>
+      <th><%= sort_link(@q, :status) %></th>
+      <th><%= sort_link(@q, :GMU) %></th>
+      <th><%= sort_link(@q, :role) %></th>
+      <th>Operation</th>
     </tr>
   </thead>
   <tbody>
     <% @users.each do |user| %>
       <tr>
+        <td><%= user.email %></td>
         <td><%= user.name %></td>
-        <td><%= user.auth %></td>
-        <td><%= user.other1 %></td>
-        <td><%= user.other2 %></td>
-        <td><%= link_to 'Edit', :action => 'edit', :id => user %></td>
-        <td><%= link_to 'Del', { :action => 'destroy', :id => user }, :confirm => 'Are you sure?', :post => true %></td>
+        <td><%#= user.auth %></td>
+        <td><%#= user.other1 %></td>
+        <td><%#= user.other2 %></td>
+        <td><%#= user.created_on.to_date if user.created_on %></td>
+        <td><%#= user.updated_on.to_date if user.updated_on %></td>
+        <td><%= user.chinese_name %></td>
+        <td><%= user.english_name %></td>
+        <td><%= user.employee_number %></td>
+        <td><%= user.department %></td>
+        <td><%= user.grade %></td>
+        <td><%= user.charge_rate %></td>
+        <td><%= user.employeement_date %></td>
+        <td><%= user.address %></td>
+        <td><%= user.postalcode %></td>
+        <td><%= user.mobile %></td>
+        <td><%= user.tel %></td>
+        <td><%= user.extension %></td>
+        <td><%= user.gender %></td>
+        <td><%= user.status %></td>
+        <td><%= user.GMU %></td>
+        <td><%= user.role %></td>
+        <td><%= link_to 'Edit', edit_user_path(user) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-<%= paginate @users %>

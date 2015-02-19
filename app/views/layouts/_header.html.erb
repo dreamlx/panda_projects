@@ -11,7 +11,7 @@
       <%= link_to t('home'), root_path, class: "navbar-brand" %>
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <% if session[:user_id] %>
+      <% if user_signed_in? %>
         <ul class="nav navbar-nav">
           <li class="<%= 'active' if params[:controller] == 'personalcharges' %>"><%= link_to t('personalcharge'), personalcharges_url %></li>
           <li class="<%= 'active' if params[:controller] == 'billings' || params[:controller] == 'receive_amounts' %>"><%= link_to t('billings'), billings_path %></li>
@@ -32,11 +32,17 @@
               <li class="<%= 'active' if params[:controller] == 'industries' %>"><%= link_to t('industries'), industries_path %></li>
               <li class="<%= 'active' if params[:controller] == 'prj_expense_logs' %>"><%= link_to t('prj_expense_logs'), prj_expense_logs_url %></li>
               <li class="<%= 'active' if params[:controller] == 'periods' %>"><%= link_to t('periods'), periods_path %></li>
-              <li class="<%= 'active' if params[:controller] == 'users' %>"><%= link_to 'user&password', users_path %></li>
+              <li class="<%= 'active' if params[:controller] == 'users' %>"><%= link_to 'users', users_path %></li>
               <li class="<%= 'active' if params[:controller] == 'contacts' %>"><%= link_to t('contacts'), contacts_url %></li>
-              <li><%= link_to 'Logout', logout_users_url, method: :post %></li>
             </ul>
           </li>
+          <li><%= link_to t('edit'), edit_user_registration_path %></li>
+          <li><%= link_to t('logout'), destroy_user_session_path, method: :delete %></li>
+        </ul>
+      <% else %>
+        <ul class="nav navbar-nav navbar-right">
+          <li><%= link_to t('signup'), new_user_registration_path %></li>
+          <li><%= link_to t('signin'), new_user_session_path %></li>
         </ul>
       <% end %>
     </div><!-- /.navbar-collapse -->

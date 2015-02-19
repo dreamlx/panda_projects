@@ -1,0 +1,41 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Main</h3>
+  </div>
+  <div class="panel-body">
+    <dl class="dl-horizontal">
+      <dt><%= t('contract_number') %></dt>
+      <dd><%= @project.contract_number %></dd>
+
+      <dt><%= t('client') %></dt>
+      <dd><%= @project.client.english_name if @project.client %></dd>
+
+      <dt><%= t('GMU') %></dt>
+      <dd><%= @project.GMU.title if @project.GMU %></dd>
+
+      <dt><%= t('description') %></dt>
+      <dd><%= @project.description %></dd>
+
+      <dt><%= t('service') %></dt>
+      <dd><%= @project.service.title if @project.service %></dd>
+
+      <dt><%= t('revenue') %></dt>
+      <dd><%= @project.revenue.title if @project.revenue %></dd>
+
+      <dt><%= t('starting_date') %></dt>
+      <dd><%= @project.starting_date %></dd>
+
+      <dt><%= t('ending_date') %></dt>
+      <dd><%= @project.ending_date %></dd>
+
+      <dt><%= t('estimated_annual_fee') %></dt>
+      <dd><%= @project.estimated_annual_fee %></dd>
+
+      <dt><%= t('risk') %></dt>
+      <dd><%= @project.risk.title if @project.risk %></dd>
+
+      <dt><%= t('status') %></dt>
+      <dd><%= @project.status.title if @project.status %></dd>
+    </dl>
+  </div>
+</div>

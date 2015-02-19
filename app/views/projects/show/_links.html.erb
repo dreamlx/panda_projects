@@ -1,0 +1,11 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Links</h3>
+  </div>
+  <div class="panel-body">
+    <p><%= link_to 'new_billing', new_billing_path(project_id: @project.id) %></p>
+    <p><%= link_to 'new_personalcharge', new_personalcharge_path(project_id: @project.id) %></p>
+    <p><%= link_to 'new_expense', new_expense_path(project_id: @project.id) %></p>
+    <p><%= link_to 'new_ufafee', new_ufafee_path(project_id: @project.id) %></p>
+  </div>
+</div>

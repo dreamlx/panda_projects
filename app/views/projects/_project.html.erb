@@ -1,10 +1,30 @@
 <tr>
   <td><%= link_to project.job_code, project %></td>
   <td><%= project.created_on.to_date %></td>
+  <td><%= project.updated_on.to_date %></td>
   <td><%= project.client.english_name if project.client %></td>      
   <td><%= project.partner.english_name if project.partner %></td>
   <td><%= project.manager.english_name if project.manager %></td>
   <td><%= project.status.title if project.status %></td>
+  <td><%= project.contract_number %></td>
+  <td><%= project.GMU.title if project.GMU %></td>
+  <td><%= project.service.title if project.service %></td>
+  <td><%= project.starting_date %></td>
+  <td><%= project.ending_date %></td>
+  <td><%= project.estimated_annual_fee %></td>
+  <td><%= project.risk.title if project.risk %></td>
+  <td><%= project.billing_partner.english_name if project.billing_partner %></td>
+  <td><%= project.billing_manager.english_name if project.billing_manager %></td>
+  <td><%= project.contracted_service_fee %></td>
+  <td><%= project.estimated_commision %></td>
+  <td><%= project.estimated_outsorcing %></td>
+  <td><%= project.budgeted_service_fee %></td>
+  <td><%= project.service_PFA %></td>
+  <td><%= project.expense_PFA %></td>
+  <td><%= project.contracted_expense %></td>
+  <td><%= project.budgeted_expense %></td>
+  <td><%= project.PFA_reason.title if project.PFA_reason %></td>
+  <td><%= project.revenue.title if project.revenue %></td>
   <td><%= project.description %></td>
   <td><%= link_to ('Edit'), edit_project_path(project) if project.status && project.status.code == '1'%></td>
   <td><%= link_to ('Close'), close_project_path(project), data: {confirm: ('Are you sure?')},method: :post if project.status && project.status.code == '1' %></td>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150218061632) do
+ActiveRecord::Schema.define(version: 20150219065314) do
 
   create_table "billings", force: :cascade do |t|
     t.datetime "created_on"
@@ -347,12 +347,40 @@ ActiveRecord::Schema.define(version: 20150218061632) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string  "name",            limit: 255
-    t.integer "person_id",       limit: 4
-    t.string  "hashed_password", limit: 255
-    t.boolean "auth",            limit: 1
-    t.string  "other1",          limit: 255
-    t.string  "other2",          limit: 255
+    t.string   "name",                   limit: 255
+    t.integer  "person_id",              limit: 4
+    t.string   "hashed_password",        limit: 255
+    t.boolean  "auth",                   limit: 1
+    t.string   "other1",                 limit: 255
+    t.string   "other2",                 limit: 255
+    t.string   "email",                  limit: 255,                          default: "", null: false
+    t.string   "encrypted_password",     limit: 255,                          default: "", null: false
+    t.string   "reset_password_token",   limit: 255
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          limit: 4,                            default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip",     limit: 255
+    t.string   "last_sign_in_ip",        limit: 255
+    t.datetime "created_on"
+    t.datetime "updated_on"
+    t.string   "chinese_name",           limit: 255
+    t.string   "english_name",           limit: 255
+    t.string   "employee_number",        limit: 255
+    t.string   "department",             limit: 255
+    t.string   "grade",                  limit: 255
+    t.decimal  "charge_rate",                        precision: 10, scale: 2
+    t.date     "employeement_date"
+    t.string   "address",                limit: 255
+    t.string   "postalcode",             limit: 255
+    t.string   "mobile",                 limit: 255
+    t.string   "tel",                    limit: 255
+    t.string   "extension",              limit: 255
+    t.string   "gender",                 limit: 255
+    t.string   "status",                 limit: 255
+    t.string   "GMU",                    limit: 255
+    t.string   "role",                   limit: 255
   end
 
   create_table "votes", force: :cascade do |t|

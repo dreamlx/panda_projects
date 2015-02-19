@@ -1,11 +1,7 @@
 Rails.application.routes.draw do
+  devise_for :users
   root 'welcome#index'
-  resources :users do
-    get :login, on: :collection
-    post :login, on: :collection
-    post :logout, on: :collection
-  end
-
+  resources :users, only: [:index, :edit, :update]
   resources :billings do
     resources :receive_amounts, only: [:new, :create, :edit, :update, :destroy]
   end

@@ -11,11 +11,31 @@
     <tr>
       <th><%= sort_link(@q, :job_code, t('Job code')) %></th>
       <th><%= sort_link(@q, :created_on, t('Created date')) %></th>
+      <th><%= sort_link(@q, :updated_on, t('updated date')) %></th>
       <th><%= sort_link(@q, :client_english_name, t('Client name')) %></th>
       <th><%= sort_link(@q, :partner_english_name, t('Job partner')) %></th>
       <th><%= sort_link(@q, :manager_english_name, t('Job manager')) %></th>
       <th><%= sort_link(@q, :status_title, t('Job status')) %></th>
-      <th><%= sort_link(@q, :description, t('Job Description')) %></th>
+      <th><%= sort_link(@q, :contract_number, t('contract_number')) %></th>
+      <th><%= sort_link(@q, :GMU_title, t('GMU_title')) %></th>
+      <th><%= sort_link(@q, :service_title, t('service_title')) %></th>
+      <th><%= sort_link(@q, :starting_date, t('starting_date')) %></th>
+      <th><%= sort_link(@q, :ending_date, t('ending_date')) %></th>
+      <th><%= sort_link(@q, :estimated_annual_fee, t('estimated_annual_fee')) %></th>
+      <th><%= sort_link(@q, :risk_title, t('risk_title')) %></th>
+      <th><%= sort_link(@q, :billing_partner_english_name, t('Billing partner')) %></th>
+      <th><%= sort_link(@q, :billing_manager_english_name, t('Billing manager')) %></th>
+      <th><%= sort_link(@q, :contracted_service_fee, t('contracted_service_fee')) %></th>
+      <th><%= sort_link(@q, :estimated_commision, t('estimated_commision')) %></th>
+      <th><%= sort_link(@q, :estimated_outsorcing, t('estimated_outsorcing')) %></th>
+      <th><%= sort_link(@q, :budgeted_service_fee, t('budgeted_service_fee')) %></th>
+      <th><%= sort_link(@q, :service_PFA, t('service_PFA')) %></th>
+      <th><%= sort_link(@q, :expense_PFA, t('expense_PFA')) %></th>
+      <th><%= sort_link(@q, :contracted_expense, t('contracted_expense')) %></th>
+      <th><%= sort_link(@q, :budgeted_expense, t('budgeted_expense')) %></th>
+      <th><%= sort_link(@q, :PFA_reason_title, t('PFA_reason')) %></th>
+      <th><%= sort_link(@q, :revenue_title, t('revenue')) %></th>
+      <th><%= sort_link(@q, :description, t('description')) %></th>
       <th colspan="2">Operation</th> 
     </tr>
   </thead>

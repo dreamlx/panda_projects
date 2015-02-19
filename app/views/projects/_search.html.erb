@@ -1,7 +1,33 @@
-<%= search_form_for(@q) do |f| %>
+<%= search_form_for(@q, html: { class: 'form-horizontal' }, 
+    wrapper: :horizontal_form,
+    wrapper_mappings: {
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean}) do |f| %>
   <%= f.input :job_code_cont, required: false %>
   <%= f.input :client_english_name_cont, required: false %>
   <%= f.input :partner_english_name_cont, required: false %>
   <%= f.input :manager_english_name_cont, required: false %>
+  <%= f.input :starting_date_gteq,
+              as: :date,
+              html5: true,
+              required: false,
+              label: 'Starting date great than' %>
+  <%= f.input :starting_date_lteq,
+              as: :date,
+              html5: true,
+              required: false,
+              label: 'Starting date less than' %>
+  <%= f.input :ending_date_gteq,
+              as: :date,
+              html5: true,
+              required: false,
+              label: 'Ending date great than' %>
+  <%= f.input :ending_date_lteq,
+              as: :date,
+              html5: true,
+              required: false,
+              label: 'Ending date less than' %>           
   <%= f.button :submit %>
 <% end %>

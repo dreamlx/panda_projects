@@ -3,15 +3,8 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  before_filter :authorize, :except => [:login]
-
-  def authorize
-    if session[:user_id].nil?
-      flash[:notice] = "Please log in"
-      redirect_to login_users_path
-    end
-  end
-
+  before_action :authenticate_user!
+  
   private
     def add_expense_observer(job_code,price=100,msg="")
       now_period = Period.today_period

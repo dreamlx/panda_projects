@@ -6,6 +6,7 @@ class UfafeesController < ApplicationController
 
   def new
     @ufafee = Ufafee.new
+    @ufafee.project_id = params[:project_id]
   end
 
   def create
