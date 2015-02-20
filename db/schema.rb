@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150219090833) do
+ActiveRecord::Schema.define(version: 20150220050111) do
 
   create_table "billings", force: :cascade do |t|
     t.datetime "created_on"
@@ -33,6 +33,17 @@ ActiveRecord::Schema.define(version: 20150219090833) do
     t.decimal  "provision",                   precision: 10,           default: 0
     t.integer  "user_id",         limit: 4
   end
+
+  create_table "bookings", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.integer  "project_id", limit: 4
+    t.decimal  "hours",                precision: 10, scale: 2, default: 0.0
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
+  end
+
+  add_index "bookings", ["project_id"], name: "index_bookings_on_project_id", using: :btree
+  add_index "bookings", ["user_id"], name: "index_bookings_on_user_id", using: :btree
 
   create_table "clients", force: :cascade do |t|
     t.string   "chinese_name", limit: 255
@@ -274,6 +285,7 @@ ActiveRecord::Schema.define(version: 20150219090833) do
     t.integer  "person_id",          limit: 4
     t.decimal  "PFA_of_service_fee",           precision: 10, scale: 2, default: 0.0
     t.integer  "user_id",            limit: 4
+    t.date     "charge_date"
   end
 
   create_table "prj_expense_logs", force: :cascade do |t|
@@ -314,6 +326,14 @@ ActiveRecord::Schema.define(version: 20150219090833) do
     t.integer  "revenue_id",             limit: 4
   end
 
+  create_table "projects_reports", id: false, force: :cascade do |t|
+    t.integer "project_id", limit: 4, null: false
+    t.integer "report_id",  limit: 4, null: false
+  end
+
+  add_index "projects_reports", ["project_id", "report_id"], name: "index_projects_reports_on_project_id_and_report_id", using: :btree
+  add_index "projects_reports", ["report_id", "project_id"], name: "index_projects_reports_on_report_id_and_project_id", using: :btree
+
   create_table "receive_amounts", force: :cascade do |t|
     t.datetime "created_on"
     t.datetime "updated_on"
@@ -323,6 +343,16 @@ ActiveRecord::Schema.define(version: 20150219090833) do
     t.decimal  "receive_amount",             precision: 10, scale: 2, default: 0.0
     t.string   "job_code",       limit: 255
   end
+
+  create_table "reports", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.integer  "period_id",  limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "reports", ["period_id"], name: "index_reports_on_period_id", using: :btree
+  add_index "reports", ["user_id"], name: "index_reports_on_user_id", using: :btree
 
   create_table "sumselects", force: :cascade do |t|
     t.string  "type",       limit: 255
@@ -394,4 +424,8 @@ ActiveRecord::Schema.define(version: 20150219090833) do
     t.integer "item_id",  limit: 4
   end
 
+  add_foreign_key "bookings", "projects"
+  add_foreign_key "bookings", "users"
+  add_foreign_key "reports", "periods"
+  add_foreign_key "reports", "users"
 end

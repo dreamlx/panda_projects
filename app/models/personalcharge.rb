@@ -6,7 +6,7 @@ class Personalcharge < ActiveRecord::Base
   validates :travel_allowance,  numericality: true
   validates :project_id,        presence: true
   validates :period_id,         presence: true
-  validates :person,            presence: true
+  validates :user_id,           presence: true
 
   belongs_to :project
   belongs_to :period
@@ -19,8 +19,8 @@ class Personalcharge < ActiveRecord::Base
       if self.project && (self.project.service_PFA != 0)
         self.PFA_of_service_fee = (self.service_fee / 100) * self.project.service_PFA
       end
-      if self.person && self.person.charge_rate
-        self.service_fee = self.hours * self.person.charge_rate
+      if self.user && self.user.charge_rate
+        self.service_fee = self.hours * self.user.charge_rate
       end
     end
 end

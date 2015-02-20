@@ -1,6 +1,7 @@
 <table class="table table-striped">
   <thead>
     <tr>
+      <th><%= sort_link(@q, :id) %></th>
       <th><%= sort_link(@q, :email) %></th>
       <th><%= sort_link(@q, :name) %></th>
       <th><%#= sort_link(@q, :auth) %></th>
@@ -30,7 +31,8 @@
   <tbody>
     <% @users.each do |user| %>
       <tr>
-        <td><%= user.email %></td>
+        <td><%= user.id %></td>
+        <td><%= mail_to user.email %></td>
         <td><%= user.name %></td>
         <td><%#= user.auth %></td>
         <td><%#= user.other1 %></td>
@@ -39,7 +41,7 @@
         <td><%#= user.updated_on.to_date if user.updated_on %></td>
         <td><%= user.chinese_name %></td>
         <td><%= user.english_name %></td>
-        <td><%= user.employee_number %></td>
+        <td><%= link_to user.employee_number, user %></td>
         <td><%= user.department %></td>
         <td><%= user.grade %></td>
         <td><%= user.charge_rate %></td>

@@ -20,14 +20,6 @@
               required: false,
               label: 'Project Cont' %>
   <%= f.input :period_number_gteq, 
-              collection: Period.all,
-              required: false,
-              label: 'Period From' %>
-  <%= f.input :period_number_lteq, 
-              collection: Period.all,
-              required: false,
-              label: 'Period To' %>
-  <%= f.input :period_number_gteq, 
               as: :date,
               html5: true,
               required: false,

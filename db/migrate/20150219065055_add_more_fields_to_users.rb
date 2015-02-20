@@ -1,4 +1,4 @@
-class AddMorefieldToUsers < ActiveRecord::Migration
+class AddMoreFieldsToUsers < ActiveRecord::Migration
   def up
     add_column :users, :created_on, :datetime
     add_column :users, :updated_on, :datetime

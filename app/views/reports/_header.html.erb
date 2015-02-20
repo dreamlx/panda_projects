@@ -1,0 +1,106 @@
+<div class="row">
+
+  <!-- Employee signature -->
+  <div class="col-md-4">
+    <table border="1">
+      <tr>
+        <td style="width: 370px; height: 60px; vertical-align: top">
+          <strong>
+            (1) Employee signature and statement
+          </strong>
+        </td>
+      </tr>
+    </table>
+    <br/>
+    <table border="1">
+      <tr>
+        <td style="width: 370px; height: 126px; vertical-align: top">
+          <font size="1">
+            By signing this time report you are affirming the following statement: "I am familiar with the provisions of the firm's Book, Ethical Standards, regarding professional ethics, including specifically independence, and have complied with those provisions as they relate to any of the clients involved in any engagements included in this time report and in all respects."
+          </font>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- report head -->
+  <div class="col-md-4 text-center">
+    <h3>Time and Expense Report(F-102)</h3>
+    <%= image_tag('tb.png', size: "257x47") %>
+    <br/>
+    <br/>
+    <div class="row">
+      <div class="col-xs-6">
+      <table border="1">
+        <tr>
+          <td style="width: 150px; height: 55px; vertical-align: top; horizotal-align: left ">
+            <strong>Approved</strong>
+          </td>
+        </tr>
+      </table>
+      </div>
+      <div class="col-xs-6">
+      <table border="1">
+        <tr>
+          <td style="width: 150px; height: 55px; vertical-align: top; horizotal-align: left ">
+            <strong>Chargeable Hours</strong>
+            <%= Personalcharge.where(period_id: @report.period.id, project_id: @projects.ids).sum(:hours)  if @report.period && @projects %>
+          </td>
+        </tr>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <br/>
+    <div class="row">
+      <div class="col-xs-8">
+        <table border="1">
+          <tr>
+            <td style="width: 350px; height: 48px; vertical-align: top; horizotal-align: left ">
+              <strong>(4) Period End Date</strong>
+              <p><%= @report.period.ending_date if @report.period %></p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-xs-4">
+        <table border="1">
+          <tr>
+            <td style="width: 150px; height: 48px; vertical-align: top; align: center ">
+              (3)  Page<br/>1 of 1
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <br />
+
+    <div class="row">
+      <div class="col-xs-12">
+        <table border="1">
+          <tr>
+            <td style="width: 480px; height: 48px; vertical-align: top; horizotal-align: left ">
+              <strong>(2) Employee Name</strong>
+              <p><%= @report.user.name if @report.user %></p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <br/>
+    <div class="row">
+      <div class="col-xs-12">
+        <table border="1">
+          <tr>
+            <td style="width: 480px; height: 48px; vertical-align: top; horizotal-align: left ">
+              <strong>(5) Personnel Number</strong>
+              <p><%= @report.user.employee_number if @report.user %></p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

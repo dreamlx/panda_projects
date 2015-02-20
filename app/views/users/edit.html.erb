@@ -5,7 +5,7 @@
     radio_buttons: :horizontal_radio_and_checkboxes,
     file: :horizontal_file_input,
     boolean: :horizontal_boolean}) do |f|%>
-  <%= f.input :email %>
+  <%= f.input :email, as: :email %>
   <%= f.input :name %>
   <%= f.input :chinese_name %>
   <%= f.input :english_name %>

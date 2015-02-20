@@ -28,10 +28,16 @@ class PersonalchargesController < ApplicationController
 
   def update
     @personalcharge = Personalcharge.find(params[:id])
-    if @personalcharge.update(personalcharge_params)
-      redirect_to personalcharges_url, notice: 'Personalcharge was successfully updated.'
-    else
-      render 'edit'
+
+    respond_to do |format|
+      if @personalcharge.update(personalcharge_params)
+        @personalcharge.update(service_fee: @personalcharge.hours * @personalcharge.user.charge_rate) if @personalcharge.user.charge_rate
+        format.html { redirect_to(@personalcharge, :notice => 'Personalcharge was successfully updated.') }
+        format.json { respond_with_bip(@personalcharge) }
+      else
+        format.html { render :action => "edit" }
+        format.json { respond_with_bip(@personalcharge) }
+      end
     end
   end
 

@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   root 'welcome#index'
-  resources :users, only: [:index, :edit, :update]
+  resources :users, only: [:index, :edit, :update, :show]
   resources :billings do
     resources :receive_amounts, only: [:new, :create, :edit, :update, :destroy]
   end
@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :deductions
   resources :projects do
     post :close, on: :member
+    resources :bookings
   end
   resources :dicts, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :industries

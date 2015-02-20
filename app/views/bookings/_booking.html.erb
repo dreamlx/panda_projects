@@ -1,0 +1,8 @@
+<tr>
+  <td><%= booking.user.english_name||booking.user.name if booking.user %></td>
+  <td><%= booking.user.charge_rate  if booking.user %></td>
+  <td><%= booking.hours %></td>
+  <td>
+    <%= link_to t('destroy'), [booking.project, booking], data: {confirm: t('are_you_sure')}, method: :delete %>
+  </td>
+</tr>

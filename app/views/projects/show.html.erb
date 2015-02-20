@@ -18,4 +18,34 @@
     <%= link_to t('edit'), edit_project_path(@project) if @project.status && @project.status.code == '1' %> ||
     <%= link_to t('back'), projects_path %>
   </div>
+
+  <div class="col-md-12">
+    <hr>
+    <div class="row">
+      <!-- bookings list -->
+      <div class="col-md-9">
+        <h3>User booked</h3>
+        <table class="table table-bordered">
+          <tr>
+            <th><%= t('user') %></th>
+            <th><%= t('charge_rate') %></th>
+            <th><%= t('hours') %></th>
+            <th><%= t('operations') %></th>
+          </tr>
+          <%= render @project.bookings %>
+        </table>
+      </div>
+
+      <!-- new booking -->
+      <div class="col-md-3">
+        <h3>book new User</h3>
+        <%= simple_form_for([@project, @project.bookings.build]) do |f|%>
+          <%= f.input :user_id, collection: User.all %>
+          <%= f.input :hours %>
+          <%= f.button :submit %>
+        <% end  %>
+      </div>
+      
+    </div>
+  </div>
 </div>
