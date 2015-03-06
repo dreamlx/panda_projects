@@ -6,7 +6,7 @@ class Personalcharge < ActiveRecord::Base
   validates :travel_allowance,  numericality: true
   validates :project_id,        presence: true
   validates :period_id,         presence: true
-  validates :user_id,           presence: true
+  # validates :user_id,           presence: true
 
   belongs_to :project
   belongs_to :period
@@ -21,6 +21,9 @@ class Personalcharge < ActiveRecord::Base
       end
       if self.user && self.user.charge_rate
         self.service_fee = self.hours * self.user.charge_rate
+      end
+      if self.person && self.person.charge_rate
+        self.service_fee = self.hours * self.person.charge_rate
       end
     end
 end

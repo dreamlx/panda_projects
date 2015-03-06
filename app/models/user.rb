@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  validates   :charge_rate, numericality: true
+  # validates   :charge_rate, numericality: true
   belongs_to  :person
   has_many    :bookings
   has_many    :projects, through: :bookings
