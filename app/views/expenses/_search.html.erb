@@ -11,14 +11,12 @@
   <%= f.input :period_number_gteq, 
               collection: Period.order(:number), 
               label: 'Period From',
-              as: :date,
-              html5: true,
+              collection: Period.order(number: :desc).pluck(:number),
               required: false %>
   <%= f.input :period_number_lteq, 
               collection: Period.order(:number), 
               label: 'Period To',
-              as: :date,
-              html5: true,
+              collection: Period.order(number: :desc).pluck(:number),
               required: false %>
   <%= f.input :memo_cont,
               required: false %>
