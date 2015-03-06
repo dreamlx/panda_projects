@@ -45,6 +45,8 @@ group :development, :test do
   gem 'spring'
 end
 
+# For i18n
+gem 'rails-i18n'
 gem 'kaminari'
 gem 'kaminari-i18n'
 gem 'simple_form'
