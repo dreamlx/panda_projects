@@ -19,7 +19,7 @@ class PeriodsController < ApplicationController
   def create
     @period = Period.new(period_params)
     if @period.save
-      redirect_to periods_url, notice: _('%s was successfully created.', Period.human_name)
+      redirect_to periods_url, notice: ('Period was successfully created.')
     else
       render "new"
     end
@@ -28,7 +28,7 @@ class PeriodsController < ApplicationController
   def update
     @period = Period.find(params[:id])
     if @period.update(period_params)
-      redirect_to periods_url, notice: _('%s was successfully updated.', Period.human_name)
+      redirect_to periods_url, notice: ('Period was successfully updated.')
     else
       render "edit"
     end
