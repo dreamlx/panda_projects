@@ -46,6 +46,7 @@ group :development, :test do
 end
 
 gem 'kaminari'
+gem 'kaminari-i18n'
 gem 'simple_form'
 gem "nested_form"
 gem 'ransack'

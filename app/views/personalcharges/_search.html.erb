@@ -5,29 +5,35 @@
     radio_buttons: :horizontal_radio_and_checkboxes,
     file: :horizontal_file_input,
     boolean: :horizontal_boolean}) do |f| %>
-  <%= f.input :user_english_name_eq, 
-              collection: User.pluck(:english_name),
-              required: false,
-              label: 'User Select' %>
-  <%= f.input :user_english_name_cont, 
-              required: false,
-              label: 'User Cont' %>
-  <%= f.input :project_job_code_eq, 
-              collection: Project.order(:job_code).pluck(:job_code),
-              required: false,
-              label: 'Project Select' %>
-  <%= f.input :project_job_code_cont, 
-              required: false,
-              label: 'Project Cont' %>
+  <div class="col-md-4">
+    <%= f.input :user_english_name_eq, 
+                collection: User.pluck(:english_name),
+                required: false,
+                label: 'User Select' %>
+    <%= f.input :user_english_name_cont, 
+                required: false,
+                label: 'User Cont' %>
+  </div>
+  <div class="col-md-4">
+    <%= f.input :project_job_code_eq, 
+                collection: Project.order(:job_code).pluck(:job_code),
+                required: false,
+                label: 'Project Select' %>
+    <%= f.input :project_job_code_cont, 
+                required: false,
+                label: 'Project Cont' %>
+  </div>
+  <div class="col-md-4">
   <%= f.input :period_number_gteq, 
-              as: :date,
-              html5: true,
+              collection: Period.order(number: :desc).pluck(:number),
               required: false,
               label: 'Period From' %>
   <%= f.input :period_number_lteq, 
-              as: :date,
-              html5: true,
+              collection: Period.order(number: :desc).pluck(:number),
               required: false,
-              label: 'Period To' %>  
-  <%= f.button :submit %>
+              label: 'Period To' %>
+  </div>
+  <div class="col-md-12">
+    <%= f.button :submit, class: "btn btn-primary" %>
+  </div>
 <% end %>

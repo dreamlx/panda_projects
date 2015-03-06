@@ -21,6 +21,9 @@ Rails.application.routes.draw do
   resources :personalcharges, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :reports do
     get :print, on: :collection
+  end
+
+  resources :time_reports do
     post :summary, on: :collection
     get   :summary_by_user, on: :collection
     post :time_report, on: :collection

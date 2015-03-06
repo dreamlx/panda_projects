@@ -14,26 +14,27 @@
       <% if user_signed_in? %>
         <ul class="nav navbar-nav">
           <li class="<%= 'active' if params[:controller] == 'personalcharges' %>"><%= link_to t('personalcharge'), personalcharges_url %></li>
-          <li class="<%= 'active' if params[:controller] == 'billings' || params[:controller] == 'receive_amounts' %>"><%= link_to t('billings'), billings_path %></li>
-          <li class="<%= 'active' if params[:controller] == 'expenses' %>"><%= link_to t('expenses'), expenses_url %></li>
-          <li class="<%= 'active' if params[:controller] == 'clients' %>"><%= link_to t('clients'), clients_path %></li>
-          <li class="<%= 'active' if params[:controller] == 'reports' %>"><%= link_to t('reports'), reports_path %></li>
-          <li class="<%= 'active' if params[:controller] == 'projects' %>"><%= link_to t('projects'), projects_url %></li>
-          <li class="<%= 'active' if params[:controller] == 'ufafees' %>"><%= link_to t('ufafees'), ufafees_url %></li>
+          <li class="<%= 'active' if params[:controller] == 'billings' || params[:controller] == 'receive_amounts' %>"><%= link_to t('billing'), billings_path %></li>
+          <li class="<%= 'active' if params[:controller] == 'expenses' %>"><%= link_to t('expense'), expenses_url %></li>
+          <li class="<%= 'active' if params[:controller] == 'clients' %>"><%= link_to t('client'), clients_path %></li>
+          <li class="<%= 'active' if params[:controller] == 'reports' %>"><%= link_to t('report'), reports_path %></li>
+          <li class="<%= 'active' if params[:controller] == 'time_reports' %>"><%= link_to t('time_report'), time_reports_path %></li>
+          <li class="<%= 'active' if params[:controller] == 'projects' %>"><%= link_to t('project'), projects_url %></li>
+          <li class="<%= 'active' if params[:controller] == 'ufafees' %>"><%= link_to t('ufafee'), ufafees_url %></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('Peferences') %><span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li class="<%= 'active' if params[:controller] == 'initialfees' %>"><%= link_to t('initialfees'), initialfees_url %></li>
-              <li class="<%= 'active' if params[:controller] == 'deductions' %>"><%= link_to t('deductions'), deductions_url %></li>
-              <li class="<%= 'active' if params[:controller] == 'people' %>"><%= link_to t('people'), people_url %></li>
-              <li class="<%= 'active' if params[:controller] == 'dicts' %>"><%= link_to t('dicts'), dicts_path %></li>
-              <li class="<%= 'active' if params[:controller] == 'industries' %>"><%= link_to t('industries'), industries_path %></li>
-              <li class="<%= 'active' if params[:controller] == 'prj_expense_logs' %>"><%= link_to t('prj_expense_logs'), prj_expense_logs_url %></li>
-              <li class="<%= 'active' if params[:controller] == 'periods' %>"><%= link_to t('periods'), periods_path %></li>
-              <li class="<%= 'active' if params[:controller] == 'users' %>"><%= link_to 'users', users_path %></li>
-              <li class="<%= 'active' if params[:controller] == 'contacts' %>"><%= link_to t('contacts'), contacts_url %></li>
+              <li class="<%= 'active' if params[:controller] == 'initialfees' %>"><%= link_to t('initialfee'), initialfees_url %></li>
+              <li class="<%= 'active' if params[:controller] == 'deductions' %>"><%= link_to t('deduction'), deductions_url %></li>
+              <li class="<%= 'active' if params[:controller] == 'people' %>"><%= link_to t('person'), people_url %></li>
+              <li class="<%= 'active' if params[:controller] == 'dicts' %>"><%= link_to t('dict'), dicts_path %></li>
+              <li class="<%= 'active' if params[:controller] == 'industries' %>"><%= link_to t('industry'), industries_path %></li>
+              <li class="<%= 'active' if params[:controller] == 'prj_expense_logs' %>"><%= link_to t('prj_expense_log'), prj_expense_logs_url %></li>
+              <li class="<%= 'active' if params[:controller] == 'periods' %>"><%= link_to t('period'), periods_path %></li>
+              <li class="<%= 'active' if params[:controller] == 'users' %>"><%= link_to t('user'), users_path %></li>
+              <li class="<%= 'active' if params[:controller] == 'contacts' %>"><%= link_to t('contact'), contacts_url %></li>
             </ul>
           </li>
           <li><%= link_to t('edit'), edit_user_registration_path %></li>
