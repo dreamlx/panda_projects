@@ -17,8 +17,8 @@
           <li class="<%= 'active' if params[:controller] == 'billings' || params[:controller] == 'receive_amounts' %>"><%= link_to t('billing'), billings_path %></li>
           <li class="<%= 'active' if params[:controller] == 'expenses' %>"><%= link_to t('expense'), expenses_url %></li>
           <li class="<%= 'active' if params[:controller] == 'clients' %>"><%= link_to t('client'), clients_path %></li>
-          <li class="<%= 'active' if params[:controller] == 'reports' %>"><%= link_to t('report'), reports_path %></li>
-          <li class="<%= 'active' if params[:controller] == 'time_reports' %>"><%= link_to t('time_report'), time_reports_path %></li>
+          <li class="<%= 'active' if params[:controller] == 'reports' %>"><%= link_to t('time_report'), reports_path %></li>
+          <li class="<%= 'active' if params[:controller] == 'time_reports' %>"><%= link_to t('report'), time_reports_path %></li>
           <li class="<%= 'active' if params[:controller] == 'projects' %>"><%= link_to t('project'), projects_url %></li>
           <li class="<%= 'active' if params[:controller] == 'ufafees' %>"><%= link_to t('ufafee'), ufafees_url %></li>
         </ul>
