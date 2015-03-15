@@ -1,0 +1,45 @@
+<%= search_form_for(@q, html: { class: 'form-horizontal' }, 
+    wrapper: :horizontal_form,
+    wrapper_mappings: {
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean}) do |f| %>
+  <div class="col-md-4">
+    <%= f.input :client_code_cont,
+                required: false %>
+    <%= f.input :client_code_eq,
+                collection: Client.pluck(:client_code),
+                required: false %>
+    <%= f.input :user_english_name_cont,
+                required: false %>
+  </div>
+  <div class="col-md-4">
+    <%= f.input :chinese_name_cont,
+                required: false %>
+    <%= f.input :chinese_name_eq,
+                collection: Client.pluck(:chinese_name),
+                required: false %>
+    <%= f.input :english_name_cont,
+                required: false %>
+    <%= f.input :english_name_eq,
+                collection: Client.pluck(:english_name),
+                required: false %>
+  </div>
+  <div class="col-md-4">
+    <%= f.input :category_title_eq,
+                collection: Dict.selected_categories,
+                required: false %>
+    <%= f.input :status_title_eq,
+                collection: Dict.selected_client_statuses,
+                required: false %> 
+    <%= f.input :region_title_eq,
+                collection: Dict.selected_regions,
+                required: false %>
+    <%= f.input :description_cont,
+                required: false %>
+  </div>
+  <div class="col-md-12">
+    <%= f.button :submit, class: "btn btn-primary" %>
+  </div>
+<% end %>

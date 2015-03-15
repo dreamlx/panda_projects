@@ -1,9 +1,14 @@
-<h1>Listing Project</h1>
-<div>
-  <%= link_to "New Project", new_project_path %>
+<div class="row">
+  <div class="col-md-10">
+    <h1>Project List</h1>
+  </div>
+  <div class="col-md-2">
+    <%= link_to 'New Project', new_project_path, class: 'btn btn-danger' %>
+  </div>
+  <div class="well col-md-12">
+    <%= render 'search' %>
+  </div>
 </div>
-
-<%= render "search" %>
 
 <%= paginate @projects %>
 <table class="table table-striped">

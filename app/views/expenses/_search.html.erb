@@ -5,20 +5,28 @@
     radio_buttons: :horizontal_radio_and_checkboxes,
     file: :horizontal_file_input,
     boolean: :horizontal_boolean}) do |f| %>
-  <%= f.input :project_id_eq, 
-              collection: Project.order(:job_code),
-              required: false %>
-  <%= f.input :period_number_gteq, 
-              collection: Period.order(:number), 
-              label: 'Period From',
-              collection: Period.order(number: :desc).pluck(:number),
-              required: false %>
-  <%= f.input :period_number_lteq, 
-              collection: Period.order(:number), 
-              label: 'Period To',
-              collection: Period.order(number: :desc).pluck(:number),
-              required: false %>
-  <%= f.input :memo_cont,
-              required: false %>
-  <%= f.button :submit %>
+  <div class="col-md-3">
+    <%= f.input :project_id_eq, 
+                collection: Project.order(:job_code),
+                required: false %>
+  </div>
+  <div class="col-md-3">
+    <%= f.input :period_number_gteq, 
+                collection: Period.period_number, 
+                label: 'Period From',
+                required: false %>
+  </div>
+  <div class="col-md-3">
+    <%= f.input :period_number_lteq, 
+                collection: Period.period_number, 
+                label: 'Period To',
+                required: false %>
+  </div>
+  <div class="col-md-3">
+    <%= f.input :memo_cont,
+                required: false %>
+  </div>
+  <div class="col-md-12">
+    <%= f.button :submit, class: "btn btn-primary" %>
+  </div>
 <% end %>

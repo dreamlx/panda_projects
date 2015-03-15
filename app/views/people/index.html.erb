@@ -1,15 +1,14 @@
-<h1>Listing people</h1>
-<div>
-  <%= link_to 'New person', new_person_path %>
+<div class="row">
+  <div class="col-md-10">
+    <h1>Person List</h1>
+  </div>
+  <div class="col-md-2">
+    <%= link_to 'New person', new_person_path, class: 'btn btn-danger' %>
+  </div>
+  <div class="well col-md-12">
+    <%= render 'search' %>
+  </div>
 </div>
-<%= search_form_for(@q) do |f| %>
-  <%= f.input :english_name_eq,
-              collection: Person.pluck(:english_name),
-              required: false %>
-  <%= f.input :employee_number_cont,
-              required: false %>
-  <%= f.button :submit %>
-<% end %>
 
 <%= paginate @people %>
 <table class="table table-striped">

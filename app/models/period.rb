@@ -18,6 +18,10 @@ class Period < ActiveRecord::Base
     return where(period_sql).first || order(number: :desc).first
   end
 
+  def self.period_number
+    Period.order(number: :desc).pluck(:number)
+  end
+
   def name
     number
   end
