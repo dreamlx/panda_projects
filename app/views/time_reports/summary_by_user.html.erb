@@ -1,62 +1,20 @@
-<table class="table table-striped" >
-  <thead>
-    <tr>
-      <th>GMU</th>
-      <th>Job code</th>
-      <th>Client(Eng)</th>           
-      <th>Job Ref</th>
-      <th>Job Ptr</th>               
-      <th>Job Mgr</th>
-      <th>Service Line</th>          
-      <th>contract_number</th>
-      <th>service_PFA%</th>
-      <th>expense_PFA%</th>
-      <th>contracted_service_fee</th>
-      <th>contracted_expense_fee</th>
-      <th>Project status</th>            
-      <th>Fee Beg</th> 
-      <th>Fee Cum</th>
-      <th>Fee Sub</th>    
-      <th>PFA Beg</th> 
-      <th>PFA Cum</th>
-      <th>PFA Sub</th>                   
-      <th>Billing Beg</th>
-      <th>Billing Cum</th> 
-      <th>Billing Sub</th>  
-      <th>BT</th>      
-      <th>INVENTORY_BALANCE</th> 
-      <th>INVENTORY%</th> 
-    </tr>
-  </thead>
-  <tbody>
-    <%  @srecords.each do |record| %>
+<div>
+  <table class="table table-striped">
+    <thead>
       <tr>
-        <td><%= record.GMU%></td>
-        <td><%= record.job_code %></td>
-        <td><%= record.client_name %></td>
-        <td><%= record.job_Ref %></td>
-        <td><%= record.job_Ptr %></td>
-        <td><%= record.job_Mgr %></td>
-        <td><%= record.service_line %></td>
-        <td><%= record.contract_number||"--" %></td> 
-        <td><%= record.service_PFA %></td>
-        <td><%= record.expense_PFA %></td>            
-        <td><%= record.contracted_fee %></td>      
-        <td><%= record.contracted_expense %></td>    
-        <td><%= record.project_status %></td>
-        <td><%= record.fees_Beg %></td>    
-        <td><%= record.fees_Cum %></td>   
-        <td><%= record.fees_Sub %></td>    
-        <td><%= record.PFA_Beg %></td> 
-        <td><%= record.PFA_Cum %></td>    
-        <td><%= record.PFA_Sub %></td> 
-        <td><%= record.Billing_Beg %></td>    
-        <td><%= record.Billing_Cum %></td> 
-        <td><%= record.Billing_Sub %></td>    
-        <td><%= record.BT %></td> 
-        <td><%= record.INVENTORY_BALANCE %></td>    
-        <td><%= sprintf("%0.0f" ,record.INVPER)+"%" %></td>
+      <% @records.first.keys.each do |key| %>
+        <th><%= key %></th>
+      <% end %>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @records.each do |record| %>
+        <tr>
+        <% record.values.each do |value| %>
+          <td><%= value %></td>
+        <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

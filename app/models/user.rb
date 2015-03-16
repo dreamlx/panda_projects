@@ -15,6 +15,10 @@ class User < ActiveRecord::Base
 
   scope :employed, -> {where(status: 'Employed')}
 
+  def self.order_english_name
+    User.order(:english_name).pluck(:english_name)
+  end
+
   private
     def self.find_first_by_auth_conditions(warden_conditions)
       conditions = warden_conditions.dup

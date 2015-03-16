@@ -1,7 +1,6 @@
 class TimeReportsController < ApplicationController
   def index
     @q = Project.search(params[:q])
-    @reports = Report.page(params[:page])
   end
 
   def time_report                   
@@ -81,160 +80,131 @@ class TimeReportsController < ApplicationController
   end
   
   def summary
-    @people       = Person.order('english_name')
-    @start_period = Period.find(params[:period][:start_period_id])
-    @end_period   = Period.find(params[:period][:end_period_id])
-    @projects     = Project.order('job_code')
- 
-    reimb_sql = "select 	 PRJ.id as prj_id, PRJ.job_code as job_code,                          "+
-      "          0 as Beg_travel,                 "+
-      "	         0 as Beg_meal,                  "+
-      "	         0 as Beg_per_dium,            "+
-      "	sum(CHARGE.reimbursement) as cum_travel,                    "+
-      "	sum(CHARGE.meal_allowance) as cum_meal,                     "+
-      "	sum(CHARGE.travel_allowance) as cum_per_dium                "+
-      " from projects 		as PRJ                                  "+
-      #" left join initialfees 	  as I_FEE  on I_FEE.project_id = PRJ.id            "+
-      " left join personalcharges as CHARGE on CHARGE.project_id = PRJ.id           "+
-      " left join periods on periods.id = CHARGE.period_id                         "+
-      " where periods.ending_date <='#{@end_period.ending_date}'                       "+
-      " and periods.starting_date >='#{@start_period.starting_date}' "+
-      " group by PRJ.id                                                       "+
-      " order by job_code; "
-    @reimbs = Expense.find_by_sql(reimb_sql)
-  
-    expense_sql = " select 	PRJ.id as prj_id, "+
-      "           PRJ.job_code as job_code,                         "+
-      "	( 	0 +      "+
-      "		0 +             "+
-      "		0 + 0         "+
-      "	) as Beg_expense,                                         "+
-      "	sum(E.tickets) as Ticket,                                 "+
-      "	sum(E.courrier) as Courrier,                              "+
-      "	sum(E.postage) as Postage,                                "+
-      "	sum(E.stationery) as Stationery,                          "+
-      "	sum(E.report_binding) as Report_binding,                  "+
-      "	sum(E.payment_on_be_half) as Payment_on_be_half,          "+
-      "	(	sum(E.tickets) + sum(E.courrier) +                    "+
-      "		sum(E.postage) + sum(E.stationery) +                  "+
-      "		sum(E.report_binding) + sum(E.payment_on_be_half)     "+
-      "	) as Sub_expense                                          "+
-      " from projects 		as PRJ                                "+
-      #" left join initialfees 	  as I_FEE  on I_FEE.project_id = PRJ.id   "+
-      " left join expenses 	  as E      on E.project_id = PRJ.id           "+
-      " left join periods on periods.id = E.period_id                       "+
-      " where periods.ending_date <='#{@end_period.ending_date}'                       "+
-      " and periods.starting_date >='#{@start_period.starting_date}' "+
-      " group by PRJ.id                                                       "+
-      " order by job_code;                                                          "
-    @expenses = Expense.find_by_sql(expense_sql)            
-
-    ufa_sql = "select 	PRJ.id as prj_id, PRJ.job_code as job_code,     "+
-      "	0 as Beg_service,           "+
-      "	sum(U.service_UFA) as Service_UFA,     "+
-      "	0 as Beg_expense,           "+
-      "	sum(U.expense_UFA) as Expense_UFA     "+
-      " from projects 		as PRJ            "+
-      #" left join deductions 	  as I_D    on I_D.project_id = PRJ.id  "+
-      " left join ufafees 	as U	on U.project_id = PRJ.id            "+
-      " group by PRJ.id "+
-      " order by job_code; "
-    @ufas = Ufafee.find_by_sql(ufa_sql)
-  
-    co_sql = 
-      " select PRJ.id as prj_id, PRJ.job_code, "+
-      " 0 as CO_Beg, "+
-      " sum(E.commission)       as commission, sum(E.outsourcing) as outsourcing"+
-      " from projects as PRJ"+
-      #" left join initialfees     as I_FEE on I_FEE.project_id = PRJ.id"+
-      " left join expenses        as E on E.project_id = PRJ.id "+
-      " left join periods on periods.id = E.period_id                       "+
-      " where periods.ending_date <='#{@end_period.ending_date}'                       "+
-      " and periods.starting_date >='#{@start_period.starting_date}' "+
-      " group by PRJ.id"+
-      " order by job_code;"
-    @co_fees = Commission.find_by_sql(co_sql)
-  
-    @srecords = Array.new
-    for record in Project.order('job_code')
-      summaryRecord                 = Summary.new
-      summaryRecord.id              = record.id.to_s
-      summaryRecord.GMU             = record.GMU.title
-      summaryRecord.job_code        = record.job_code
-      summaryRecord.client_name     = record.client.english_name if record.client
-      summaryRecord.job_Ref         = record.referring.english_name if record.referring
-      summaryRecord.job_Ptr         = record.partner.english_name if record.partner
-      summaryRecord.job_Mgr         = record.manager.english_name if record.manager
-      summaryRecord.budgeted_service_fee = record.budgeted_service_fee
-      summaryRecord.budgeted_expense = record.budgeted_expense
-      summaryRecord.service_line    = record.service_code.code
-      summaryRecord.service_PFA     = record.service_PFA
-      summaryRecord.expense_PFA     = record.expense_PFA
-      summaryRecord.estimated_commision = record.estimated_commision
-      summaryRecord.estimated_outsorcing = record.estimated_outsorcing
-      summaryRecord.contract_number = record.contract_number
-      summaryRecord.contracted_fee  = record.contracted_service_fee
-      summaryRecord.contracted_expense = record.contracted_expense
-      summaryRecord.project_status  = record.status.title if record.status
-      summaryRecord.created_on  = record.created_on
-      summaryRecord.fees_Beg = record.initialfee.service_fee if record.initialfee
-      summaryRecord.fees_Cum = record.personalcharges.sum(:service_fee)
-      summaryRecord.fees_Sub = (summaryRecord.fees_Beg + summaryRecord.fees_Cum).to_i
-      summaryRecord.PFA_Beg = record.deduction.service_PFA if record.deduction
-      summaryRecord.PFA_Cum = (record.personalcharges.sum(:service_fee)/100 * (record.service_PFA))
-      summaryRecord.PFA_Sub = (summaryRecord.PFA_Beg + summaryRecord.PFA_Cum).to_i
-
-      summaryRecord.Billing_Beg = record.deduction.service_billing if record.deduction
-      summaryRecord.Billing_Cum = record.billings.sum(:service_billing)
-      summaryRecord.Expense_Cum - record.billings.sum(:expense_billing)
-      summaryRecord.Billing_Sub = (summaryRecord.Billing_Beg + summaryRecord.Billing_Cum).to_i
-      summaryRecord.BT = record.billings.sum(:business_tax)
-
-      summaryRecord.INVENTORY_BALANCE = summaryRecord.fees_Cum.to_i - summaryRecord.PFA_Cum.to_i - summaryRecord.Billing_Cum.to_i    
-      summaryRecord.INVPER =  (summaryRecord.contracted_fee == 0)? 0 : (summaryRecord.Billing_Cum.to_i / summaryRecord.contracted_fee )* 100 
-
-      @srecords << summaryRecord
+    periods_ids = Period.where("number >= ? AND  number <= ?",
+                                params[:period][:start_period_number],
+                                params[:period][:end_period_number]).ids
+    @records = Array.new
+    @projects = Project.order(:job_code)
+    @projects.each do |project|
+      @records << get_column(project, periods_ids)
     end
   end
-  
-  def summary_by_user    
+
+
+  def summary_by_user
+    periods_ids = Period.where("number >= ? AND  number <= ?",
+                                params[:period][:start_period_number],
+                                params[:period][:end_period_number]).ids
+    @records = Array.new
     @q = Project.search(params[:q])
-    @projects = @q.result  
-    
-    @srecords = Array.new
-    for record in @projects    
-      summaryRecord                     = Summary.new
-      summaryRecord.id                  = record.id.to_s
-      summaryRecord.GMU                 = record.GMU.title
-      summaryRecord.job_code            = record.job_code
-      summaryRecord.client_name         = record.client.english_name if record.client
-      summaryRecord.job_Ref             = record.referring.english_name if record.referring
-      summaryRecord.job_Ptr             = record.partner.english_name if record.partner
-      summaryRecord.job_Mgr             = record.manager.english_name if record.manager
-      summaryRecord.service_line        = record.service_code.code
-      summaryRecord.service_PFA         = record.service_PFA 
-      summaryRecord.expense_PFA         = record.expense_PFA
-      summaryRecord.contract_number     = record.contract_number
-      summaryRecord.contracted_fee      = record.contracted_service_fee
-      summaryRecord.contracted_expense  = record.contracted_expense
-      summaryRecord.project_status      = record.status.title
-    
-      summaryRecord.fees_Beg = record.initialfee.service_fee if record.initialfee
-      summaryRecord.fees_Cum = record.personalcharges.sum(:service_fee)
-      summaryRecord.fees_Sub = (summaryRecord.fees_Beg + summaryRecord.fees_Cum).to_i
-      summaryRecord.PFA_Beg = record.deduction.service_PFA if record.deduction
-      summaryRecord.PFA_Cum = (record.personalcharges.sum(:service_fee)/100 * (record.service_PFA))
-      summaryRecord.PFA_Sub = (summaryRecord.PFA_Beg + summaryRecord.PFA_Cum).to_i
-
-      summaryRecord.Billing_Beg = record.deduction.service_billing if record.deduction
-      summaryRecord.Billing_Cum = record.billings.sum(:service_billing)
-      summaryRecord.Billing_Sub = (summaryRecord.Billing_Beg + summaryRecord.Billing_Cum).to_i
-      summaryRecord.BT = record.billings.sum(:business_tax)
-
-      summaryRecord.INVENTORY_BALANCE = summaryRecord.fees_Cum.to_i - summaryRecord.PFA_Cum.to_i - summaryRecord.Billing_Cum.to_i    
-      summaryRecord.INVPER =  (summaryRecord.contracted_fee == 0)? 0 : (summaryRecord.Billing_Cum.to_i / summaryRecord.contracted_fee )* 100 
-
-      @srecords << summaryRecord
+    @projects = @q.result.order(:job_code)
+    @projects.each do |project|
+      @records << get_column(project, periods_ids)
     end
   end
+  
+  # def summary_by_user
+  #   @q = Project.search(params[:q])
+  #   @projects = @q.result  
+    
+  #   @srecords = Array.new
+  #   for record in @projects    
+  #     summaryRecord                     = Summary.new
+  #     summaryRecord.id                  = record.id.to_s
+  #     summaryRecord.GMU                 = record.GMU.title
+  #     summaryRecord.job_code            = record.job_code
+  #     summaryRecord.client_name         = record.client.english_name if record.client
+  #     summaryRecord.job_Ref             = record.referring.english_name if record.referring
+  #     summaryRecord.job_Ptr             = record.partner.english_name if record.partner
+  #     summaryRecord.job_Mgr             = record.manager.english_name if record.manager
+  #     summaryRecord.service_line        = record.service_code.code
+  #     summaryRecord.service_PFA         = record.service_PFA 
+  #     summaryRecord.expense_PFA         = record.expense_PFA
+  #     summaryRecord.contract_number     = record.contract_number
+  #     summaryRecord.contracted_fee      = record.contracted_service_fee
+  #     summaryRecord.contracted_expense  = record.contracted_expense
+  #     summaryRecord.project_status      = record.status.title
+  #     summaryRecord.fees_Beg            = record.initialfee.service_fee if record.initialfee
+  #     summaryRecord.fees_Cum            = record.personalcharges.sum(:service_fee)
+  #     summaryRecord.fees_Sub            = (summaryRecord.fees_Beg + summaryRecord.fees_Cum).to_i
+  #     summaryRecord.PFA_Beg             = record.deduction.service_PFA if record.deduction
+  #     summaryRecord.PFA_Cum             = (record.personalcharges.sum(:service_fee)/100 * (record.service_PFA))
+  #     summaryRecord.PFA_Sub             = (summaryRecord.PFA_Beg + summaryRecord.PFA_Cum).to_i
+  #     summaryRecord.Billing_Beg         = record.deduction.service_billing if record.deduction
+  #     summaryRecord.Billing_Cum         = record.billings.sum(:service_billing)
+  #     summaryRecord.Billing_Sub         = (summaryRecord.Billing_Beg + summaryRecord.Billing_Cum).to_i
+  #     summaryRecord.BT                  = record.billings.sum(:business_tax)
+  #     summaryRecord.INVENTORY_BALANCE   = summaryRecord.fees_Cum.to_i - summaryRecord.PFA_Cum.to_i - summaryRecord.Billing_Cum.to_i    
+  #     summaryRecord.INVPER              =  (summaryRecord.contracted_fee == 0)? 0 : (summaryRecord.Billing_Cum.to_i / summaryRecord.contracted_fee )* 100 
+  #     @srecords << summaryRecord
+  #   end
+  # end
+  private
+    def get_column(project, periods_ids)
+      personalcharges = project.personalcharges.where(period_id: periods_ids)
+      expenses        = project.expenses.where(period_id: periods_ids)
+      ufafees         = project.ufafees.where(period_id: periods_ids)
+      billings        = project.billings.where(period_id: periods_ids)
+      record = Hash.new
+      record[:gmu]                    = project.GMU ? project.GMU.title : ""
+      record[:job_code]               = project.job_code
+      record[:client_name]            = project.client ? project.client.english_name : ""
+      record[:job_ref]                = project.referring ? project.referring.english_name : ""
+      record[:job_ptr]                = project.partner ? project.partner.english_name : ""
+      record[:job_mgr]                = project.manager ? project.manager.english_name : ""
+      record[:contract_number]        = project.contract_number
+      record[:budgeted_service_fee]   = project.budgeted_service_fee
+      record[:budgeted_expense_fee]   = project.budgeted_expense
+      record[:service_PFA]            = project.service_PFA
+      record[:expense_PFA]            = project.expense_PFA
+      record[:estimated_commision]    = project.estimated_commision
+      record[:estimated_outsorcing]   = project.estimated_outsorcing
+      record[:contracted_serive_fee]  = project.contracted_service_fee
+      record[:contracted_expense_fee] = project.contracted_expense
+      record[:created_on]             = project.created_on
+      record[:service_line]           = project.service_code ? project.service_code.code : ""
+      record[:project_status]         = project.status ? project.status.title : ""
+
+      # pfa
+      record[:fee_beg]                = project.initialfee ? project.initialfee.service_fee : 0
+      record[:fee_cum]                = personalcharges.sum(:service_fee) || 0
+      record[:fee_sub]                = 0
+      record[:PFA_rate]               = project.service_PFA
+      record[:PFA_beg]                = project.deduction ? project.deduction.service_PFA : 0
+      record[:PFA_cum]                = (personalcharges.sum(:service_fee)/100 * (project.service_PFA))
+      record[:PFA_sub]                = 0
+
+      # co-fee
+      record[:co_beg]                 = 0
+      record[:commission]             = expenses.sum(:commission) || 0
+      record[:outsourcing]            = expenses.sum(:outsourcing) || 0
+      record[:sub]                    = 0
+
+      # reibur
+      record[:traval_cum]             = personalcharges.sum(:reimbursement) || 0
+      record[:meal_cum]               = personalcharges.sum(:meal_allowance) || 0
+      record[:per_dium_cum]           = personalcharges.sum(:travel_allowance) || 0
+
+      # expense
+      record[:expense_beg]            = 0
+      record[:ticket]                 = expenses.sum(:tickets) || 0
+      record[:courrier]               = expenses.sum(:courrier) || 0
+      record[:stationery]             = expenses.sum(:stationery) || 0
+      record[:postage]                = expenses.sum(:postage) || 0
+      record[:report_binding]         = expenses.sum(:report_binding) || 0
+      record[:payment_on_be_half]     = expenses.sum(:payment_on_be_half) || 0
+
+      # billing
+      record[:billing_beg]            = 0
+      record[:service_billing_cum]    = billings.sum(:service_billing) || 0
+      record[:expense_billing_cum]    = billings.sum(:expense_billing) || 0
+      record[:bt]                     = billings.sum(:business_tax) || 0
+      record[:billing_sub]            = 0
+
+      # ufa-fee
+      record[:ufa_beg]                = 0
+      record[:service_ufa_cum]        = ufafees.sum(:service_UFA) || 0
+      record[:expense_ufa_cum]        = 0
+      return record
+    end
 end

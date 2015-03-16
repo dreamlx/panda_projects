@@ -5,46 +5,48 @@
     radio_buttons: :horizontal_radio_and_checkboxes,
     file: :horizontal_file_input,
     boolean: :horizontal_boolean}) do |f| %>
-  <%= f.input :partner_english_name_eq, 
-              collection: User.all, 
-              required: false,
-              label: 'Partner' %>
-  <%= f.input :contract_number_eq, 
-              collection: Project.pluck(:contract_number), 
-              required: false,
-              label: 'Contact Number' %>
-  <%= f.input :service_id_eq, 
-              collection: Project.pluck(:service_id),
-              required: false,
-              label: 'ServiceLine' %>
-  <%= f.input :referring_english_name_eq,
-              collection: User.all,
-              required: false,
-              label: 'Job Ref'%>
-  <%= f.input :starting_date_gteq,
-              as: :date,
-              html5: true,
-              required: false,
-              label: 'Project From date' %>
-  <%= f.input :starting_date_lteq,
-              as: :date,
-              html5: true,
-              required: false,
-              label: 'Project To date' %>
-  <%= f.input :GMU_id_eq,
-              collection: Dict.selected_gmus,
-              required: false,
-              label: 'GMU' %>
-  <%= f.input :manager_english_name_eq, 
-              collection: User.all, 
-              required: false,
-              label: 'Manager' %>
-  <%= f.input :job_code_cont, 
-              required: false,
-              label: 'Job Code' %>
-  <%= f.input :status_id_eq,
-              collection: Dict.selected_statuses,
-              required: false,
-              label: 'Status' %>
-  <%= f.button :submit %>
+  <div class="col-md-12">
+    <%= collection_select(:period, :start_period_number, Period.all, :number, :number) %>
+    <%= collection_select(:period, :end_period_number, Period.all, :number, :number) %>
+  </div>
+  <div class="col-md-4">
+    <%= f.input :partner_english_name_eq, 
+                collection: User.order_english_name, 
+                required: false,
+                label: 'Partner' %>
+    <%= f.input :referring_english_name_eq,
+                collection: User.order_english_name,
+                required: false,
+                label: 'Job Ref'%>
+    <%= f.input :manager_english_name_eq, 
+                collection: User.order_english_name, 
+                required: false,
+                label: 'Manager' %>
+  </div>
+  <div class="col-md-4">
+    <%= f.input :contract_number_eq, 
+                collection: Project.order(:contract_number).pluck(:contract_number), 
+                required: false,
+                label: 'Contact Number' %>
+    <%= f.input :job_code_cont, 
+                required: false,
+                label: 'Job Code' %>
+  </div>
+  <div class="col-md-4">
+    <%= f.input :service_code_eq, 
+                collection: Dict.selected_service_codes,
+                required: false,
+                label: 'ServiceLine' %>
+    <%= f.input :GMU_id_eq,
+                collection: Dict.selected_gmus,
+                required: false,
+                label: 'GMU' %>
+    <%= f.input :status_id_eq,
+                collection: Dict.selected_statuses,
+                required: false,
+                label: 'Status' %>
+  </div>
+  <div class="col-md-12">
+    <%= f.button :submit, class: "btn btn-primary" %>
+  </div>
 <% end %>

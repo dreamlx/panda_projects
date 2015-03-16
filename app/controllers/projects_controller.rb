@@ -2,6 +2,7 @@ class ProjectsController < ApplicationController
   def index
     @q = Project.search(params[:q])
     @projects = @q.result.includes(:status, :client, :partner, :manager).page(params[:page])
+    @count = @q.result.count
   end
 
   def show
