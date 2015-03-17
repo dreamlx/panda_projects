@@ -166,12 +166,12 @@ class TimeReportsController < ApplicationController
       record[:project_status]         = project.status ? project.status.title : ""
 
       # pfa
-      record[:fee_beg]                = project.initialfee ? project.initialfee.service_fee : 0
+      record[:fee_beg]                = 0
       record[:fee_cum]                = personalcharges.sum(:service_fee) || 0
       record[:fee_sub]                = 0
       record[:PFA_rate]               = project.service_PFA
-      record[:PFA_beg]                = project.deduction ? project.deduction.service_PFA : 0
-      record[:PFA_cum]                = (personalcharges.sum(:service_fee)/100 * (project.service_PFA))
+      record[:PFA_beg]                = 0
+      record[:PFA_cum]                = personalcharges.sum(:service_fee)/100 * project.service_PFA
       record[:PFA_sub]                = 0
 
       # co-fee
@@ -204,7 +204,7 @@ class TimeReportsController < ApplicationController
       # ufa-fee
       record[:ufa_beg]                = 0
       record[:service_ufa_cum]        = ufafees.sum(:service_UFA) || 0
-      record[:expense_ufa_cum]        = 0
+      record[:expense_ufa_cum]        = ufafees.sum(:expense_UFA) || 0
       return record
     end
 end

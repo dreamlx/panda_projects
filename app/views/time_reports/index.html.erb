@@ -13,8 +13,8 @@
 <h3>Summary</h3>
 <%= form_tag :action => 'summary', method: :post do %>
   Period:
-  <%= collection_select(:period, :start_period_id, Period.all, :id, :number) %>
-  <%= collection_select(:period, :end_period_id, Period.all, :id, :number) %>
+  <%= collection_select(:period, :start_period_number, Period.all, :number, :number) %>
+  <%= collection_select(:period, :end_period_number, Period.all, :number, :number) %>
   <%= submit_tag 'summary' %>
 <% end %>
 <!-- end of summary -->
