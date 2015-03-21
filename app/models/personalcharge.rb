@@ -14,6 +14,19 @@ class Personalcharge < ActiveRecord::Base
   belongs_to :user
   before_save :save_PFA_of_service_fee
 
+  state_machine :state, :initial => :pending do
+    event :submit do
+      transition [:pending, :denied] => :submitted
+    end
+    event :approve do
+      transition :submitted  => :approved
+    end
+    event :deny do
+      transition :submitted  => :denied
+    end
+  end
+
+
   private 
     def save_PFA_of_service_fee
       if self.project && (self.project.service_PFA != 0)

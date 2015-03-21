@@ -1,7 +1,12 @@
 class PersonalchargesController < ApplicationController
+  load_and_authorize_resource :except => [:index, :new, :create]
   def index
     @q = Personalcharge.search(params[:q])
-    @personalcharges = @q.result.page(params[:page])
+    if current_user.role == "admin"
+      @personalcharges = @q.result.page(params[:page])
+    else
+      @personalcharges = @q.result.where(user_id: current_user.id).page(params[:page])
+    end
 
     @personalcharges_num    = @q.result.joins(:project).where("job_code REGEXP '^[0-9]'")
     @personalcharges_char   = @q.result.joins(:project).where("job_code REGEXP '^[a-z]'")
@@ -16,7 +21,7 @@ class PersonalchargesController < ApplicationController
   def create
     @personalcharge = Personalcharge.new(personalcharge_params)
     if @personalcharge.save
-      redirect_to personalcharges_url, notice: 'Personalcharge was successfully created.'
+      redirect_to personalcharges_url
     else
       render 'new'
     end
@@ -32,7 +37,7 @@ class PersonalchargesController < ApplicationController
     respond_to do |format|
       if @personalcharge.update(personalcharge_params)
         @personalcharge.update(service_fee: @personalcharge.hours * @personalcharge.user.charge_rate) if @personalcharge.user.charge_rate
-        format.html { redirect_to(@personalcharge, :notice => 'Personalcharge was successfully updated.') }
+        format.html { redirect_to personalcharges_url }
         format.json { respond_with_bip(@personalcharge) }
       else
         format.html { render :action => "edit" }
@@ -42,7 +47,7 @@ class PersonalchargesController < ApplicationController
   end
 
   def destroy
-    Personalcharge.find(params[:id]).destroy
+    current_user.personalcharges.find(params[:id]).destroy
     redirect_to personalcharges_url
   end
 

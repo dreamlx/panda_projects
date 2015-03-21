@@ -34,7 +34,7 @@
               <li class="<%= 'active' if params[:controller] == 'contacts' %>"><%= link_to t('contact'), contacts_url %></li>
             </ul>
           </li>
-          <li><%= link_to t('edit'), edit_user_registration_path %></li>
+          <li><%= link_to current_user.name, edit_user_registration_path %></li>
           <li><%= link_to t('logout'), destroy_user_session_path, method: :delete %></li>
         </ul>
       <% else %>

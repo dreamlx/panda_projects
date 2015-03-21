@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150306080153) do
+ActiveRecord::Schema.define(version: 20150321133134) do
 
   create_table "billings", force: :cascade do |t|
     t.datetime "created_on"
@@ -33,6 +33,11 @@ ActiveRecord::Schema.define(version: 20150306080153) do
     t.decimal  "provision",                   precision: 10,           default: 0
     t.integer  "user_id",         limit: 4
   end
+
+  add_index "billings", ["business_tax"], name: "index_billings_on_business_tax", using: :btree
+  add_index "billings", ["expense_billing"], name: "index_billings_on_expense_billing", using: :btree
+  add_index "billings", ["period_id"], name: "index_billings_on_period_id", using: :btree
+  add_index "billings", ["service_billing"], name: "index_billings_on_service_billing", using: :btree
 
   create_table "bookings", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -171,7 +176,19 @@ ActiveRecord::Schema.define(version: 20150306080153) do
     t.integer  "project_id",         limit: 4
     t.decimal  "payment_on_be_half",             precision: 10, scale: 2, default: 0.0
     t.string   "memo",               limit: 255
+    t.integer  "user_id",            limit: 4
   end
+
+  add_index "expenses", ["commission"], name: "index_expenses_on_commission", using: :btree
+  add_index "expenses", ["courrier"], name: "index_expenses_on_courrier", using: :btree
+  add_index "expenses", ["outsourcing"], name: "index_expenses_on_outsourcing", using: :btree
+  add_index "expenses", ["payment_on_be_half"], name: "index_expenses_on_payment_on_be_half", using: :btree
+  add_index "expenses", ["period_id"], name: "index_expenses_on_period_id", using: :btree
+  add_index "expenses", ["postage"], name: "index_expenses_on_postage", using: :btree
+  add_index "expenses", ["report_binding"], name: "index_expenses_on_report_binding", using: :btree
+  add_index "expenses", ["stationery"], name: "index_expenses_on_stationery", using: :btree
+  add_index "expenses", ["tickets"], name: "index_expenses_on_tickets", using: :btree
+  add_index "expenses", ["user_id"], name: "index_expenses_on_user_id", using: :btree
 
   create_table "incomes", force: :cascade do |t|
     t.integer  "item_id",        limit: 4
@@ -275,18 +292,25 @@ ActiveRecord::Schema.define(version: 20150306080153) do
   create_table "personalcharges", force: :cascade do |t|
     t.datetime "created_on"
     t.datetime "updated_on"
-    t.decimal  "hours",                        precision: 10, scale: 2, default: 0.0
-    t.decimal  "service_fee",                  precision: 10, scale: 2, default: 0.0
-    t.decimal  "reimbursement",                precision: 10, scale: 2, default: 0.0
-    t.decimal  "meal_allowance",               precision: 10, scale: 2, default: 0.0
-    t.decimal  "travel_allowance",             precision: 10, scale: 2, default: 0.0
+    t.decimal  "hours",                          precision: 10, scale: 2, default: 0.0
+    t.decimal  "service_fee",                    precision: 10, scale: 2, default: 0.0
+    t.decimal  "reimbursement",                  precision: 10, scale: 2, default: 0.0
+    t.decimal  "meal_allowance",                 precision: 10, scale: 2, default: 0.0
+    t.decimal  "travel_allowance",               precision: 10, scale: 2, default: 0.0
     t.integer  "project_id",         limit: 4
     t.integer  "period_id",          limit: 4
     t.integer  "person_id",          limit: 4
-    t.decimal  "PFA_of_service_fee",           precision: 10, scale: 2, default: 0.0
+    t.decimal  "PFA_of_service_fee",             precision: 10, scale: 2, default: 0.0
     t.integer  "user_id",            limit: 4
     t.date     "charge_date"
+    t.string   "state",              limit: 255
   end
+
+  add_index "personalcharges", ["meal_allowance"], name: "index_personalcharges_on_meal_allowance", using: :btree
+  add_index "personalcharges", ["period_id"], name: "index_personalcharges_on_period_id", using: :btree
+  add_index "personalcharges", ["reimbursement"], name: "index_personalcharges_on_reimbursement", using: :btree
+  add_index "personalcharges", ["service_fee"], name: "index_personalcharges_on_service_fee", using: :btree
+  add_index "personalcharges", ["travel_allowance"], name: "index_personalcharges_on_travel_allowance", using: :btree
 
   create_table "prj_expense_logs", force: :cascade do |t|
     t.integer "prj_id",     limit: 4
@@ -426,6 +450,7 @@ ActiveRecord::Schema.define(version: 20150306080153) do
 
   add_foreign_key "bookings", "projects"
   add_foreign_key "bookings", "users"
+  add_foreign_key "expenses", "users"
   add_foreign_key "reports", "periods"
   add_foreign_key "reports", "users"
 end

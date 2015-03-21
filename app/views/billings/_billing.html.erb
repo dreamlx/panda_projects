@@ -25,6 +25,6 @@
   <td><%= billing.collection_days %></td>
   <td><%= billing.created_on.to_date %></td>
   <td><%= billing.updated_on.to_date %></td>
-  <td><%= link_to 'Edit', edit_billing_path(billing) if billing.status == '0'%></td>
-  <td><%= link_to 'Destroy', billing, method: :delete, data: {confirm: 'Are you sure ?'} if billing.status == '0' %></td>
+  <td><%= link_to_if (can? :update, billing), 'Edit', edit_billing_path(billing)%></td>
+  <td><%= link_to_if (can? :destroy, billing), 'Destroy', billing, method: :delete, data: {confirm: 'Are you sure ?'} %></td>
 </tr>

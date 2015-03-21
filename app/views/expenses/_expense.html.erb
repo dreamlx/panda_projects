@@ -13,6 +13,6 @@
   <td><%= expense.created_on.to_date %></td>
   <td><%= expense.updated_on.to_date %></td>
   <td><%= expense.memo %></td>
-  <td><%= link_to ('Edit'), edit_expense_path(expense) %></td>
-  <td><%= link_to ('Destroy'), expense, data: {confirm: 'Are you sure?'}, method: :delete %></td>
+  <td><%= link_to_if (can? :update, expense), 'Edit', edit_expense_path(expense) %></td>
+  <td><%= link_to_if (can? :destroy, expense), 'Destroy', expense, data: {confirm: 'Are you sure?'}, method: :delete %></td>
 </tr>

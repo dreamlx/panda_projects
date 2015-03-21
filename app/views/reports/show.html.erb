@@ -179,16 +179,16 @@
         <tr>
           <td><%= project.job_code %></td>
           <td></td>
-          <% 16.times  do |col| %>
-            <% work_hours = project.personalcharges.find_by(
-                      user_id: @report.user_id,  
-                      charge_date:  (start_date + col), 
-                      period_id: @report.period_id
-                      ).hours %>
+          <% 15.times  do |col| %>
+            <% personalcharge = project.personalcharges.find_by(
+                                  user_id: @report.user_id, 
+                                  charge_date:  (start_date + col), 
+                                  period_id: @report.period_id) %>
             <td>
-              <%= work_hours == 0 ? "" : work_hours %>
+              <%= personalcharge ?  personalcharge.hours : "" %>
             </td>
           <% end %>
+          <td></td>
         </tr>
       <% end %>
 
@@ -212,13 +212,13 @@
           </td>
           <td></td>
           <% 16.times  do |col| %>
-            <% add_hours = Project.find_by_job_code(value).personalcharges.find_by(
+            <% personalcharge = Project.find_by_job_code(value).personalcharges.find_by(
                     user_id: @report.user_id,  
                     charge_date:  (start_date + col), 
                     period_id: @report.period_id
-                    ).hours %>
+                    ) %>
             <td style="width: 50px">
-              <%= add_hours == 0 ? "" : add_hours %>
+              <%= personalcharge ?  personalcharge.hours : "" %>
             </td>
           <% end %>
         </tr>

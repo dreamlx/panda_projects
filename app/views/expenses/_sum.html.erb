@@ -1,0 +1,14 @@
+<tr>
+  <td colspan="2">sum:</td>
+  <td><%= @expenses_total.sum(:commission) %></td>
+  <td><%= @expenses_total.sum(:outsourcing) %></td>
+  <td><%= @expenses_total.sum(:tickets) %></td>
+  <td><%= @expenses_total.sum(:courrier) %></td>
+  <td><%= @expenses_total.sum(:postage) %></td>
+  <td><%= @expenses_total.sum(:stationery) %></td>
+  <td><%= @expenses_total.sum(:report_binding) %></td>
+  <td><%= @expenses_total.sum(:cash_advance) %></td>
+  <td><%= @expenses_total.sum(:payment_on_be_half) %></td>
+  <td></td>
+  <td colspan="2"></td>
+</tr>

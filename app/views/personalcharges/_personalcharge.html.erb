@@ -12,6 +12,7 @@
   <td><%= personalcharge.charge_date %></td>
   <td><%= personalcharge.created_on.to_date %></td>
   <td><%= personalcharge.updated_on.to_date %></td>
-  <td><%= link_to 'Edit', edit_personalcharge_path(personalcharge) %></td>
-  <td><%= link_to 'Destroy', personalcharge, method: :delete, data: {confirm: t('are_you_sure')} %></td>
+  <td><%= personalcharge.state %></td>
+  <td><%= link_to_if (can? :update, personalcharge), 'Edit', edit_personalcharge_path(personalcharge) %></td>
+  <td><%= link_to_if (can? :destroy, personalcharge), 'Destroy', personalcharge, method: :delete, data: {confirm: t('are_you_sure')} %></td>
 </tr>

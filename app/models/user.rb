@@ -12,6 +12,8 @@ class User < ActiveRecord::Base
   belongs_to  :person
   has_many    :bookings
   has_many    :projects, through: :bookings
+  has_many    :billings
+  has_many    :personalcharges
 
   scope :employed, -> {where(status: 'Employed')}
 

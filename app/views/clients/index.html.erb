@@ -42,8 +42,8 @@
         <td><%= client.description %></td>
         <td><%= client.created_on.to_date %></td>
         <td><%= client.updated_on.to_date %></td>
-        <td><%= link_to 'Edit', edit_client_path(client) %></td>
-        <td><%= link_to 'Destroy', client, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td><%= link_to_if (can? :update, client), 'Edit', edit_client_path(client) %></td>
+        <td><%= link_to_if (can? :destroy, client), 'Destroy', client, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
     <% end %>
   </tbody>
