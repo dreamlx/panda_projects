@@ -1,11 +1,11 @@
 class MoveFromPersonToUsers < ActiveRecord::Migration
   def up
     Project.all.each do |e|
-      e.update(partner_id:          User.find_by_person_id(e.partner_id).id)          if e.partner_id && User.find_by_person_id(e.partner_id)
-      e.update(manager_id:          User.find_by_person_id(e.manager_id).id)          if e.manager_id && User.find_by_person_id(e.manager_id)
-      e.update(referring_id:        User.find_by_person_id(e.referring_id).id)        if e.referring_id && User.find_by_person_id(e.referring_id)
-      e.update(billing_partner_id:  User.find_by_person_id(e.billing_partner_id).id)  if e.billing_partner_id && User.find_by_person_id(e.billing_partner_id)
-      e.update(billing_manager_id:  User.find_by_person_id(e.billing_manager_id).id)  if e.billing_manager_id && User.find_by_person_id(e.billing_manager_id)
+      e.update(partner_id:          (User.find_by_person_id(e.partner_id)         ? User.find_by_person_id(e.partner_id).id         : nil)) if e.partner_id
+      e.update(manager_id:          (User.find_by_person_id(e.manager_id)         ? User.find_by_person_id(e.manager_id).id         : nil)) if e.manager_id
+      e.update(referring_id:        (User.find_by_person_id(e.referring_id)       ? User.find_by_person_id(e.referring_id).id       : nil)) if e.referring_id
+      e.update(billing_partner_id:  (User.find_by_person_id(e.billing_partner_id) ? User.find_by_person_id(e.billing_partner_id).id : nil)) if e.billing_partner_id
+      e.update(billing_manager_id:  (User.find_by_person_id(e.billing_manager_id) ? User.find_by_person_id(e.billing_manager_id).id : nil)) if e.billing_manager_id
     end
 
     add_column :clients, :user_id, :integer
