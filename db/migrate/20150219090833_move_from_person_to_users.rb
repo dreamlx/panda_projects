@@ -10,22 +10,22 @@ class MoveFromPersonToUsers < ActiveRecord::Migration
 
     add_column :clients, :user_id, :integer
     Client.all.each do |e|
-      e.update(user_id: User.find_by_person_id(e.person_id).id) if e.person_id && User.find_by_person_id(e.person_id)
+      e.update(user_id: (User.find_by_person_id(e.person_id) ? User.find_by_person_id(e.person_id).id : nil)) if e.person_id
     end
 
     add_column :personalcharges, :user_id, :integer
     Personalcharge.all.each do |e|
-      e.update(user_id: User.find_by_person_id(e.person_id).id) if e.person_id && User.find_by_person_id(e.person_id)
+      e.update(user_id: (User.find_by_person_id(e.person_id) ? User.find_by_person_id(e.person_id).id : nil)) if e.person_id
     end
 
     add_column :commissions, :user_id, :integer
     Commission.all.each do |e|
-      e.update(user_id: User.find_by_person_id(e.person_id).id) if e.person_id && User.find_by_person_id(e.person_id)
+      e.update(user_id: (User.find_by_person_id(e.person_id) ? User.find_by_person_id(e.person_id).id : nil)) if e.person_id
     end
 
     add_column :billings, :user_id, :integer
     Billing.all.each do |e|
-      e.update(user_id: User.find_by_person_id(e.person_id).id) if e.person_id && User.find_by_person_id(e.person_id)
+      e.update(user_id: (User.find_by_person_id(e.person_id) ? User.find_by_person_id(e.person_id).id : nil)) if e.person_id
     end
   end
 
