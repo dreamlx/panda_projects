@@ -12,13 +12,4 @@ class ApplicationController < ActionController::Base
       devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:name, :email, :password, :remember_me) }
       devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:name, :email, :password, :password_confirmation, :current_password) }
     end
-  private
-    def add_expense_observer(job_code,price=100,msg="")
-      now_period = Period.today_period
-      prj = Project.find_by_job_code(job_code)
-      if prj.status.title == "Active"
-        expense = Expense.create(project_id: prj.id, period_id: now_period.id, report_binding: price, memo: msg)
-        PrjExpenseLog.create(period_id: now_period.id, prj_id: prj.id, expense_id: expense.id, other: ( prj.job_code + "|" + msg))
-      end
-    end
 end

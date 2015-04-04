@@ -23,9 +23,6 @@ class ProjectsController < ApplicationController
     @project = Project.new(project_params)
     @project.job_code =@project.client.client_code+@project.GMU.code+@project.service_code.code if (@project.job_code || @project.job_code == "")
     if @project.save
-      if (@project.service_code.code.to_i < 60 || @project.service_code.code.to_i >68) && @project.service_code.code.to_i != 100
-        add_expense_observer(@project.job_code,250,"if prj code not in 60-68,then add 250")
-      end
       redirect_to @project, notice: 'Project was successfully created.'
     else
       render "new"

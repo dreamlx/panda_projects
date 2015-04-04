@@ -90,7 +90,6 @@ class TimeReportsController < ApplicationController
     end
   end
 
-
   def summary_by_user
     periods_ids = Period.where("number >= ? AND  number <= ?",
                                 params[:period][:start_period_number],
@@ -102,43 +101,7 @@ class TimeReportsController < ApplicationController
       @records << get_column(project, periods_ids)
     end
   end
-  
-  # def summary_by_user
-  #   @q = Project.search(params[:q])
-  #   @projects = @q.result  
-    
-  #   @srecords = Array.new
-  #   for record in @projects    
-  #     summaryRecord                     = Summary.new
-  #     summaryRecord.id                  = record.id.to_s
-  #     summaryRecord.GMU                 = record.GMU.title
-  #     summaryRecord.job_code            = record.job_code
-  #     summaryRecord.client_name         = record.client.english_name if record.client
-  #     summaryRecord.job_Ref             = record.referring.english_name if record.referring
-  #     summaryRecord.job_Ptr             = record.partner.english_name if record.partner
-  #     summaryRecord.job_Mgr             = record.manager.english_name if record.manager
-  #     summaryRecord.service_line        = record.service_code.code
-  #     summaryRecord.service_PFA         = record.service_PFA 
-  #     summaryRecord.expense_PFA         = record.expense_PFA
-  #     summaryRecord.contract_number     = record.contract_number
-  #     summaryRecord.contracted_fee      = record.contracted_service_fee
-  #     summaryRecord.contracted_expense  = record.contracted_expense
-  #     summaryRecord.project_status      = record.status.title
-  #     summaryRecord.fees_Beg            = record.initialfee.service_fee if record.initialfee
-  #     summaryRecord.fees_Cum            = record.personalcharges.sum(:service_fee)
-  #     summaryRecord.fees_Sub            = (summaryRecord.fees_Beg + summaryRecord.fees_Cum).to_i
-  #     summaryRecord.PFA_Beg             = record.deduction.service_PFA if record.deduction
-  #     summaryRecord.PFA_Cum             = (record.personalcharges.sum(:service_fee)/100 * (record.service_PFA))
-  #     summaryRecord.PFA_Sub             = (summaryRecord.PFA_Beg + summaryRecord.PFA_Cum).to_i
-  #     summaryRecord.Billing_Beg         = record.deduction.service_billing if record.deduction
-  #     summaryRecord.Billing_Cum         = record.billings.sum(:service_billing)
-  #     summaryRecord.Billing_Sub         = (summaryRecord.Billing_Beg + summaryRecord.Billing_Cum).to_i
-  #     summaryRecord.BT                  = record.billings.sum(:business_tax)
-  #     summaryRecord.INVENTORY_BALANCE   = summaryRecord.fees_Cum.to_i - summaryRecord.PFA_Cum.to_i - summaryRecord.Billing_Cum.to_i    
-  #     summaryRecord.INVPER              =  (summaryRecord.contracted_fee == 0)? 0 : (summaryRecord.Billing_Cum.to_i / summaryRecord.contracted_fee )* 100 
-  #     @srecords << summaryRecord
-  #   end
-  # end
+
   private
     def get_column(project, periods_ids)
       personalcharges = project.personalcharges.where(period_id: periods_ids)

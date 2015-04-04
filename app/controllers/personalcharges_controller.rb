@@ -16,6 +16,8 @@ class PersonalchargesController < ApplicationController
   def new
     @personalcharge = Personalcharge.new
     @personalcharge.project_id = params[:project_id]
+    @personalcharge.period_id = Period.last.id
+    @personalcharge.user_id = current_user.id
   end
 
   def create
@@ -47,7 +49,7 @@ class PersonalchargesController < ApplicationController
   end
 
   def destroy
-    current_user.personalcharges.find(params[:id]).destroy
+    Personalcharge.find(params[:id]).destroy
     redirect_to personalcharges_url
   end
 

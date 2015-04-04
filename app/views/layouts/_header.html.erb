@@ -21,7 +21,7 @@
           <li class="<%= 'active' if params[:controller] == 'time_reports' %>"><%= link_to t('report'), time_reports_path %></li>
           <li class="<%= 'active' if params[:controller] == 'projects' %>"><%= link_to t('project'), projects_url %></li>
           <li class="<%= 'active' if params[:controller] == 'ufafees' %>"><%= link_to t('ufafee'), ufafees_url %></li>
-          <li class="<%= 'active' if params[:controller] == 'people' %>"><%= link_to t('person'), people_url %></li>
+          <li class="<%= 'active' if params[:controller] == 'people' %>"><%= link_to 'Employee', people_url %></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
