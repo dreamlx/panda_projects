@@ -300,10 +300,10 @@ ActiveRecord::Schema.define(version: 20150321133134) do
     t.integer  "project_id",         limit: 4
     t.integer  "period_id",          limit: 4
     t.integer  "person_id",          limit: 4
+    t.string   "state",              limit: 255
     t.decimal  "PFA_of_service_fee",             precision: 10, scale: 2, default: 0.0
     t.integer  "user_id",            limit: 4
     t.date     "charge_date"
-    t.string   "state",              limit: 255
   end
 
   add_index "personalcharges", ["meal_allowance"], name: "index_personalcharges_on_meal_allowance", using: :btree
@@ -411,12 +411,12 @@ ActiveRecord::Schema.define(version: 20150321133134) do
     t.boolean  "auth",                   limit: 1
     t.string   "other1",                 limit: 255
     t.string   "other2",                 limit: 255
-    t.string   "email",                  limit: 255,                          default: "", null: false
-    t.string   "encrypted_password",     limit: 255,                          default: "", null: false
+    t.string   "email",                  limit: 255,                          default: "",  null: false
+    t.string   "encrypted_password",     limit: 255,                          default: "",  null: false
     t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          limit: 4,                            default: 0,  null: false
+    t.integer  "sign_in_count",          limit: 4,                            default: 0,   null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",     limit: 255
@@ -428,7 +428,7 @@ ActiveRecord::Schema.define(version: 20150321133134) do
     t.string   "employee_number",        limit: 255
     t.string   "department",             limit: 255
     t.string   "grade",                  limit: 255
-    t.decimal  "charge_rate",                        precision: 10, scale: 2
+    t.decimal  "charge_rate",                        precision: 10, scale: 2, default: 0.0
     t.date     "employeement_date"
     t.string   "address",                limit: 255
     t.string   "postalcode",             limit: 255

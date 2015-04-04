@@ -7,7 +7,7 @@ class AddMoreFieldsToUsers < ActiveRecord::Migration
     add_column :users, :employee_number, :string
     add_column :users, :department, :string
     add_column :users, :grade, :string
-    add_column :users, :charge_rate, :decimal, precision: 10, scale: 2
+    add_column :users, :charge_rate, :decimal, precision: 10, scale: 2, default: 0
     add_column :users, :employeement_date, :date
     add_column :users, :address, :string
     add_column :users, :postalcode, :string

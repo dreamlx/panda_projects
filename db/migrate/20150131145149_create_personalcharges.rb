@@ -11,6 +11,7 @@ class CreatePersonalcharges < ActiveRecord::Migration
       t.integer :project_id
       t.integer :period_id
       t.integer :person_id
+      t.string  :state
     end
   end
 end

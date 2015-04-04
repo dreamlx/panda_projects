@@ -14,8 +14,9 @@ class MoveFromPersonToUsers < ActiveRecord::Migration
     end
 
     add_column :personalcharges, :user_id, :integer
+
     Personalcharge.all.each do |e|
-      e.update(user_id: (User.find_by_person_id(e.person_id) ? User.find_by_person_id(e.person_id).id : nil)) if e.person_id
+      e.update_column(:user_id, (User.find_by_person_id(e.person_id) ? User.find_by_person_id(e.person_id).id : nil)) if e.person_id
     end
 
     add_column :commissions, :user_id, :integer

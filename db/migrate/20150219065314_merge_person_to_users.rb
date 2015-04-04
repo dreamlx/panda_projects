@@ -1,5 +1,6 @@
 class MergePersonToUsers < ActiveRecord::Migration
   def up
+    User.reset_column_information
     Person.all.each do |person|
       user = User.find_or_initialize_by(email: "#{person.english_name.downcase.tr(" ", ".")}@think-bridge.com")
       user.person_id          = person.id
