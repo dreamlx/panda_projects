@@ -13,9 +13,8 @@ class Period < ActiveRecord::Base
   has_many  :limit_fees
   
   def self.today_period
-    today = Time.now.strftime("%Y-%m-%d")
-    period_sql = " 1 and '#{today}' <= ending_date and '#{today}' >= starting_date"
-    return where(period_sql).first || order(number: :desc).first
+    today = Date.today.to_s
+    return where("starting_date <= ? AND ending_date >= ?", today, today).first || order(number: :desc).first
   end
 
   def self.period_number

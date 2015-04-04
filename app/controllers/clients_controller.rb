@@ -5,7 +5,7 @@ class ClientsController < ApplicationController
     if current_user.role == "admin"
       @clients = @q.result.page(params[:page])
     else
-      @clients = @q.result.page(params[:page]).where(user_id: current_user.id)
+      @clients = @q.result.where(user_id: current_user.id).page(params[:page])
     end
   end
   

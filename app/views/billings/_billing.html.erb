@@ -23,8 +23,8 @@
   <td><%= billing.status == "0" ? "outstanding" : "received" %></td>
   <td><%= billing.business_tax %></td>
   <td><%= billing.collection_days %></td>
-  <td><%= billing.created_on.to_date %></td>
-  <td><%= billing.updated_on.to_date %></td>
+  <td><%= billing.created_on.to_date if billing.created_on %></td>
+  <td><%= billing.updated_on.to_date if billing.updated_on %></td>
   <td><%= link_to_if (can? :update, billing), 'Edit', edit_billing_path(billing)%></td>
   <td><%= link_to_if (can? :destroy, billing), 'Destroy', billing, method: :delete, data: {confirm: 'Are you sure ?'} %></td>
 </tr>

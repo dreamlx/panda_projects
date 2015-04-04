@@ -15,8 +15,8 @@
   <thead>
     <tr>
       <th><%= sort_link(@q, :job_code, t('Job code')) %></th>
-      <th><%= sort_link(@q, :created_on, t('Created date')) %></th>
-      <th><%= sort_link(@q, :updated_on, t('updated date')) %></th>
+      <th><%#= sort_link(@q, :created_on, t('Created date')) %></th>
+      <th><%#= sort_link(@q, :updated_on, t('updated date')) %></th>
       <th><%= sort_link(@q, :client_english_name, t('Client name')) %></th>
       <th><%= sort_link(@q, :partner_english_name, t('Job partner')) %></th>
       <th><%= sort_link(@q, :manager_english_name, t('Job manager')) %></th>
@@ -32,7 +32,7 @@
       <th><%= sort_link(@q, :billing_manager_english_name, t('Billing manager')) %></th>
       <th><%= sort_link(@q, :contracted_service_fee, t('contracted_service_fee')) %></th>
       <th><%= sort_link(@q, :estimated_commision, t('estimated_commision')) %></th>
-      <th><%= sort_link(@q, :estimated_outsorcing, t('estimated_outsorcing')) %></th>
+      <th><%= sort_link(@q, :estimated_outsorcing, t('estimated_outsourcing')) %></th>
       <th><%= sort_link(@q, :budgeted_service_fee, t('budgeted_service_fee')) %></th>
       <th><%= sort_link(@q, :service_PFA, t('service_PFA')) %></th>
       <th><%= sort_link(@q, :expense_PFA, t('expense_PFA')) %></th>

@@ -13,6 +13,7 @@ class Ability
       can [:new, :create],                        Expense,        :user_id => user.id
       can [:update, :destroy],                    Expense,        :user_id => user.id
       can [:new, :create, :edit, :update, :show], Client,         :user_id => user.id
+      can [:read],                                Project,        :bookings => {user_id: user.id}
     end
     #
     # The first argument to `can` is the action you are giving the user

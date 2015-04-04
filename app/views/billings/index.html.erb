@@ -43,7 +43,7 @@
     <%= render @billings %>
 
     <tr bgcolor = yellow>
-      <td COLSPAN="6">Total</td>
+      <td colspan="8">Total</td>
       <td><%= @b_total.sum(:service_billing) %></td>
       <td><%= @b_total.sum(:expense_billing) %></td>
       <td><%= @b_total.sum(:amount) %></td>
@@ -52,7 +52,7 @@
       <td><%= @b_total.sum(:write_off) %></td>
       <td><%= @b_total.sum(:outstanding) - @b_total.sum(:write_off) %></td>
       <td><%= @b_total.sum(:provision) %></td>
-      <td COLSPAN="5"></td>
+      <td COLSPAN="8"></td>
     </tr>
   </tbody>
 </table>

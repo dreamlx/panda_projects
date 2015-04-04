@@ -1,7 +1,13 @@
 class ProjectsController < ApplicationController
+  load_and_authorize_resource :except => [:index]
   def index
     @q = Project.search(params[:q])
-    @projects = @q.result.includes(:status, :client, :partner, :manager).page(params[:page])
+    @projects = @q.result.includes(
+      :status, 
+      :client, 
+      :partner, 
+      :manager, 
+      :bookings).where(bookings: {user_id: current_user.id}).page(params[:page])
     @count = @q.result.count
   end
 
@@ -13,6 +19,7 @@ class ProjectsController < ApplicationController
 
   def new
     @project = Project.new
+    @project.starting_date = Date.today
   end
 
   def edit
@@ -21,45 +28,32 @@ class ProjectsController < ApplicationController
 
   def create
     @project = Project.new(project_params)
-    @project.job_code =@project.client.client_code+@project.GMU.code+@project.service_code.code if (@project.job_code || @project.job_code == "")
     if @project.save
-      redirect_to @project, notice: 'Project was successfully created.'
+      redirect_to @project
     else
       render "new"
     end
   end
 
   def update
-    @project = Project.find(params[:id])
-    if @project.job_code.nil? or @project.job_code.blank?                      
-      @project.job_code =@project.client.client_code+@project.GMU.code+@project.service_code.code
-    end    
-    if @project.update_attributes(project_params)
-      redirect_to @project, notice: _('%s was successfully updated.', Project.human_name)
+    @project = Project.find(params[:id])  
+    if @project.update(project_params)
+      redirect_to @project
     else
       render "edit"
     end
   end
   
   def close
-    closed_item = Dict.find_by_category_and_code('prj_status', '0')
-    #需要判断balance是否为0，如果有结余！=0 则无法close
-    allow_closed = is_balance(Project.find(params[:id]),Period.today_period)
-    billings = Billing.where(project_id: params[:id])
-    billing_number= "<br/>|need close billings --"
-    for item in billings
-      if item.status == "0"
-        allow_closed = false
-        billing_number = billing_number + item.number + " |"
-      end
+    project = Project.find(params[:id])
+
+    allow_closed = is_balance(project)
+
+    for item in Billing.where(project_id: project.id)
+      allow_closed = false if item.status == "0" # billing status equal to 0, meas outstanding, 1 meas received
     end
-    if allow_closed and Project.find(params[:id]).update_attribute(:status_id,closed_item.id)
-      redirect_to projects_url, notice: "Poject was successfully closed"
-    else
-      flash[:notice] ="Poject error updated with projects"
-      flash[:notice]=( "<font color=red>ballance is not 0!</font>" + "|service balance: #{ @service_balance.to_s}" +"|expense balance:"+ @expense_balance.to_s + billing_number) unless allow_closed
-      redirect_to projects_url
-    end
+    project.update(status_id: Dict.find_by_category_and_code(:prj_status, '0').id) if allow_closed
+    redirect_to project
   end
 
   def destroy
@@ -68,11 +62,9 @@ class ProjectsController < ApplicationController
   end
   
   private
-    def is_balance(t_project,t_period)
-      @statuses   = Dict.where("category ='prj_status' and code = '1'")# 1 open, 0 close
-                     
+    def is_balance(t_project)
       @project = t_project
-      @now_period = t_period
+      @now_period = Period.today_period
       
       @report = TimeReport.new
       @report.for_report(@project, @now_period)
@@ -140,7 +132,7 @@ class ProjectsController < ApplicationController
       @service_balance = service_total_charges - service_PFA - service_billing - service_UFA
       @expense_balance = expense_total_charges - expense_PFA - expense_billing - expense_UFA
       
-      return ((@service_balance <1 and @service_balance >-1 ) and (@expense_balance <1  and @expense_balance >-1 ))#为0 允许close
+      return (@service_balance <1 && @service_balance >-1  && @expense_balance <1  && @expense_balance >-1 )#为0 允许close
     end
 
     def project_params

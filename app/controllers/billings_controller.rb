@@ -21,13 +21,17 @@ class BillingsController < ApplicationController
   def new
     @billing    = Billing.new
     @billing.project_id = params[:project_id]
+    @billing.period_id = Period.last.id
+    @billing.user_id = current_user.id if current_user
+    @billing.billing_date = Date.today
+    @billing.status = "0"
   end
 
   def create
     @billing              = Billing.new(billing_params)
     if @billing.status == "1"
       @billing.collection_days = @billing.days_of_ageing
-      @billing.outstanding =@billing.amount
+      @billing.outstanding = @billing.amount
     end
     tax_rate = 5.26/100
     @billing.business_tax = @billing.service_billing * tax_rate
@@ -40,7 +44,7 @@ class BillingsController < ApplicationController
       @billing_number.code  = (@billing_number.code.to_i + 1).to_s
       @billing_number.save
       # end of update billing_number
-      redirect_to billings_url, id: @billing.project_id, notice: "#{@billing.project.job_code} -- Billing was successfully updated."
+      redirect_to billings_url, notice: "#{@billing.project.job_code} -- Billing was successfully updated."
     else
       render 'new'
     end
