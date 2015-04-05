@@ -1,7 +1,8 @@
 class PeriodsController < ApplicationController
+  # load_and_authorize_resource
   def index
     @q = Period.search(params[:q])
-    @periods = @q.result
+    @periods = @q.result.order(id: :desc)
   end
 
   def show
@@ -19,7 +20,7 @@ class PeriodsController < ApplicationController
   def create
     @period = Period.new(period_params)
     if @period.save
-      redirect_to periods_url, notice: ('Period was successfully created.')
+      redirect_to periods_url
     else
       render "new"
     end
@@ -28,15 +29,10 @@ class PeriodsController < ApplicationController
   def update
     @period = Period.find(params[:id])
     if @period.update(period_params)
-      redirect_to periods_url, notice: ('Period was successfully updated.')
+      redirect_to periods_url
     else
       render "edit"
     end
-  end
-
-  def destroy
-    Period.find(params[:id]).destroy
-    redirect_to periods_url
   end
 
   private

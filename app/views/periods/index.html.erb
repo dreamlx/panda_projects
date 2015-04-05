@@ -9,7 +9,7 @@
       <th><%= sort_link(@q, :number) %></th>
       <th><%= sort_link(@q, :starting_date) %></th>
       <th><%= sort_link(@q, :ending_date) %></th>
-      <th colspan="2">Operation</th>
+      <th colspan="1">Operation</th>
     </tr>
   </thead>
   <tbody>
@@ -20,7 +20,6 @@
         <td><%= period.starting_date %></td>
         <td><%= period.ending_date %></td>
         <td><%= link_to 'Edit', edit_period_path(period) %></td>
-        <td><%= link_to 'Destroy', period, method: :delete, data: {confirm: ('Are you sure?')} %></td>
       </tr>
     <% end %>
   </tbody>

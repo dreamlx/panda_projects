@@ -1,4 +1,5 @@
 class IndustriesController < ApplicationController
+  load_and_authorize_resource
   def index
     @q = Industry.search(params[:q])
     @industries  = @q.result.order(:code)
@@ -11,7 +12,7 @@ class IndustriesController < ApplicationController
   def create
     @industry = Industry.new(industry_params)
     if @industry.save
-      redirect_to industries_path, notice: 'Industry was successfully created.'
+      redirect_to industries_path
     else
       render 'new'
     end
@@ -21,7 +22,7 @@ class IndustriesController < ApplicationController
     @industry = Industry.find(params[:id])
     respond_to do |format|
       if @industry.update(industry_params)
-        format.html {redirect_to @industry, notice: 'Industry was successfully updated.'}
+        format.html {redirect_to @industry}
         format.json { respond_with_bip(@industry)}
       else
         format.html { render :action => "edit" }

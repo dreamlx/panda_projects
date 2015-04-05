@@ -6,7 +6,7 @@
     file: :horizontal_file_input,
     boolean: :horizontal_boolean}) do |f| %>
   <div class="col-md-6">
-    <%= f.input :category %>
+    <%= f.input :category, collection: Dict.uniq.pluck(:category) %>
     <%= f.input :code %>
     <%= f.input :title %>
   </div>

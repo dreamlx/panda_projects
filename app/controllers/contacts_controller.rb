@@ -20,7 +20,7 @@ class ContactsController < ApplicationController
     
     respond_to do |format|
       if @contact.update(contact_params)
-        format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
+        format.html { redirect_to @contact }
         format.json { respond_with_bip(@contact) }
       else
         format.html { render :action => "edit" }

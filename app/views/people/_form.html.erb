@@ -15,8 +15,9 @@
     <%= f.input :extension  %></p>
     <%= f.input :GMU_id, collection: Dict.selected_gmus  %></p>
     <%= f.input :status_id, collection: Dict.selected_person_status  %></p>
-    <%= f.input :created_on, as: :date, html5: true  %></p>
-    <%= f.input :updated_on, as: :date, html5: true  %></p>
+    <%= f.input :created_on, disabled: true, as: :date, html5: true  %></p>
+    <%= f.input :updated_on, disabled: true, as: :date, html5: true  %></p>
     <%= f.button :submit %>
   <% end %>
+  <%= link_to 'Back', people_url %>
 </div>

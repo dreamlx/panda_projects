@@ -1,0 +1,9 @@
+<tr>
+  <td><%= link_to person.employee_number, person %></td>
+  <td><%= person.chinese_name%></td>
+  <td><%= person.english_name%></td>
+  <td><%= person.charge_rate%></td>
+  <td><%= person.grade %></td>
+  <td><%= link_to 'Edit', edit_person_path(person) %></td>
+  <td><%= link_to 'Destroy', person, method: :delete, data: {:confirm => 'Are you sure?'} %></td>
+</tr>

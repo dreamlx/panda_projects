@@ -1,4 +1,5 @@
 class UfafeesController < ApplicationController
+  load_and_authorize_resource
   def index
     @q = Ufafee.search(params[:q])
     @ufafees = @q.result.page(params[:page])
@@ -7,31 +8,19 @@ class UfafeesController < ApplicationController
   def new
     @ufafee = Ufafee.new
     @ufafee.project_id = params[:project_id]
+    @ufafee.period_id = Period.last.id
   end
 
   def create
-    @billing_number = Dict.find_by_category('billing_number')
-    @number = @billing_number.code.to_i + 1
-    
-    if @number <10 
-      @str_number = "000" + @number.to_s
-    elsif @number <100
-      @str_number = "00" + @number.to_s
-    elsif @number <1000
-      @str_number = "0" + @number.to_s
-    else 
-      @str_number = @number.to_s
-    end 
-    # update billing_number
     billing_number = Dict.find_by_category('billing_number')
-    billing_number.update(code: (billing_number.code.to_i + 1).to_s)
+    billing_number.update(code: (billing_number.code.to_i + 1).to_s.rjust(4, '0'))
 
     @ufafee = Ufafee.new(ufafee_params)
     if @ufafee.save
       @ufafee.update(
-        number: (@billing_number.title + @str_number),
+        number: (billing_number.title + billing_number.code),
         amount: (@ufafee.service_UFA + @ufafee.expense_UFA))
-      redirect_to ufafees_url, notice: 'Ufafee was successfully created.'
+      redirect_to ufafees_url
     else
       render 'new'
     end
@@ -45,7 +34,7 @@ class UfafeesController < ApplicationController
     @ufafee = Ufafee.find(params[:id])
     if @ufafee.update(ufafee_params)
       @ufafee.update(amount: (@ufafee.service_UFA + @ufafee.expense_UFA))
-      redirect_to @ufafee, notice: 'Ufafee was successfully updated.'
+      redirect_to @ufafee
     else
       render 'edit'
     end
@@ -58,7 +47,6 @@ class UfafeesController < ApplicationController
   
   private
     def ufafee_params
-      params.require(:ufafee).permit(
-        :created_on, :updated_on, :number, :project_id, :period_id, :service_UFA, :expense_UFA)
+      params.require(:ufafee).permit(:number, :project_id, :period_id, :service_UFA, :expense_UFA)
     end
 end

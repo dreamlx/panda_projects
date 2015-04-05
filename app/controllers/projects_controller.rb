@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  load_and_authorize_resource :except => [:index]
+  load_and_authorize_resource
   def index
     @q = Project.search(params[:q])
     @projects = @q.result.includes(

@@ -30,7 +30,7 @@ Rails.application.routes.draw do
   end
   resources :people
   resources :contacts, only: [:index, :create, :update] 
-  resources :periods, only: [:index, :new, :create, :edit, :update, :destroy]
+  resources :periods, only: [:index, :new, :create, :edit, :update]
   resources :prj_expense_logs, only: [:index, :destroy]
   resources :ufafees
 end
