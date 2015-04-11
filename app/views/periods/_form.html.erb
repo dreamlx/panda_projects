@@ -1,5 +1,5 @@
 <div class="col-md-6">
-  <p>Last period: <%= Period.last.number %></p>
+  <p>Last period: <%= Period.last.number if Period.last %></p>
   <%= simple_form_for(@period) do |f| %>
     <%= f.input :number, as: :date, html5: true %>
     <%= f.input :starting_date, as: :date, html5: true %>

@@ -8,7 +8,7 @@ class UfafeesController < ApplicationController
   def new
     @ufafee = Ufafee.new
     @ufafee.project_id = params[:project_id]
-    @ufafee.period_id = Period.last.id
+    @ufafee.period_id = Period.last.id if Period.last
   end
 
   def create

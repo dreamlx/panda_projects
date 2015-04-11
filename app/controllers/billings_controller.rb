@@ -21,7 +21,7 @@ class BillingsController < ApplicationController
   def new
     @billing    = Billing.new
     @billing.project_id = params[:project_id]
-    @billing.period_id = Period.last.id
+    @billing.period_id = Period.last.id if Period.last
     @billing.user_id = current_user.id if current_user
     @billing.billing_date = Date.today
     @billing.status = "0"

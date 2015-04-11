@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
       :client, 
       :partner, 
       :manager, 
-      :bookings).where(bookings: {user_id: current_user.id}).page(params[:page])
+      :bookings).page(params[:page])
     @count = @q.result.count
   end
 

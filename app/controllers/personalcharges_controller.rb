@@ -16,7 +16,7 @@ class PersonalchargesController < ApplicationController
   def new
     @personalcharge = Personalcharge.new
     @personalcharge.project_id = params[:project_id]
-    @personalcharge.period_id = Period.last.id
+    @personalcharge.period_id = Period.last.id if Period.last
     @personalcharge.user_id = current_user.id
   end
 

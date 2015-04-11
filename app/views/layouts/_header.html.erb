@@ -8,34 +8,59 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <%= link_to t('home'), root_path, class: "navbar-brand" %>
+      <%= link_to image_tag('thinkbridge.png'), root_path, class: "navbar-brand" %>
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <% if user_signed_in? %>
         <ul class="nav navbar-nav">
-          <li class="<%= 'active' if params[:controller] == 'personalcharges' %>"><%= link_to t('personalcharge'), personalcharges_url %></li>
+          
           <li class="<%= 'active' if params[:controller] == 'billings' || params[:controller] == 'receive_amounts' %>"><%= link_to t('billing'), billings_path %></li>
           <li class="<%= 'active' if params[:controller] == 'expenses' %>"><%= link_to t('expense'), expenses_url %></li>
-          <li class="<%= 'active' if params[:controller] == 'clients' %>"><%= link_to t('client'), clients_path %></li>
-          <li class="<%= 'active' if params[:controller] == 'reports' %>"><%= link_to t('time_report'), reports_path %></li>
           <li class="<%= 'active' if params[:controller] == 'time_reports' %>"><%= link_to t('report'), time_reports_path %></li>
-          <li class="<%= 'active' if params[:controller] == 'projects' %>"><%= link_to t('project'), projects_url %></li>
-          <li class="<%= 'active' if params[:controller] == 'ufafees' %>"><%= link_to t('ufafee'), ufafees_url %></li>
-          <li class="<%= 'active' if params[:controller] == 'people' %>"><%= link_to 'Employee', people_url %></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('client') %><span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li class="<%= 'active' if params[:controller] == 'clients' %>"><%= link_to t('client'), clients_path %></li>
+              <li class="<%= 'active' if params[:controller] == 'contacts' %>"><%= link_to t('contact'), contacts_url %></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('user') %><span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li class="<%= 'active' if params[:controller] == 'users' %>"><%= link_to t('user'), users_path %></li>
+              <li class="<%= 'active' if params[:controller] == 'people' %>"><%= link_to 'Employee', people_url %></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('project') %><span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li class="<%= 'active' if params[:controller] == 'projects' %>"><%= link_to t('project'), projects_url %></li>
+              <li class="<%= 'active' if params[:controller] == 'ufafees' %>"><%= link_to t('ufafee'), ufafees_url %></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('time_report') %><span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li class="<%= 'active' if params[:controller] == 'reports' %>"><%= link_to t('time_report'), reports_path %></li>
+              <li class="<%= 'active' if params[:controller] == 'personalcharges' %>"><%= link_to t('personalcharge'), personalcharges_url %></li>
+            </ul>
+          </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('Peferences') %><span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('setting') %><span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li class="<%= 'active' if params[:controller] == 'dicts' %>"><%= link_to t('dict'), dicts_path %></li>
               <li class="<%= 'active' if params[:controller] == 'industries' %>"><%= link_to t('industry'), industries_path %></li>
               <li class="<%= 'active' if params[:controller] == 'periods' %>"><%= link_to t('period'), periods_path %></li>
-              <li class="<%= 'active' if params[:controller] == 'users' %>"><%= link_to t('user'), users_path %></li>
-              <li class="<%= 'active' if params[:controller] == 'contacts' %>"><%= link_to t('contact'), contacts_url %></li>
             </ul>
           </li>
           <li><%= link_to current_user.name, edit_user_registration_path %></li>
-          <li><%= link_to t('logout'), destroy_user_session_path, method: :delete %></li>
+          <li>
+            <%= link_to destroy_user_session_path, method: :delete do %>
+              <i class="glyphicon glyphicon-log-out"></i>
+            <% end %>
+          </li>
         </ul>
       <% else %>
         <ul class="nav navbar-nav navbar-right">
