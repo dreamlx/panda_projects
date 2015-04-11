@@ -60,6 +60,15 @@ class ProjectsController < ApplicationController
     Project.find(params[:id]).destroy
     redirect_to projects_url
   end
+
+  def delete_project
+    @report = Report.find(params[:report_id])
+    project = Project.find(params[:id])
+    @report.projects.delete(project)
+    Personalcharge.where(user_id: @report.user_id,  period_id: @report.period_id, project_id: project).delete_all
+    Expense.where(user_id: @report.user_id,  period_id: @report.period_id, project_id: project).delete_all
+    redirect_to add_projects_report_path(@report)
+  end
   
   private
     def is_balance(t_project)

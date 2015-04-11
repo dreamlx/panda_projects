@@ -1,24 +1,10 @@
-<%= simple_nested_form_for(@report) do |f|%>
-  <p>
-    <strong>User:</strong>
-    <%= @report.user.name %>
-  </p>
-  <p>
-    <strong>Period:</strong>
-    <%= @report.period.number %>
-  </p>
-  <h3>Projects</h3>
-
-  <div class="col-md-10">
-    <%= f.collection_check_boxes :project_ids, current_user.projects, :id, :name, as: :check_boxes %>
+<div class="row">
+  <div class="col-md-3 col-md-offset-9">
+    <%= link_to 'submit', submit_report_path(@report), method: :post, class: 'btn btn-danger' %>
   </div>
-  <div class="col-md-2">
-    <%= f.button :submit, 'refresh', class: "btn btn-danger btn-lg" %>
-  </div>
-<% end %>
-<hr>
+</div>
 <!-- head -->
-<%= render 'reports/header' %>
+<%= render 'header' %>
 
 <br />
 <div class="row">
@@ -80,7 +66,7 @@
       <% if @projects %>
         <% @projects.each do |project| %>
           <tr>
-            <td><%= project.job_code %></td>
+            <td><%= truncate(project.client.english_name, length: 24) if project.client %></td>
             <td></td>
             <% 16.times  do |col| %>
               <% col_date = start_date + col %>

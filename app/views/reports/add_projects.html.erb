@@ -1,0 +1,20 @@
+<%= @report.period.number if @report.period %>
+<%= @report.user.name if @report.user %>
+
+<% @report.projects.each do |project|%>
+  <p><%= project.job_code %></p>
+  <p><%= link_to 'Destroy', delete_project_report_project_path(@report, project), 
+                  method: :delete, 
+                  data: {confirm: t('are_you_sure')} %></p>
+<% end %>
+
+
+<h3>Add new Project</h3>
+<%= simple_form_for([@report, @report.projects.build], 
+  url: add_projects_report_path, 
+  method: :get) do |f|%>
+  <%= f.input :job_code, collection: Project.order(job_code: :asc).pluck(:job_code) %>
+  <%= f.button :submit, 'add project' %>
+<% end  %>
+
+<%= link_to 'Go to fill data', fill_data_report_path(@report) %>

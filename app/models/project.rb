@@ -11,7 +11,7 @@ class Project < ActiveRecord::Base
   has_many    :ufafees
   has_many    :bookings,        :dependent => :destroy
   has_many    :users,           through: :bookings
-  has_and_belongs_to_many       :reports
+  has_and_belongs_to_many       :reports, -> { uniq }, join_table: "projects_reports"
   belongs_to  :client
   belongs_to  :GMU,             -> {where category: 'GMU' },          class_name: "Dict", foreign_key: "GMU_id"      
   belongs_to  :status,          -> {where category: 'prj_status' },   class_name: "Dict", foreign_key: "status_id"

@@ -3,9 +3,9 @@ class PersonalchargesController < ApplicationController
   def index
     @q = Personalcharge.search(params[:q])
     if current_user.role == "admin"
-      @personalcharges = @q.result.page(params[:page])
+      @personalcharges = @q.result.page(params[:page]).order(id: :desc)
     else
-      @personalcharges = @q.result.where(user_id: current_user.id).page(params[:page])
+      @personalcharges = @q.result.where(user_id: current_user.id).order(id: :desc).page(params[:page])
     end
 
     @personalcharges_num    = @q.result.joins(:project).where("job_code REGEXP '^[0-9]'")

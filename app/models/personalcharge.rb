@@ -29,14 +29,17 @@ class Personalcharge < ActiveRecord::Base
 
   private 
     def save_PFA_of_service_fee
-      if self.project && (self.project.service_PFA != 0)
-        self.PFA_of_service_fee = (self.service_fee / 100) * self.project.service_PFA
-      end
       if self.user && self.user.charge_rate
         self.service_fee = self.hours * self.user.charge_rate
+        if self.project && (self.project.service_PFA != 0)
+          self.PFA_of_service_fee = (self.service_fee / 100) * self.project.service_PFA
+        end
       end
       if self.person && self.person.charge_rate
         self.service_fee = self.hours * self.person.charge_rate
+        if self.project && (self.project.service_PFA != 0)
+          self.PFA_of_service_fee = (self.service_fee / 100) * self.project.service_PFA
+        end
       end
     end
 end
