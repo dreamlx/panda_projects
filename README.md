@@ -23,3 +23,9 @@ config.assets.compile = true
 if GemNotFound
 remove the `.ruby-version` and `.ruby-gemset` and reboot the system
 then bundle it again.
+
+whenever issue
+A solution is to disable the prompt by adding this line to your user rvm file in ~/.rvmrc
+```
+rvm_trust_rvmrcs_flag=1
+```
