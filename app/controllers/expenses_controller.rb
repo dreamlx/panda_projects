@@ -1,12 +1,9 @@
 class ExpensesController < ApplicationController
-  load_and_authorize_resource :except => [:index]
+  load_and_authorize_resource
   def index
     @q = Expense.ransack(params[:q])
-    if current_user.role == "admin"
-      @expenses = @q.result.includes(:project, :period).page(params[:page])
-    else
-      @expenses = @q.result.includes(:project, :period).where(user_id: current_user.id).page(params[:page])
-    end
+    @expenses = @q.result.includes(:project, :period).page(params[:page])
+
 
     @expenses_total = @q.result
   end

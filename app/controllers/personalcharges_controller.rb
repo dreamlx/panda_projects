@@ -1,12 +1,8 @@
 class PersonalchargesController < ApplicationController
-  load_and_authorize_resource :except => [:index, :new, :create]
+  load_and_authorize_resource
   def index
     @q = Personalcharge.search(params[:q])
-    if current_user.role == "admin"
-      @personalcharges = @q.result.page(params[:page]).order(id: :desc)
-    else
-      @personalcharges = @q.result.where(user_id: current_user.id).order(id: :desc).page(params[:page])
-    end
+    @personalcharges = @q.result.page(params[:page]).order(id: :desc)
 
     @personalcharges_num    = @q.result.joins(:project).where("job_code REGEXP '^[0-9]'")
     @personalcharges_char   = @q.result.joins(:project).where("job_code REGEXP '^[a-z]'")

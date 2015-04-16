@@ -1,4 +1,5 @@
 class BookingsController < ApplicationController
+  load_and_authorize_resource
   def create
     @project = Project.find(params[:project_id])
     @booking = @project.bookings.build(booking_params)

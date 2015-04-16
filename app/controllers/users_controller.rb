@@ -1,4 +1,5 @@
-class UsersController < ApplicationController 
+class UsersController < ApplicationController
+  load_and_authorize_resource
   def index
     @q = User.search(params[:q])
     @users = @q.result.where.not(status: "Resigned")

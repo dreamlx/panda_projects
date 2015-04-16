@@ -1,12 +1,8 @@
 class BillingsController < ApplicationController
-  load_and_authorize_resource :except => [:index]
+  load_and_authorize_resource
   def index
     @q = Billing.search(params[:q])
-    if current_user.role == "admin"
-      @billings = @q.result.page(params[:page])
-    else
-      @billings = @q.result.where(user_id: current_user.id).page(params[:page])
-    end
+    @billings = @q.result.page(params[:page])
     @b_total = @q.result
     # @r_total = 0
     # @b_total.each do |b|

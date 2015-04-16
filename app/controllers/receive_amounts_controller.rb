@@ -1,4 +1,5 @@
 class ReceiveAmountsController < ApplicationController
+  load_and_authorize_resource
   def new
     @billing = Billing.find(params[:billing_id])
     @receive_amount = @billing.receive_amounts.build

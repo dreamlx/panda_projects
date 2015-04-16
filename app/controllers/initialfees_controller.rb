@@ -1,4 +1,5 @@
 class InitialfeesController < ApplicationController
+  load_and_authorize_resource
   def index
     @q = Initialfee.search(params[:q])
     @initialfees = @q.result.page(params[:page])

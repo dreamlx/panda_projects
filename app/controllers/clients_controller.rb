@@ -1,12 +1,8 @@
 class ClientsController < ApplicationController
-  load_and_authorize_resource :except => [:index]
+  load_and_authorize_resource
   def index
     @q = Client.ransack(params[:q])
-    if current_user.role == "admin"
-      @clients = @q.result.page(params[:page])
-    else
-      @clients = @q.result.where(user_id: current_user.id).page(params[:page])
-    end
+    @clients = @q.result.page(params[:page])
   end
   
   def new

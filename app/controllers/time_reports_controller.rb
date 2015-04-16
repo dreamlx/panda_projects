@@ -1,9 +1,10 @@
 class TimeReportsController < ApplicationController
+  load_and_authorize_resource
   def index
     @q = Project.search(params[:q])
   end
 
-  def time_report                   
+  def time_report
     @project = Project.find(params[:personalcharge][:project_id])
     @period = Period.find(params[:personalcharge][:period_id])
     

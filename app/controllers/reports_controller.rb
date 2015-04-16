@@ -1,4 +1,5 @@
 class ReportsController < ApplicationController
+  load_and_authorize_resource
   def index
     @q = Project.search(params[:q])
     @reports = Report.page(params[:page])

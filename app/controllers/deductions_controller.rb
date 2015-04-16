@@ -1,4 +1,5 @@
 class DeductionsController < ApplicationController
+  load_and_authorize_resource
   def index
     @q = Deduction.ransack(params[:q])
     @deductions = @q.result.page(params[:page])
