@@ -1,0 +1,5 @@
+en:
+  devise:
+    failure:
+      invalid: "Invalid name or password"
+      not_found_in_database: "Invalid name or password"
