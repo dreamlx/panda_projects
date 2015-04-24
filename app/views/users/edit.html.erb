@@ -21,7 +21,7 @@
   <%= f.input :gender %>
   <%= f.input :status %>
   <%= f.input :GMU %>
-  <%= f.input :role %>
+  <%= f.input :role, collection: @roles %>
   <%= f.input :password %>
   <%= f.button :submit %>
 <% end %>

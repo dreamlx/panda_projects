@@ -19,6 +19,20 @@ class Ability
       can :manage,              Person
       can [:approve, :deny],    Report
       can :manage,              Personalcharge
+    elsif user.role == "hr_admin"
+      can :manage,              Billing
+      can :manage,              Expense
+      can [:read,:time_report], TimeReport
+      can :manage,              Client
+      can :manage,              Contact
+      can :manage,              Project
+      can :manage,              Ufafee
+      can :manage,              Dict
+      can :manage,              Industry
+      can :manage,              User
+      can :manage,              Person
+      can [:approve, :deny],    Report
+      can :manage,              Personalcharge
     elsif user.role == "gm"
       can :show,                Billing
       can :show,                Expense

@@ -1,10 +1,12 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
+  USER_ROLES = ["admin", "hr", "hr_admin", "gm", "partner", "manager", "accounting", ""]
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :authentication_keys => [:name]
 
   validates :name ,presence: true, uniqueness: { case_sensitive: false}
+  # validates :role, inclusion: USER_ROLES
   # attr_accessor :name
   # validates   :charge_rate, numericality: true
   belongs_to  :person

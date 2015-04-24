@@ -6,17 +6,9 @@
         radio_buttons: :horizontal_radio_and_checkboxes,
         file: :horizontal_file_input,
         boolean: :horizontal_boolean}) do |f| %>
-    <%= f.input :project_id, collection:  Project.all %>
+    <%= f.input :project_id, collection:  Project.select_projects %>
     <%= f.input :period_id, collection: Period.all %>
     <%= f.input :user_id, collection: User.all, label: 'Prepared by' %> 
-    <%= f.input :created_on, 
-                as: :date, 
-                html5: true, 
-                disabled: true  %>
-    <%= f.input :updated_on, 
-                as: :date, 
-                html5: true,
-                disabled: true  %></p>
     <%= f.input :number  %>
     <%= f.input :billing_date, 
                 as: :date, 

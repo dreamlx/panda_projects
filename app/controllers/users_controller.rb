@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   
   def edit
     @user = User.find(params[:id])
+    @roles = current_user.role == "hr_admin" ? User::USER_ROLES : User::USER_ROLES.reject{ |e| e == "hr_admin"}
   end
 
   def update

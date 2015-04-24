@@ -49,4 +49,8 @@ class Project < ActiveRecord::Base
   def name_with_initial
     "#{id}||#{job_code}"
   end
+
+  def self.select_projects
+    Hash[Project.order(job_code: :asc).select("id,job_code").all.map{|u| [u.job_code, u.id]}]
+  end
 end

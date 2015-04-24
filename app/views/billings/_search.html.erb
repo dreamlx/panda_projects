@@ -7,7 +7,7 @@
     boolean: :horizontal_boolean}) do |f| %>
   <div class="col-md-3">
     <%= f.input :number_eq,
-                collection: Billing.pluck(:number),
+                collection: Billing.order(number: :desc).pluck(:number),
                 required: false %>
     <%= f.input :number_cont, 
                 required: false %>
@@ -25,7 +25,7 @@
 
   <div class="col-md-3">
     <%= f.input :user_english_name_eq, 
-                collection: User.pluck(:english_name),
+                collection: User.order(english_name: :asc).pluck(:english_name),
                 required: false,
                 label: 'User eq' %>
     <%= f.input :user_english_name_cont, 
