@@ -17,7 +17,7 @@ class Ability
     elsif user.role == "hr"
       can :manage,              User
       can :manage,              Person
-      can [:approve, :deny],    Report
+      can [:index, :show, :approve, :deny],    Report
       can :manage,              Personalcharge
     elsif user.role == "hr_admin"
       can :manage,              Billing
@@ -31,7 +31,7 @@ class Ability
       can :manage,              Industry
       can :manage,              User
       can :manage,              Person
-      can [:approve, :deny],    Report
+      can [:index, :show, :approve, :deny],    Report
       can :manage,              Personalcharge
     elsif user.role == "gm"
       can :show,                Billing
@@ -47,18 +47,21 @@ class Ability
       can :show,                Expense
       can [:read, :time_report],TimeReport
       can :show,                Project
-      can [:create, :update, :add_projects, :fill_data, :submit], Report
+      can [:index, :create, :update, :add_projects, :fill_data, :submit], Report
+      can [:update],            Personalcharge
     elsif user.role == "manager"
       can :show,                Billing
       can :show,                Expense
       can [:read, :time_report],TimeReport
       can :show,                Project
-      can [:create, :update, :add_projects, :fill_data, :submit], Report
+      can [:index, :create, :update, :add_projects, :fill_data, :submit], Report
+      can [:update],            Personalcharge
     elsif user.role == "accounting"
       can :show,                Billing
       can :show,                Expense
     else
-      can [:create, :update, :add_projects, :fill_data, :submit], Report
+      can [:index, :create, :update, :add_projects, :fill_data, :submit], Report
+      can [:update],            Personalcharge
     end
   end
 end

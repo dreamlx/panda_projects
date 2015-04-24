@@ -245,12 +245,12 @@
                 <%= pcs_hours.sum(:hours) == 0 ? "" : pcs_hours.sum(:hours) %>
               </td>
               <td>
-                <%= pc_hours.meal_allowance == 0 ? "" : pc_hours.meal_allowance %></td>
+                <%= pc_hours ? (pc_hours.meal_allowance == 0 ? "" : pc_hours.meal_allowance) : "" %></td>
               <td>
                 <%= "" %>
               </td>
               <td>
-                <%= pc_hours.travel_allowance == 0 ? "" : pc_hours.travel_allowance %>
+                <%= pc_hours ? (pc_hours.travel_allowance == 0 ? "" : pc_hours.travel_allowance) : "" %>
               </td>
               <td>
                 <%= (pcs_hours.sum(:meal_allowance) + pcs_hours.sum(:travel_allowance) == 0) ? "" : (pcs_hours.sum(:meal_allowance) + 
