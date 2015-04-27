@@ -14,6 +14,10 @@ end
 every :day do
   rake "rake update:days_of_ageing"
 end
+
+every :day do
+  rake "rake update:billing_number"
+end
 #
 # every 4.days do
 #   runner "AnotherModel.prune_old_records"
