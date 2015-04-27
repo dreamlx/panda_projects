@@ -13,4 +13,7 @@ class Billing < ActiveRecord::Base
   belongs_to  :person
   belongs_to  :user
   has_many    :receive_amounts
+
+  scope :outstanding, -> {where(status: '0')}
+  scope :received, -> {where(status: '1')}
 end

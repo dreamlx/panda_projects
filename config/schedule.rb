@@ -10,6 +10,10 @@
 every :month do
   rake "rake period:create"
 end
+
+every :day do
+  rake "rake update:days_of_ageing"
+end
 #
 # every 4.days do
 #   runner "AnotherModel.prune_old_records"
