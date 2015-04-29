@@ -8,15 +8,15 @@
 # set :output, "/path/to/my/cron_log.log"
 #
 every :month do
-  rake "rake period:create"
+  "rake period:create"
 end
 
 every :day do
-  rake "rake update:days_of_ageing"
+  "rake update:days_of_ageing"
 end
 
 every :day do
-  rake "rake update:billing_number"
+  "rake update:billing_number"
 end
 #
 # every 4.days do
