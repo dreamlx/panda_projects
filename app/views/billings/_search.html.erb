@@ -6,10 +6,10 @@
     file: :horizontal_file_input,
     boolean: :horizontal_boolean}) do |f| %>
   <div class="col-md-3">
-    <%= f.input :number_eq,
-                collection: Billing.order(number: :desc).pluck(:number),
-                required: false %>
     <%= f.input :number_cont, 
+                required: false %>
+    <%= f.input :status_eq, 
+                collection: [["outstanding", "0"],["received", "1"]],
                 required: false %>
   </div>
 
@@ -18,9 +18,6 @@
                 collection: Project.order(:job_code).pluck(:job_code),
                 required: false,
                 label: 'Project eq' %>
-    <%= f.input :project_job_code_cont, 
-                required: false,
-                label: 'Project Cont' %>
   </div>
 
   <div class="col-md-3">
@@ -28,9 +25,6 @@
                 collection: User.order(english_name: :asc).pluck(:english_name),
                 required: false,
                 label: 'User eq' %>
-    <%= f.input :user_english_name_cont, 
-                required: false,
-                label: 'User Cont' %>
   </div>
   <div class="col-md-3">
     <%= f.input :period_number_gteq, 
@@ -41,12 +35,6 @@
                 collection: Period.period_number,
                 required: false,
                 label: 'Period To' %>
-  </div>
-
-  <div class="col-md-3">
-    <%= f.input :status_eq, 
-                collection: [["outstanding", "0"],["received", "1"]],
-                required: false %>
   </div>
   <div class="col-md-12">
     <%= f.button :submit, class: "btn btn-primary" %>
