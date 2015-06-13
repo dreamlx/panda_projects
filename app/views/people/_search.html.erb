@@ -7,29 +7,12 @@
     boolean: :horizontal_boolean}) do |f| %>
   <div class="col-md-4">
     <%= f.input :english_name_eq,
-                collection: Person.pluck(:english_name),
-                required: false %>
-    <%= f.input :english_name_cont,
-                required: false %>
-    <%= f.input :chinese_name_eq,
-                collection: Person.pluck(:chinese_name),
-                required: false %>
-    <%= f.input :chinese_name_cont,
-                required: false %>
-  </div>
-  <div class="col-md-4">
-    <%= f.input :employee_number_cont,
-                required: false %>
-    <%= f.input :charge_rate_gteq,
-                collection: Person.order(:charge_rate).uniq.pluck(:charge_rate),
-                required: false %>
-    <%= f.input :charge_rate_lteq,
-                collection: Person.order(:charge_rate).uniq.pluck(:charge_rate),
+                collection: Person.order(english_name: :asc).pluck(:english_name),
                 required: false %>
   </div>
   <div class="col-md-4">
     <%= f.input :grade_eq,
-                collection: Person.uniq.pluck(:grade),
+                collection: Person.order(grade: :asc).pluck(:grade).uniq,
                 required: false%>
   </div>
   <div class="col-md-12">

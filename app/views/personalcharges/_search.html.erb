@@ -10,9 +10,6 @@
                 collection: User.pluck(:english_name),
                 required: false,
                 label: 'User Select' %>
-    <%= f.input :user_english_name_cont, 
-                required: false,
-                label: 'User Cont' %>
     <%= f.input :state_eq, 
                 collection: ["pending", "submitted", "approved", "denied"],
                 required: false,

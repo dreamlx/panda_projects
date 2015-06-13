@@ -1,19 +1,21 @@
-<div class="col-md-6">
-  <%= simple_form_for @personalcharge do |f| %>
+<%= simple_form_for @personalcharge do |f| %>
+  <div class="col-md-6">
     <%= f.input :user_id, collection: User.all %>
-    <%= f.input :project_id, collection: Project.all %>
+    <%= f.input :project_id, collection: Project.order_with_job_code %>
     <%= f.input :period_id, collection: Period.all %>
-    <%= f.input :created_on, as: :date, html5: true, disabled: true  %>
-    <%= f.input :updated_on, as: :date, html5: true, disabled: true  %>
     <%= f.input :hours  %>
-    <%= f.input :service_fee, disabled: true  %>
-    <%= f.input :PFA_of_service_fee, disabled: true  %>
     <%= f.input :reimbursement  %>
     <%= f.input :meal_allowance  %>
     <%= f.input :travel_allowance  %>
+  </div>
+  <div class="col-md-6">
+    <%= f.input :service_fee, disabled: true  %>
+    <%= f.input :PFA_of_service_fee, disabled: true  %>
+  </div>
+  <div class="col-md-12">
     <%= f.button :submit %>
-  <% end %>
-</div>
+  </div>
+<% end %>
 <div class="col-md-12">
   <%= link_to 'Back', personalcharges_url %>
 </div>

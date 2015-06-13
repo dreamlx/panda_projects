@@ -1,13 +1,15 @@
-<div class="col-md-6">
-  <%= simple_form_for @ufafee do |f| %>
-    <%= f.input :project_id, collection: Project.all %>
+<%= simple_form_for @ufafee do |f| %>
+  <div class="col-md-6">
+    <%= f.input :project_id, collection: Project.order_with_job_code %>
     <%= f.input :period_id, collection: Period.all %>
-    <%= f.input :created_on, as: :date, html5: true, disabled: true  %>
-    <%= f.input :updated_on, as: :date, html5: true, disabled: true  %>
-    <%= f.input :number, disabled: true  %>
-    <%= f.input :amount, disabled: true  %>
     <%= f.input :service_UFA  %>
     <%= f.input :expense_UFA  %>
+  </div>
+  <div class="col-md-6">
+    <%= f.input :number, disabled: true  %>
+    <%= f.input :amount, disabled: true  %>
+  </div>
+  <div class="col-md-12">
     <%= f.button :submit  %>
-  <% end %>
-</div>
+  </div>
+<% end %>

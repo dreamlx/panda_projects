@@ -50,6 +50,10 @@ class Project < ActiveRecord::Base
     "#{id}||#{job_code}"
   end
 
+  def self.order_with_job_code
+    Project.order(job_code: :asc).pluck(:job_code)
+  end
+
   def self.select_projects
     Hash[Project.order(job_code: :asc).select("id,job_code").all.map{|u| [u.job_code, u.id]}]
   end
