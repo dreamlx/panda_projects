@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :deductions
   resources :projects do
     post :close, on: :member
+    post :open, on: :member
     resources :bookings
   end
   resources :dicts, only: [:index, :new, :create, :edit, :update, :destroy]

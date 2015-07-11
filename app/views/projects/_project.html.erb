@@ -28,4 +28,5 @@
   <td><%= project.description %></td>
   <td><%= link_to_if ((can? :update, project) && project.status && project.status.code == '1'), 'Edit', edit_project_path(project) %></td>
   <td><%= link_to_if ((can? :close, project) && project.status && project.status.code == '1'), 'Close', close_project_path(project), data: {confirm: ('Are you sure?')}, method: :post %></td>
+  <td><%= link_to_if ((can? :open, project) && project.status && project.status.code == '0'), 'Open', open_project_path(project), data: {confirm: ('Are you sure?')}, method: :post %></td>
 </tr>

@@ -56,6 +56,12 @@ class ProjectsController < ApplicationController
     redirect_to project
   end
 
+  def open
+    project = Project.find(params[:id])
+    project.update(status_id: Dict.find_by_category_and_code(:prj_status, '1').id)
+    redirect_to project
+  end
+
   def destroy
     Project.find(params[:id]).destroy
     redirect_to projects_url

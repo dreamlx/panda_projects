@@ -7,6 +7,10 @@ class PersonalchargesController < ApplicationController
     @personalcharges_num    = @q.result.joins(:project).where("job_code REGEXP '^[0-9]'")
     @personalcharges_char   = @q.result.joins(:project).where("job_code REGEXP '^[a-z]'")
     @personalcharges_total  = @q.result
+    respond_to do |format|
+      format.html
+      format.xls { send_data @personalcharges_total.to_xls, content_type: 'application/vnd.ms-excel', filename: 'personalcharges.xls' }
+    end
   end
 
   def new

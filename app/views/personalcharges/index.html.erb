@@ -9,7 +9,6 @@
     <%= render 'search' %>
   </div>
 </div>
-
 <div class="col-md-12">
   <%= paginate @personalcharges %>
   <table class="table table-striped">
@@ -34,7 +33,7 @@
     </thead>
     <tbody>
       <%= render @personalcharges %>
-      <%#= render 'total' %>
+      <%= render 'total' %>
     </tbody>
   </table>
   <%= paginate @personalcharges %>
