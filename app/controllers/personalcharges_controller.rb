@@ -9,7 +9,7 @@ class PersonalchargesController < ApplicationController
     @personalcharges_total  = @q.result
     respond_to do |format|
       format.html
-      format.xls { send_data @personalcharges_total.to_xls, content_type: 'application/vnd.ms-excel', filename: 'personalcharges.xls' }
+      format.xls { send_data @personalcharges_total.to_xls, content_type: 'application/vnd.ms-excel', filename: "#{DateTime.now.to_s(:number)}personalcharges.xls" }
     end
   end
 
