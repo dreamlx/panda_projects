@@ -9,7 +9,7 @@ class PersonalchargesController < ApplicationController
     @personalcharges_total  = @q.result
     respond_to do |format|
       format.html
-      format.xls { send_data @personalcharges_total.to_xls, content_type: 'application/vnd.ms-excel', filename: "#{DateTime.now.to_s(:number)}personalcharges.xls" }
+      format.xls { send_data @personalcharges_total.to_xls(:columns => [{:project => [{:client => [:english_name]}]}, {:project => [:job_code]}, {:period => [:number]}, {:user => [:english_name]}, :hours, :service_fee, :reimbursement, :meal_allowance, :travel_allowance ], :headers => ['Client name', 'Job code', 'Period', 'Employee', 'Hours', 'Service fee', 'Reimbursement', 'Meal allowance', 'Travel allowance']), content_type: 'application/vnd.ms-excel', filename: "#{DateTime.now.to_s(:number)}personalcharges.xls" }
     end
   end
 
