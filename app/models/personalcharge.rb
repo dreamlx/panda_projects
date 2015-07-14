@@ -26,6 +26,10 @@ class Personalcharge < ActiveRecord::Base
     end
   end
 
+  def expense_sum
+    reimbursement + meal_allowance + travel_allowance
+  end
+
 
   private 
     def save_PFA_of_service_fee
