@@ -36,6 +36,6 @@
   </div>
   <div class="col-md-12">
     <%= f.button :submit, class: "btn btn-primary" %>
-    <%= link_to t('export_data'), personalcharges_path(format: :xls, :q => params[:q]) %>
+    <%= link_to t('export_data'), personalcharges_path(format: :xlsx, :q => params[:q]) %>
   </div>
 <% end %>
