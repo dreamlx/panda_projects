@@ -1,47 +1,64 @@
 wb = xlsx_package.workbook
-wb.add_worksheet(name: DateTime.now.to_s(:number)) do |sheet|
-  sheet.add_row ['Client name', 'Job code', 'Period', 'Employee', 'Hours', 'Service fee', 'Reimbursement', 'Meal allowance', 'Travel allowance', 'Expense sum']
-  @personalcharges_total.each do |personalcharge|
-    sheet.add_row [ (personalcharge.project && personalcharge.project.client) ? personalcharge.project.client.english_name : "",
-                    personalcharge.project ? personalcharge.project.job_code : "",
-                    personalcharge.period.number,
-                    personalcharge.user ? personalcharge.user.english_name : "",
-                    personalcharge.hours, 
-                    personalcharge.service_fee, 
-                    personalcharge.reimbursement,
-                    personalcharge.meal_allowance,
-                    personalcharge.travel_allowance,
-                    personalcharge.expense_sum]
+wb.styles do |s|
+  blue_cell =  s.add_style  :bg_color => "ff3399", :fg_color => "000000"
+  wb.add_worksheet(name: DateTime.now.to_s(:number)) do |sheet|
+    sheet.add_row ['Client name', 'Job code', 'Period', 'Employee', 'Hours', 'Service fee', 'Reimbursement', 'Meal allowance', 'Travel allowance', 'Expense sum']
+    @personalcharges_total.each do |personalcharge|
+      if personalcharge.project &&  (personalcharge.project.job_code =~ /^[0-9]/)
+        sheet.add_row [ (personalcharge.project && personalcharge.project.client) ? personalcharge.project.client.english_name : "",
+                        personalcharge.project ? personalcharge.project.job_code : "",
+                        personalcharge.period.number,
+                        personalcharge.user ? personalcharge.user.english_name : "",
+                        personalcharge.hours, 
+                        personalcharge.service_fee, 
+                        personalcharge.reimbursement,
+                        personalcharge.meal_allowance,
+                        personalcharge.travel_allowance,
+                        personalcharge.expense_sum],
+                        :style => [blue_cell,blue_cell,blue_cell,blue_cell,blue_cell,blue_cell,blue_cell,blue_cell,blue_cell,blue_cell]
+      else
+        sheet.add_row [ (personalcharge.project && personalcharge.project.client) ? personalcharge.project.client.english_name : "",
+                        personalcharge.project ? personalcharge.project.job_code : "",
+                        personalcharge.period.number,
+                        personalcharge.user ? personalcharge.user.english_name : "",
+                        personalcharge.hours, 
+                        personalcharge.service_fee, 
+                        personalcharge.reimbursement,
+                        personalcharge.meal_allowance,
+                        personalcharge.travel_allowance,
+                        personalcharge.expense_sum]
+      end
+    end
+    sheet.add_row ['Client name', 'Job code', 'Period', 'Employee', 'Hours', 'Service fee', 'Reimbursement', 'Meal allowance', 'Travel allowance', 'Expense sum']
+    sheet.add_row [ 'subtotal', 
+                    '' , 
+                    '' ,
+                    '', 
+                    @personalcharges_num.sum(:hours), 
+                    @personalcharges_num.sum(:service_fee),
+                    @personalcharges_num.sum(:reimbursement),
+                    @personalcharges_num.sum(:meal_allowance),
+                    @personalcharges_num.sum(:travel_allowance),
+                    @personalcharges_num.sum(:reimbursement) + @personalcharges_num.sum(:meal_allowance) + @personalcharges_num.sum(:travel_allowance)]
+    sheet.add_row [ 'subtotal', 
+                    '' , 
+                    '' ,
+                    '', 
+                    @personalcharges_char.sum(:hours), 
+                    @personalcharges_char.sum(:service_fee),
+                    @personalcharges_char.sum(:reimbursement),
+                    @personalcharges_char.sum(:meal_allowance),
+                    @personalcharges_char.sum(:travel_allowance),
+                    @personalcharges_char.sum(:reimbursement) + @personalcharges_char.sum(:meal_allowance) + @personalcharges_char.sum(:travel_allowance)]
+    sheet.add_row [ 'All total', 
+                    '' , 
+                    '' ,
+                    '', 
+                    @personalcharges_total.sum(:hours), 
+                    @personalcharges_total.sum(:service_fee),
+                    @personalcharges_total.sum(:reimbursement),
+                    @personalcharges_total.sum(:meal_allowance),
+                    @personalcharges_total.sum(:travel_allowance),
+                    @personalcharges_total.sum(:reimbursement) + @personalcharges_total.sum(:meal_allowance) + @personalcharges_total.sum(:travel_allowance)]
   end
-  sheet.add_row ['Client name', 'Job code', 'Period', 'Employee', 'Hours', 'Service fee', 'Reimbursement', 'Meal allowance', 'Travel allowance', 'Expense sum']
-  sheet.add_row [ 'subtotal', 
-                  '' , 
-                  '' ,
-                  '', 
-                  @personalcharges_num.sum(:hours), 
-                  @personalcharges_num.sum(:service_fee),
-                  @personalcharges_num.sum(:reimbursement),
-                  @personalcharges_num.sum(:meal_allowance),
-                  @personalcharges_num.sum(:travel_allowance),
-                  @personalcharges_num.sum(:reimbursement) + @personalcharges_num.sum(:meal_allowance) + @personalcharges_num.sum(:travel_allowance)]
-  sheet.add_row [ 'subtotal', 
-                  '' , 
-                  '' ,
-                  '', 
-                  @personalcharges_char.sum(:hours), 
-                  @personalcharges_char.sum(:service_fee),
-                  @personalcharges_char.sum(:reimbursement),
-                  @personalcharges_char.sum(:meal_allowance),
-                  @personalcharges_char.sum(:travel_allowance),
-                  @personalcharges_char.sum(:reimbursement) + @personalcharges_char.sum(:meal_allowance) + @personalcharges_char.sum(:travel_allowance)]
-  sheet.add_row [ 'All total', 
-                  '' , 
-                  '' ,
-                  '', 
-                  @personalcharges_total.sum(:hours), 
-                  @personalcharges_total.sum(:service_fee),
-                  @personalcharges_total.sum(:reimbursement),
-                  @personalcharges_total.sum(:meal_allowance),
-                  @personalcharges_total.sum(:travel_allowance),
-                  @personalcharges_total.sum(:reimbursement) + @personalcharges_total.sum(:meal_allowance) + @personalcharges_total.sum(:travel_allowance)]
 end

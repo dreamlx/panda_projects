@@ -1,18 +1,18 @@
 <tr>
-  <td><%= link_to personalcharge.project.job_code, personalcharge.project if personalcharge.project %></td>
-  <td><%= link_to personalcharge.user.english_name, personalcharge.user if personalcharge.user%></td>
-  <td><%= personalcharge.period.number if personalcharge.period %></td>
-  <td><%= personalcharge.hours %></td>
-  <td><%= personalcharge.service_fee %></td>
-  <td><%= personalcharge.project.service_PFA if personalcharge.project %></td>
-  <td><%= personalcharge.PFA_of_service_fee %></td>
-  <td><%= personalcharge.reimbursement %></td>
-  <td><%= personalcharge.meal_allowance %></td>
-  <td><%= personalcharge.travel_allowance %></td>
-  <td><%= personalcharge.charge_date %></td>
-  <td><%= personalcharge.created_on.to_date %></td>
-  <td><%= personalcharge.updated_on.to_date %></td>
-  <td><%= personalcharge.state %></td>
-  <td><%= link_to_if (can? :update, personalcharge), 'Edit', edit_personalcharge_path(personalcharge) %></td>
-  <td><%= link_to_if (can? :destroy, personalcharge), 'Destroy', personalcharge, method: :delete, data: {confirm: t('are_you_sure')} %></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= link_to personalcharge.project.job_code, personalcharge.project if personalcharge.project %></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= link_to personalcharge.user.english_name, personalcharge.user if personalcharge.user%></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= personalcharge.period.number if personalcharge.period %></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= personalcharge.hours %></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= personalcharge.service_fee %></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= personalcharge.project.service_PFA if personalcharge.project %></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= personalcharge.PFA_of_service_fee %></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= personalcharge.reimbursement %></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= personalcharge.meal_allowance %></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= personalcharge.travel_allowance %></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= personalcharge.charge_date %></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= personalcharge.created_on.to_date %></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= personalcharge.updated_on.to_date %></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= personalcharge.state %></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= link_to_if (can? :update, personalcharge), 'Edit', edit_personalcharge_path(personalcharge) %></td>
+  <td class=<%= "danger" if personalcharge.project && (personalcharge.project.job_code =~ /^[0-9]/) %> ><%= link_to_if (can? :destroy, personalcharge), 'Destroy', personalcharge, method: :delete, data: {confirm: t('are_you_sure')} %></td>
 </tr>
