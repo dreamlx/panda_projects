@@ -1,0 +1,28 @@
+<%= simple_form_for(@user, html: { class: 'form-horizontal' }, 
+    wrapper: :horizontal_form,
+    wrapper_mappings: {
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean}) do |f|%>
+  <%= f.input :email, as: :email %>
+  <%= f.input :name %>
+  <%= f.input :chinese_name %>
+  <%= f.input :english_name %>
+  <%= f.input :department %>
+  <%= f.input :grade %>
+  <%= f.input :charge_rate %>
+  <%= f.input :employeement_date, as: :date, html5: true %>
+  <%= f.input :address %>
+  <%= f.input :postalcode %>
+  <%= f.input :mobile %>
+  <%= f.input :tel %>
+  <%= f.input :extension %>
+  <%= f.input :gender %>
+  <%= f.input :status %>
+  <%= f.input :GMU %>
+  <%= f.input :role, collection: @roles %>
+  <%= f.input :password if @user.new_record? %>
+  <%= f.input :password_confirmation if @user.new_record? %>
+  <%= f.button :submit %>
+<% end %>

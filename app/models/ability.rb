@@ -13,6 +13,7 @@ class Ability
       can :manage,              Ufafee
       can :manage,              Dict
       can :manage,              Industry
+      can [:edit_password, :update], User, :id => user.id
       # can :manage, :all
     elsif user.role == "hr"
       can :manage,              User
@@ -42,6 +43,7 @@ class Ability
       can :show,                Project
       can :index,               Personalcharge
       can [:read, :create, :update],  Dict
+      can [:edit_password, :update], User, :id => user.id
     elsif user.role == "partner"
       can :show,                Billing
       can :show,                Expense
@@ -49,6 +51,7 @@ class Ability
       can :show,                Project
       can [:index, :create, :update, :add_projects, :fill_data, :submit], Report
       can [:update],            Personalcharge
+      can [:edit_password, :update], User, :id => user.id
     elsif user.role == "manager"
       can :show,                Billing
       can :show,                Expense
@@ -56,12 +59,15 @@ class Ability
       can :show,                Project
       can [:index, :create, :update, :add_projects, :fill_data, :submit], Report
       can [:update],            Personalcharge
+      can [:edit_password, :update], User, :id => user.id
     elsif user.role == "accounting"
       can :show,                Billing
       can :show,                Expense
+      can [:edit_password, :update], User, :id => user.id
     else
       can [:index, :create, :update, :add_projects, :fill_data, :submit], Report
       can [:update],            Personalcharge
+      can [:edit_password, :update], User, :id => user.id
     end
   end
 end

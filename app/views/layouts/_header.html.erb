@@ -28,7 +28,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('user') %><span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li class="<%= 'active' if params[:controller] == 'users' %>"><%= link_to t('user'), users_path %></li>
-              <li class="<%= 'active' if params[:controller] == 'people' %>"><%= link_to 'Employee', people_url %></li>
+              <li class="<%= 'active' if params[:controller] == 'people' %>"><%#= link_to 'Employee', people_url %></li>
             </ul>
           </li>
           <li class="dropdown">
@@ -55,7 +55,7 @@
               <li class="<%= 'active' if params[:controller] == 'periods' %>"><%= link_to t('period'), periods_path %></li>
             </ul>
           </li>
-          <li><%= link_to current_user.name, edit_user_registration_path %></li>
+          <li><%= link_to current_user.name, edit_password_user_path(current_user) %></li>
           <li>
             <%= link_to destroy_user_session_path, method: :delete do %>
               <i class="glyphicon glyphicon-log-out"></i>
@@ -64,7 +64,7 @@
         </ul>
       <% else %>
         <ul class="nav navbar-nav navbar-right">
-          <li><%= link_to t('signup'), new_user_registration_path %></li>
+          <li><%#= link_to t('signup'), new_user_registration_path %></li>
           <li><%= link_to t('signin'), new_user_session_path %></li>
         </ul>
       <% end %>

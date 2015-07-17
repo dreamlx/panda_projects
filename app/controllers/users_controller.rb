@@ -2,7 +2,21 @@ class UsersController < ApplicationController
   load_and_authorize_resource
   def index
     @q = User.search(params[:q])
-    @users = @q.result.where.not(status: "Resigned")
+    @users = @q.result
+  end
+
+  def new
+    @user = User.new
+    @roles = current_user.role == "hr_admin" ? User::USER_ROLES : User::USER_ROLES.reject{ |e| e == "hr_admin"}
+  end
+
+  def create
+    @user = User.create(user_params)
+    if @user.save
+      redirect_to @user
+    else
+      render 'new'
+    end
   end
   
   def edit
