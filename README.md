@@ -15,11 +15,6 @@ run `rake secret`, the revise the belowed file
 secrets.yml
 ```
 
-run vi config/environments/production.rb
-```
-config.assets.compile = true
-```
-
 if GemNotFound
 remove the `.ruby-version` and `.ruby-gemset` and reboot the system
 then bundle it again.
