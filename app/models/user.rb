@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   USER_ROLES = ["admin", "hr", "hr_admin", "gm", "partner", "manager", "accounting", ""]
   devise :database_authenticatable, #:registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :authentication_keys => [:name]
+         :recoverable, :rememberable, :trackable, :validatable,:session_limitable, :authentication_keys => [:name]
 
   validates :name ,presence: true, uniqueness: { case_sensitive: false}
   # validates :role, inclusion: USER_ROLES

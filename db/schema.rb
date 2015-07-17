@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150411130547) do
+ActiveRecord::Schema.define(version: 20150717072435) do
 
   create_table "billings", force: :cascade do |t|
     t.datetime "created_on"
@@ -440,6 +440,7 @@ ActiveRecord::Schema.define(version: 20150411130547) do
     t.string   "status",                 limit: 255
     t.string   "GMU",                    limit: 255
     t.string   "role",                   limit: 255
+    t.string   "unique_session_id",      limit: 20
   end
 
   create_table "votes", force: :cascade do |t|

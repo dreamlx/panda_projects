@@ -65,3 +65,4 @@ gem 'cancancan'
 gem 'state_machines-activerecord'
 gem 'whenever', :require => false
 gem 'axlsx_rails'
+gem 'devise_security_extension'
