@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<%= link_to_if (can? :update, @billing), 'Edit', edit_billing_path(@billing) %> |
+<%= link_to_if ((can? :update, @billing) && (@billing.status == '0')), 'Edit', edit_billing_path(@billing) %> |
 <%= link_to 'Back', billings_url %>
 <hr>
 <%= link_to 'New receive_amount', new_billing_receive_amount_path(billing_id: @billing) if @billing.status == '0'%>

@@ -49,7 +49,8 @@ class Ability
       can :show,                Expense
       can [:read, :time_report],TimeReport
       can :show,                Project
-      can [:index, :create, :update, :add_projects, :fill_data, :submit], Report
+      can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
+      can :show,                Report, :state => "approved", :user_id => user.id
       can [:update],            Personalcharge
       can [:edit_password, :update], User, :id => user.id
     elsif user.role == "manager"
@@ -57,7 +58,8 @@ class Ability
       can :show,                Expense
       can [:read, :time_report],TimeReport
       can :show,                Project
-      can [:index, :create, :update, :add_projects, :fill_data, :submit], Report
+      can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
+      can :show,                Report, :state => "approved", :user_id => user.id
       can [:update],            Personalcharge
       can [:edit_password, :update], User, :id => user.id
     elsif user.role == "accounting"
@@ -65,7 +67,8 @@ class Ability
       can :show,                Expense
       can [:edit_password, :update], User, :id => user.id
     else
-      can [:index, :create, :update, :add_projects, :fill_data, :submit], Report
+      can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
+      can :show,                Report, :state => "approved", :user_id => user.id
       can [:update],            Personalcharge
       can [:edit_password, :update], User, :id => user.id
     end

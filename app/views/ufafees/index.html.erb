@@ -36,8 +36,8 @@
         <td><%= ufafee.amount %></td>
         <td><%= ufafee.service_UFA %></td>
         <td><%= ufafee.expense_UFA %></td>
-        <td><%= link_to 'Edit', edit_ufafee_path(ufafee) if ufafee.project.status.title == 'Active'%></td>
-        <td><%= link_to 'Destroy', ufafee, method: :delete, data: {confirm: 'Are you sure?'} if ufafee.project.status.title == 'Active'%></td>
+        <td><%= link_to 'Edit', edit_ufafee_path(ufafee) if ufafee.project && ufafee.project.status && ufafee.project.status.title == 'Active'%></td>
+        <td><%= link_to 'Destroy', ufafee, method: :delete, data: {confirm: 'Are you sure?'} if ufafee.project && ufafee.project.status && ufafee.project.status.title == 'Active'%></td>
       </tr>
     <% end %>
   </tbody>

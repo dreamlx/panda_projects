@@ -58,6 +58,7 @@ class BillingsController < ApplicationController
 
   def update
     @billing = Billing.find(params[:id])
+    return redirect_to @billing if @billing.status == '1'
     if @billing.update(billing_params)
       tax_rate = 5.26/100
       @billing.business_tax = @billing.service_billing * tax_rate

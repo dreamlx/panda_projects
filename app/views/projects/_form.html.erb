@@ -18,11 +18,13 @@
           <%= f.input :description, as: :text %>
           <%= f.input :service_id, collection: Dict.selected_service_codes, label: 'Service line code' %>
           <%= f.input :revenue_id, collection: Dict.selected_revenues, label: 'Job revenue type' %>
-          <%= f.input :starting_date, as: :date, html5: true %>
-          <%= f.input :ending_date, as: :date, html5: true %>
           <%= f.input :estimated_annual_fee %>
           <%= f.input :risk_id, collection: Dict.selected_risks, label: 'Collection risk' %>
           <%= f.input :status_id, collection: Dict.selected_statuses,  label: 'Job status' %>
+          <%= f.input :partner_id,    collection: User.order_english_name, label: 'Engagement partner' %>
+          <%= f.input :manager_id,    collection: User.order_english_name, label: 'Engagement manager' %>
+          <%= f.input :referring_id,  collection: User.order_english_name, label: 'Job source' %>
+          <%= f.input :contracted_service_fee %>
         </div>
       </div>
     </div>
@@ -31,10 +33,6 @@
       <div class="panel panel-default">
         <div class="panel-heading">Estimated and Budgeted</div>
         <div class="panel-body">
-          <%= f.input :partner_id,    collection: User.order_english_name, label: 'Engagement partner' %>
-          <%= f.input :manager_id,    collection: User.order_english_name, label: 'Engagement manager' %>
-          <%= f.input :referring_id,  collection: User.order_english_name, label: 'Job source' %>
-          <%= f.input :contracted_service_fee %>
           <%= f.input :estimated_commision %>
           <%= f.input :estimated_outsorcing %>
           <%= f.input :budgeted_service_fee %>
@@ -42,6 +40,8 @@
           <%= f.input :expense_PFA, label: 'expense PFA' %>
           <%= f.input :contracted_expense %>
           <%= f.input :budgeted_expense %>
+          <%= f.input :starting_date, as: :date, html5: true %>
+          <%= f.input :ending_date, as: :date, html5: true %>
         </div>
       </div>
     </div>

@@ -5,13 +5,15 @@
     radio_buttons: :horizontal_radio_and_checkboxes,
     file: :horizontal_file_input,
     boolean: :horizontal_boolean}) do |f| %>
-  <div class="col-md-6">
+  <div class="col-md-4">
     <%= f.input :client_code_cont,
                 required: false %>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-4">
     <%= f.input :chinese_name_cont,
                 required: false %>
+  </div>
+  <div class="col-md-4">
     <%= f.input :english_name_cont,
                 required: false %>
   </div>

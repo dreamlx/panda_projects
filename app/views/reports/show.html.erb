@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Thinkbridge</title>
+  <title><%= @report.period.number %><%= @report.user.english_name %><%= DateTime.now.to_s(:number) %></title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -82,7 +82,7 @@
           <!-- projects -->
           <% @projects.each do |project| %>
             <tr>
-              <td><%= truncate(project.client.english_name, length: 24) %></td>
+              <td><%= truncate(project.client.english_name, length: 20) %></td>
               <td></td>
               <% 15.times  do |col| %>
                 <% personalcharge = project.personalcharges.find_by(

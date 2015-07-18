@@ -1,6 +1,6 @@
 <%= simple_form_for @ufafee do |f| %>
   <div class="col-md-6">
-    <%= f.input :project_id, collection: Project.order_with_job_code %>
+    <%= f.input :project_id, collection: Project.select_projects %>
     <%= f.input :period_id, collection: Period.all %>
     <%= f.input :service_UFA  %>
     <%= f.input :expense_UFA  %>

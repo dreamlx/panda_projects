@@ -1,6 +1,7 @@
 <%= simple_form_for @expense do |f| %>
   <div class="col-md-6">
     <%= f.input :project_id, collection: Project.order(:job_code) %>
+    <%= f.input :period_id, collection: Period.order(:number) %>
     <%= f.input :commission %>
     <%= f.input :outsourcing %>
     <%= f.input :tickets %>
@@ -11,9 +12,6 @@
     <%= f.input :cash_advance %>
     <%= f.input :payment_on_be_half %>
     <%= f.input :memo %>
-  </div>
-  <div class="col-md-6">
-    <%= f.input :period_id, collection: Period.order(:number) %>
   </div>
   <div class="col-md-12">
     <%= f.button :submit %>

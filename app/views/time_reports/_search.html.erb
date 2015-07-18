@@ -6,12 +6,12 @@
     file: :horizontal_file_input,
     boolean: :horizontal_boolean}) do |f| %>
   <div class="col-md-12">
-    <%= collection_select(:period, :start_period_number, Period.all, :number, :number) %>
-    <%= collection_select(:period, :end_period_number, Period.all, :number, :number) %>
+    <%= collection_select(:period, :start_period_number, Period.order(number: :desc), :number, :number) %>
+    <%= collection_select(:period, :end_period_number, Period.order(number: :desc), :number, :number) %>
   </div>
   <div class="col-md-4">
     <%= f.input :partner_english_name_eq, 
-                collection: User.order_english_name, 
+                collection: User.select_partners, 
                 required: false,
                 label: 'Partner' %>
     <%= f.input :referring_english_name_eq,
@@ -19,7 +19,7 @@
                 required: false,
                 label: 'Job Ref'%>
     <%= f.input :manager_english_name_eq, 
-                collection: User.order_english_name, 
+                collection: User.select_managers, 
                 required: false,
                 label: 'Manager' %>
   </div>
