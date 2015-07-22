@@ -25,7 +25,7 @@
   </div>
   <div class="col-md-4">
     <%= f.input :contract_number_eq, 
-                collection: Project.order(:contract_number).pluck(:contract_number), 
+                collection: Project.order(:contract_number).pluck(:contract_number).uniq, 
                 required: false,
                 label: 'Contact Number' %>
     <%= f.input :job_code_cont, 

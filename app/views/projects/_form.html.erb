@@ -24,7 +24,7 @@
           <%= f.input :partner_id,    collection: User.order_english_name, label: 'Engagement partner' %>
           <%= f.input :manager_id,    collection: User.order_english_name, label: 'Engagement manager' %>
           <%= f.input :referring_id,  collection: User.order_english_name, label: 'Job source' %>
-          <%= f.input :contracted_service_fee %>
+          
         </div>
       </div>
     </div>
@@ -33,6 +33,7 @@
       <div class="panel panel-default">
         <div class="panel-heading">Estimated and Budgeted</div>
         <div class="panel-body">
+          <%= f.input :contracted_service_fee %>
           <%= f.input :estimated_commision %>
           <%= f.input :estimated_outsorcing %>
           <%= f.input :budgeted_service_fee %>

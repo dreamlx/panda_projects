@@ -1,7 +1,7 @@
 <%= simple_form_for @expense do |f| %>
   <div class="col-md-6">
     <%= f.input :project_id, collection: Project.order(:job_code) %>
-    <%= f.input :period_id, collection: Period.order(:number) %>
+    <%= f.input :period_id, collection: Period.order(number: :desc) %>
     <%= f.input :commission %>
     <%= f.input :outsourcing %>
     <%= f.input :tickets %>

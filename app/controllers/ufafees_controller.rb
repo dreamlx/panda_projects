@@ -34,7 +34,7 @@ class UfafeesController < ApplicationController
     @ufafee = Ufafee.find(params[:id])
     if @ufafee.update(ufafee_params)
       @ufafee.update(amount: (@ufafee.service_UFA + @ufafee.expense_UFA))
-      redirect_to @ufafee
+      redirect_to ufafees_url
     else
       render 'edit'
     end
