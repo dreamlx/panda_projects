@@ -57,7 +57,7 @@ class ReportsController < ApplicationController
 
   def add_projects
     @report = Report.find(params[:id])
-    if params[:project] && params[:project][:job_code]
+    if params[:project] && !params[:project][:job_code].empty?
       @report.projects << Project.find_by_job_code(params[:project][:job_code])
     end
   end
@@ -92,7 +92,7 @@ class ReportsController < ApplicationController
     redirect_to reports_url
   end
 
-    def deny
+  def deny
     report = Report.find(params[:id])
     personalcharges = Personalcharge.where(user_id: report.user_id,  period_id: report.period_id)
     personalcharges.each do |personalcharge|
@@ -104,7 +104,102 @@ class ReportsController < ApplicationController
     redirect_to reports_url
   end
 
+  def json_data
+    @report = Report.find(params[:report_id])
+    @projects = @report.projects
+    @additional_projects = Project.where(job_code: Report.additional_items.values)
+    start_date  = @report.period.starting_date
+    end_date    = @report.period.ending_date
+    @total = Array.new
+    16.times do |col|
+      col_date = start_date + col
+      if col_date <= end_date
+        @total << Personalcharge.where(charge_date: col_date,project_id: @projects.ids, user_id: @report.user_id ).sum(:hours)  + 
+                  Personalcharge.where(charge_date: col_date, project_id: @additional_projects.ids, user_id: @report.user_id ).sum(:hours)
+      end
+    end
+    @overtime = Array.new
+    16.times  do |col|
+      project_time = Personalcharge.where( charge_date: start_date + col, project_id: @projects.ids, user_id: @report.user_id).sum(:hours)
+                     addtional_time = Personalcharge.where( charge_date: start_date + col, project_id: @additional_projects.ids, user_id: @report.user_id ).sum(:hours)
+      if weekend(start_date + col.days)
+        @overtime << project_time + addtional_time
+      else
+        @overtime << (((project_time + addtional_time) > 8) ? (project_time + addtional_time -8) : 0)
+      end             
+    end
+    @total_hours = Array.new
+    @total_expenses = Array.new
+    @projects.each do |project|
+      @total_hours << project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id ).sum(:hours)
+      @total_expenses << project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id ).sum(:meal_allowance) + 
+                      project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id).sum(:travel_allowance)
+    end
+    (20 - @projects.count).times do |row|
+      @total_hours << ""
+      @total_expenses << ""
+    end
+    @additional_projects.each do |project|
+      @total_hours << project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id ).sum(:hours)
+      @total_expenses << project.personalcharges.where(user_id: @report.user_id, period_id: @report.period_id).sum(:meal_allowance) + 
+                project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id ).sum(:travel_allowance)
 
+    end
+    @periods = Array.new
+    @periods << Personalcharge.where(
+                    period_id: @report.period_id, 
+                    project_id: @projects.ids,
+                    user_id: @report.user_id
+                    ).sum(:hours)  + 
+                  Personalcharge.where(
+                    period_id: @report.period_id, 
+                    project_id: @additional_projects.ids,
+                    user_id: @report.user_id
+                    ).sum(:hours)
+    @periods << Personalcharge.where(
+                    period_id: @report.period_id, 
+                    project_id: @projects.ids,
+                    user_id: @report.user_id
+                    ).sum(:meal_allowance) + 
+                  Personalcharge.where(
+                    period_id: @report.period_id, 
+                    project_id: @additional_projects.ids,
+                    user_id: @report.user_id
+                    ).sum(:meal_allowance)
+    @periods << 0
+    @periods << Personalcharge.where(
+                    period_id: @report.period_id, 
+                    project_id: @projects.ids,
+                    user_id: @report.user_id
+                    ).sum(:travel_allowance) + 
+                  Personalcharge.where(
+                    period_id: @report.period_id, 
+                    project_id: @additional_projects.ids,
+                    user_id: @report.user_id
+                    ).sum(:travel_allowance)
+    @periods << Personalcharge.where(
+                    period_id: @report.period_id, 
+                    project_id: @projects.ids,
+                    user_id: @report.user_id
+                    ).sum(:meal_allowance) + 
+                  Personalcharge.where(
+                    period_id: @report.period_id, 
+                    project_id: @additional_projects.ids,
+                    user_id: @report.user_id
+                    ).sum(:meal_allowance) +
+                  Personalcharge.where(
+                    period_id: @report.period_id, 
+                    project_id: @projects.ids,
+                    user_id: @report.user_id
+                    ).sum(:travel_allowance) + 
+                  Personalcharge.where(
+                    period_id: @report.period_id, 
+                    project_id: @additional_projects.ids,
+                    user_id: @report.user_id
+                    ).sum(:travel_allowance)
+    @expenses = Array.new
+    @expenses <<  @overtime.inject{|sum,x| sum + x }
+  end
 
   private
     def report_params

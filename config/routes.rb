@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     post :submit, on: :member
     post :approve, on: :member
     post :deny, on: :member
+    get :json_data, :member, defaults: {format: :json}
   end
 
   resources :time_reports do

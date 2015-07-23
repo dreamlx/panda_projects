@@ -50,8 +50,11 @@ class Ability
       can [:read, :time_report],TimeReport
       can :show,                Project
       can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
+      can :destroy,             Report, :state => ['pending', 'denied']
       can :show,                Report, :state => "approved", :user_id => user.id
+      can :delete_project,      Project
       can [:update],            Personalcharge
+      can :json_data,           Report
       can [:edit_password, :update], User, :id => user.id
     elsif user.role == "manager"
       can :show,                Billing
@@ -59,8 +62,11 @@ class Ability
       can [:read, :time_report],TimeReport
       can :show,                Project
       can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
+      can :destroy,             Report, :state => ['pending', 'denied']
       can :show,                Report, :state => "approved", :user_id => user.id
+      can :delete_project,      Project
       can [:update],            Personalcharge
+      can :json_data,           Report
       can [:edit_password, :update], User, :id => user.id
     elsif user.role == "accounting"
       can :show,                Billing
@@ -68,8 +74,11 @@ class Ability
       can [:edit_password, :update], User, :id => user.id
     else
       can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
+      can :destroy,             Report, :state => ['pending', 'denied']
       can :show,                Report, :state => "approved", :user_id => user.id
+      can :delete_project,      Report
       can [:update],            Personalcharge
+      can :json_data,           Report
       can [:edit_password, :update], User, :id => user.id
     end
   end
