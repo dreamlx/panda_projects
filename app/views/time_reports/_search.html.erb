@@ -37,12 +37,12 @@
                 collection: Dict.selected_service_codes,
                 required: false,
                 label: 'ServiceLine' %>
-    <%= f.input :GMU_id_eq,
-                collection: Dict.selected_gmus,
+    <%= f.input :GMU_eq,
+                collection: User::GMU_TYPES,
                 required: false,
                 label: 'GMU' %>
-    <%= f.input :status_id_eq,
-                collection: Dict.selected_statuses,
+    <%= f.input :status_eq,
+                collection: User::STATUS_TYPES,
                 required: false,
                 label: 'Status' %>
   </div>

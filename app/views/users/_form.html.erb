@@ -18,9 +18,9 @@
   <%= f.input :mobile %>
   <%= f.input :tel %>
   <%= f.input :extension %>
-  <%= f.input :gender %>
-  <%= f.input :status %>
-  <%= f.input :GMU %>
+  <%= f.input :gender, collection: User::GENDER_TYPES %>
+  <%= f.input :status, collection: User::STATUS_TYPES %>
+  <%= f.input :GMU, collection: User::GMU_TYPES %>
   <%= f.input :role, collection: @roles %>
   <%= f.input :password if @user.new_record? %>
   <%= f.input :password_confirmation if @user.new_record? %>
