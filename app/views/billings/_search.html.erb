@@ -18,7 +18,7 @@
                 required: false,
                 label: 'Project eq' %>
     <%= f.input :user_english_name_eq, 
-                collection: User.order(english_name: :asc).pluck(:english_name),
+                collection: User.order_english_name,
                 required: false,
                 label: 'User eq' %>
   </div>

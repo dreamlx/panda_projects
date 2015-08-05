@@ -23,7 +23,8 @@ class Ability
     elsif user.role == "hr_admin"
       can :manage,              Billing
       can :manage,              Expense
-      can [:read,:time_report], TimeReport
+      # can [:read,:time_report], TimeReport
+      can :manage,              TimeReport
       can :manage,              Client
       can :manage,              Contact
       can :manage,              Project

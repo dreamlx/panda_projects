@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   scope :employed, -> {where(status: 'Employed')}
 
   def self.order_english_name
-    User.order(:english_name).pluck(:english_name)
+    User.employed.order(:english_name).pluck(:english_name)
   end
 
   def self.select_users
