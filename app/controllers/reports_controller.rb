@@ -5,39 +5,23 @@ class ReportsController < ApplicationController
     if current_user.role == 'hr' ||  current_user.role == 'hr_admin'
       @reports = Report.page(params[:page]).where(state: 'submitted')
     else
-      @reports = Report.page(params[:page]).where(user_id: current_user.id)
+      @reports = current_user.reports.page(params[:page])
     end
   end
 
   def new
     @report = Report.new
-    @report.user_id = current_user.id if current_user
-    @projects = @report.projects
-    @additional_projects = Project.where(job_code: Report.additional_items.values)
   end
 
   def create
-    @report = Report.new(report_params)
+    @report = current_user.reports.build(report_params)
     if @report.save
+      current_user.projects.live.each do |project|
+        @report.projects.create!(project_id: project.id)
+      end
       redirect_to reports_url
     else
       render 'new'
-    end
-  end
-
-  def edit
-    @report = Report.find(params[:id])
-    @projects = @report.projects
-    @additional_projects = Project.where(job_code: Report.additional_items.values)
-  end
-
-  def update
-    report = Report.find(params[:id])
-    Personalcharge.where(user_id: report.user_id,  period_id: report.period_id).delete_all
-    if report.update(report_params)
-      redirect_to reports_url
-    else
-      render 'edit'
     end
   end
 
@@ -53,13 +37,6 @@ class ReportsController < ApplicationController
     @projects = @report.projects
     @additional_projects = Project.where(job_code: Report.additional_items.values)
     render layout: false
-  end
-
-  def add_projects
-    @report = Report.find(params[:id])
-    if params[:project] && !params[:project][:job_code].empty?
-      @report.projects << Project.find_by_job_code(params[:project][:job_code])
-    end
   end
 
   def fill_data
@@ -203,7 +180,7 @@ class ReportsController < ApplicationController
 
   private
     def report_params
-      params.require(:report).permit(:user_id, :period_id, projects_attributes: [:id, :name], project_ids: [])
+      params.require(:report).permit(:period_id)
     end
     
     def personalcharge_params

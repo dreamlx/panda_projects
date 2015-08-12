@@ -35,13 +35,14 @@ class Project < ActiveRecord::Base
   end
   scope :num_projects,  ->  {where("job_code REGEXP '^[0-9]'")}
   scope :char_projects, ->  {where("job_code REGEXP '^[a-z]'")}
-  def self.live
-    live_projects = Array.new
-    all.order(job_code: :asc).each do |project|
-      live_projects << project if project.status.title != 'closed'
-    end
-    return live_projects
-  end
+  scope :live, -> {where(status_id: 251)}
+  # def self.live
+  #   live_projects = Array.new
+  #   all.order(job_code: :asc).each do |project|
+  #     live_projects << project if project.status.title != 'closed'
+  #   end
+  #   return live_projects
+  # end
   def name
     job_code
   end

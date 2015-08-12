@@ -18,8 +18,9 @@ class User < ActiveRecord::Base
   has_many    :projects, through: :bookings
   has_many    :billings
   has_many    :personalcharges
+  has_many    :reports
 
-  scope :employed, -> {where(status: 'Employed')}
+  scope :employed, -> {where(status: 'Employed').order(english_name: :asc)}
 
   def self.order_english_name
     User.employed.order(:english_name).pluck(:english_name)

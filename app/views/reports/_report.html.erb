@@ -3,9 +3,7 @@
   <td><%= report.user.name %></td>
   <td><%= report.period.number %></td>
   <td><%= report.state %></td>
-  <td><%= link_to_if (report.state == 'pending' || report.state == 'denied'), 'Add project', add_projects_report_path(report) %></td>
   <td><%= link_to_if (report.state == 'pending' || report.state == 'denied'), 'Fill data', fill_data_report_path(report) %></td>
-  <td><%= link_to_if (report.state == 'pending' || report.state == 'denied'), t('edit'), edit_report_path(report) %></td>
   <td><%= link_to_if (report.state == 'pending' || report.state == 'denied'),
                   t('destroy'), report, 
                   data: {confirm: t('are_you_sure')}, 

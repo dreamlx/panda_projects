@@ -28,7 +28,11 @@ class ProjectsController < ApplicationController
 
   def create
     @project = Project.new(project_params)
+
     if @project.save
+      params[:project][:user_ids].each do |user_id|
+        @project.bookings.create!(user_id: user_id)
+      end
       redirect_to @project
     else
       render "new"
@@ -38,6 +42,10 @@ class ProjectsController < ApplicationController
   def update
     @project = Project.find(params[:id])  
     if @project.update(project_params)
+      @project.bookings.delete_all
+      params[:project][:user_ids].each do |user_id|
+        @project.bookings.create!(user_id: user_id)
+      end
       redirect_to @project
     else
       render "edit"
@@ -156,6 +164,6 @@ class ProjectsController < ApplicationController
         :starting_date, :ending_date, :estimated_annual_fee, :risk_id, :status_id, :partner_id, :manager_id,
         :referring_id, :billing_partner_id, :billing_manager_id, :contract_service_fee, :estimated_commision,
         :estimated_outsourcing, :budgeted_service_fee, :service_PFA, :expense_PFA, :contracted_expense, 
-        :budgeted_expense, :PFA_reason_id, :revenue_id )
+        :budgeted_expense, :PFA_reason_id, :revenue_id, :contracted_service_fee, :estimated_outsorcing)
     end
 end

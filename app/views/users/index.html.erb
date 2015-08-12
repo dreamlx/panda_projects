@@ -11,6 +11,7 @@
 <table class="table table-striped">
   <thead>
     <tr>
+      <th>Projct count</th>
       <th><%= sort_link(@q, :id) %></th>
       <th><%= sort_link(@q, :email) %></th>
       <th><%= sort_link(@q, :name) %></th>
@@ -41,6 +42,7 @@
   <tbody>
     <% @users.each do |user| %>
       <tr>
+        <td><%= user.projects.live.count %></td>
         <td><%= user.id %></td>
         <td><%= mail_to user.email %></td>
         <td><%= user.name %></td>

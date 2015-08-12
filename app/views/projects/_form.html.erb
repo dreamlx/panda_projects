@@ -6,7 +6,18 @@
     radio_buttons: :horizontal_radio_and_checkboxes,
     file: :horizontal_file_input,
     boolean: :horizontal_boolean}) do |f| %>
-
+    <% if @project.errors.any? %>
+      <div id="error_explanation">
+        <div class="alert alert-danger">
+          The form contains <%= pluralize(@project.errors.count, "error") %>.
+        </div>
+        <ul>
+        <% @project.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
     <div class="col-md-6">
       <div class="panel panel-default">
         <div class="panel-heading">Main</div>
@@ -55,6 +66,16 @@
           <%= f.input :billing_manager_id, collection: User.order_english_name, label: "Manager" %>
         </div>
       </div>
+    </div>
+
+    <div class="col-md-12">
+      <h1>Team Member</h1>
+      <% User.employed.each do |user| %>
+        <div class="col-md-2">
+          <%= check_box_tag "project[user_ids][]", user.id, @project.users.include?(user) %>
+          <%= user.english_name %>
+        </div>
+      <% end %>
     </div>
 
     <div class="col-md-12">

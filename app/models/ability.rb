@@ -12,6 +12,7 @@ class Ability
       can :manage,              Project
       can :manage,              Ufafee
       can :manage,              Dict
+      can :manage,              Booking
       can :manage,              Industry
       can [:edit_password, :update], User, :id => user.id
       # can :manage, :all
@@ -30,6 +31,7 @@ class Ability
       can :manage,              Project
       can :manage,              Ufafee
       can :manage,              Dict
+      can :manage,              Booking
       can :manage,              Industry
       can :manage,              User
       can :manage,              Person
@@ -43,6 +45,7 @@ class Ability
       can :read,                User
       can :show,                Project
       can :index,               Personalcharge
+      can :manage,              Booking
       can [:read, :create, :update],  Dict
       can [:edit_password, :update], User, :id => user.id
     elsif user.role == "partner"
@@ -55,6 +58,7 @@ class Ability
       can :show,                Report, :state => "approved", :user_id => user.id
       can :delete_project,      Project
       can [:update],            Personalcharge
+      can :manage,              Booking
       can :json_data,           Report
       can [:edit_password, :update], User, :id => user.id
     elsif user.role == "manager"
@@ -67,6 +71,7 @@ class Ability
       can :show,                Report, :state => "approved", :user_id => user.id
       can :delete_project,      Project
       can [:update],            Personalcharge
+      can :manage,              Booking
       can :json_data,           Report
       can [:edit_password, :update], User, :id => user.id
     elsif user.role == "accounting"

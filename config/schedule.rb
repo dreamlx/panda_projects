@@ -7,7 +7,7 @@
 #
 # set :output, "/path/to/my/cron_log.log"
 #
-every :month do
+every :day do
   rake "period:create"
 end
 
