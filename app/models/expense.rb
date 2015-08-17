@@ -13,4 +13,5 @@ class Expense < ActiveRecord::Base
   validates :report_binding,  numericality: true
   validates :cash_advance,    numericality: true
   validates :payment_on_be_half, numericality: true
+  EXPENSE_NUMBER_FIELDS = ["commission", "outsourcing", "tickets", "courrier", "postage", "stationery", "report_binding", "cash_advance", "payment_on_be_half"]
 end

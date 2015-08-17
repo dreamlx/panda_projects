@@ -1,9 +1,12 @@
 class ExpensesController < ApplicationController
   load_and_authorize_resource
   def index
-    @q = Expense.ransack(params[:q])
-    @expenses = @q.result.includes(:project, :period).page(params[:page])
-
+    @q = params[:q] ? Expense.ransack(params[:q]) : Expense.ransack(project_id_eq: params[:project], period_number_gteq: params[:period_from], period_number_lteq: params[:period_to])
+    if Expense::EXPENSE_NUMBER_FIELDS.include?(params[:col]) && !params[:col].empty?
+      @expenses = @q.result.includes(:project, :period).where.not("#{params[:col]}": 0).page(params[:page])
+    else
+      @expenses = @q.result.includes(:project, :period).page(params[:page])
+    end
 
     @expenses_total = @q.result
   end

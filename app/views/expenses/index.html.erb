@@ -5,8 +5,29 @@
   <div class="col-md-2">
     <%= link_to 'New Expense', new_expense_path, class: 'btn btn-danger' %>
   </div>
+<!--   <div class="well col-md-12">
+    <%#= render 'search' %>
+  </div> -->
   <div class="well col-md-12">
-    <%= render 'search' %>
+    <%= form_tag("/expenses", method: "get") do %>
+      <%= label_tag(:project, "Project:") %>
+      <%= select_tag  :project, 
+                      options_for_select(Project.select_projects), 
+                      :include_blank => true %>
+      <%= label_tag(:period_from, "Peroid From:") %>
+      <%= select_tag  :period_from, 
+                      options_for_select(Period.period_number), 
+                      :include_blank => true %>
+      <%= label_tag(:period_to, "Period To:") %>
+      <%= select_tag  :period_to, 
+                      options_for_select(Period.period_number),
+                      :include_blank => true %>
+      <%= label_tag(:col, "col:") %>
+      <%= select_tag  :col, 
+                      options_for_select(Expense::EXPENSE_NUMBER_FIELDS), 
+                      :include_blank => true %>
+      <%= submit_tag("Search") %>
+    <% end %>
   </div>
 </div>
 
