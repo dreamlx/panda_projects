@@ -279,7 +279,7 @@
 
       <% @additional_projects.each do |project| %>
         <tr>
-          <td>
+          <td class="refresh8">
             <%= project.personalcharges.where(
                   user_id: @report.user_id, 
                   period_id: @report.period_id
@@ -302,7 +302,7 @@
                   period_id: @report.period_id
                   ), :reimbursement, as: :input %>
           </td>
-          <td>
+          <td class="refresh7">
             <%= project.personalcharges.where(
                   user_id: @report.user_id, 
                   period_id: @report.period_id
@@ -476,6 +476,8 @@
             refresh4(data.total_expenses);
             refresh5(data.periods);
             refresh6(data.expenses);
+            refresh7(data.total_expenses);
+            refresh8(data.total_hours);
           },
           
           });
@@ -526,6 +528,22 @@
 
   function refresh6(data6){
     $(".refresh6").text(data6[0]);
+  }
+
+  function refresh7(data7){
+    var i=20;
+        $(".refresh7").each(function(){
+          $(this).text(data7[i]);
+          i++;
+        });
+  }
+
+  function refresh8(data8){
+    var i=20;
+        $(".refresh8").each(function(){
+          $(this).text(data8[i]);
+          i++;
+        });
   }
 
 
