@@ -110,7 +110,8 @@ class ReportsController < ApplicationController
     @projects.each do |project|
       @total_hours << project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id ).sum(:hours)
       @total_expenses << project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id ).sum(:meal_allowance) + 
-                      project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id).sum(:travel_allowance)
+                      project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id).sum(:travel_allowance)+ 
+                      project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id).sum(:reimbursement)
     end
     (20 - @projects.count).times do |row|
       @total_hours << ""
@@ -119,7 +120,8 @@ class ReportsController < ApplicationController
     @additional_projects.each do |project|
       @total_hours << project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id ).sum(:hours)
       @total_expenses << project.personalcharges.where(user_id: @report.user_id, period_id: @report.period_id).sum(:meal_allowance) + 
-                project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id ).sum(:travel_allowance)
+                project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id ).sum(:travel_allowance)+ 
+                project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id ).sum(:reimbursement)
 
     end
     @periods = Array.new
@@ -143,7 +145,6 @@ class ReportsController < ApplicationController
                     project_id: @additional_projects.ids,
                     user_id: @report.user_id
                     ).sum(:meal_allowance)
-    @periods << 0
     @periods << Personalcharge.where(
                     period_id: @report.period_id, 
                     project_id: @projects.ids,
@@ -154,6 +155,16 @@ class ReportsController < ApplicationController
                     project_id: @additional_projects.ids,
                     user_id: @report.user_id
                     ).sum(:travel_allowance)
+    @periods << Personalcharge.where(
+                    period_id: @report.period_id, 
+                    project_id: @projects.ids,
+                    user_id: @report.user_id
+                    ).sum(:reimbursement) + 
+                  Personalcharge.where(
+                    period_id: @report.period_id, 
+                    project_id: @additional_projects.ids,
+                    user_id: @report.user_id
+                    ).sum(:reimbursement)
     @periods << Personalcharge.where(
                     period_id: @report.period_id, 
                     project_id: @projects.ids,
@@ -173,7 +184,17 @@ class ReportsController < ApplicationController
                     period_id: @report.period_id, 
                     project_id: @additional_projects.ids,
                     user_id: @report.user_id
-                    ).sum(:travel_allowance)
+                    ).sum(:travel_allowance)+
+                  Personalcharge.where(
+                    period_id: @report.period_id, 
+                    project_id: @projects.ids,
+                    user_id: @report.user_id
+                    ).sum(:reimbursement) + 
+                  Personalcharge.where(
+                    period_id: @report.period_id, 
+                    project_id: @additional_projects.ids,
+                    user_id: @report.user_id
+                    ).sum(:reimbursement)
     @expenses = Array.new
     @expenses <<  @overtime.inject{|sum,x| sum + x }
   end

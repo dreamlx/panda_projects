@@ -27,15 +27,15 @@ class User < ActiveRecord::Base
   end
 
   def self.select_users
-    Hash[User.order(english_name: :asc).select("id,english_name").all.map{|u| [u.english_name, u.id]}]
+    Hash[User.employed.order(english_name: :asc).select("id,english_name").all.map{|u| [u.english_name, u.id]}]
   end
 
   def self.select_partners
-    User.where(role: 'partner').order(:english_name).pluck(:english_name)
+    User.employed.where(role: 'partner').order(:english_name).pluck(:english_name)
   end
 
   def self.select_managers
-    User.where(role: 'manager').order(:english_name).pluck(:english_name)
+    User.employed.where(role: 'manager').order(:english_name).pluck(:english_name)
   end
 
   def email_required?

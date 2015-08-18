@@ -36,10 +36,7 @@ class BillingsController < ApplicationController
 
   def create
     @billing              = Billing.new(billing_params)
-    if @billing.status == "1"
-      @billing.collection_days = @billing.days_of_ageing
-      @billing.outstanding = @billing.amount
-    end
+    @billing.collection_days = @billing.days_of_ageing if @billing.status == "1"
     tax_rate = 5.26/100
     @billing.business_tax = @billing.service_billing * tax_rate
     @billing.amount = @billing.service_billing + @billing.expense_billing
