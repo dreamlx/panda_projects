@@ -76,7 +76,7 @@
                       user_id: @report.user_id,  
                       charge_date:  col_date, 
                       period_id: @report.period_id
-                      ), :hours, as: :input) : "-"  %>
+                      ), :hours, as: :input, display_as: :hours_replace ) : "-"  %>
               </td>
             <% end %>
           </tr>
@@ -110,7 +110,7 @@
                       user_id: @report.user_id,  
                       charge_date:  col_date, 
                       period_id: @report.period_id
-                      ), :hours, as: :input) : "-" %>
+                      ), :hours, as: :input, display_as: :hours_replace) : "-" %>
             </td>
           <% end %>
         </tr>
@@ -232,18 +232,18 @@
             <%= best_in_place project.personalcharges.find_or_create_by(
                   user_id: @report.user_id, 
                   period_id: @report.period_id
-                  ), :meal_allowance, as: :input %></td>
+                  ), :meal_allowance, as: :input, display_as: :meal_allowance_replace %></td>
           <td class="focus">
             <%= best_in_place project.personalcharges.find_or_create_by(
                   user_id: @report.user_id, 
                   period_id: @report.period_id
-                  ), :travel_allowance, as: :input %></td>
+                  ), :travel_allowance, as: :input, display_as: :travel_allowance_replace %></td>
           </td>
           <td class="focus">
             <%= best_in_place project.personalcharges.find_or_create_by(
                   user_id: @report.user_id, 
                   period_id: @report.period_id
-                  ), :reimbursement, as: :input %>
+                  ), :reimbursement, as: :input, display_as: :reimbursement_replace %>
           </td>
           <td class="refresh4">
             <%= project.personalcharges.where(
@@ -289,18 +289,18 @@
             <%= best_in_place project.personalcharges.find_or_create_by(
                   user_id: @report.user_id, 
                   period_id: @report.period_id
-                  ), :meal_allowance, as: :input %></td>
+                  ), :meal_allowance, as: :input, display_as: :meal_allowance_replace %></td>
           <td class="focus">
             <%= best_in_place project.personalcharges.find_or_create_by(
                   user_id: @report.user_id, 
                   period_id: @report.period_id
-                  ), :travel_allowance, as: :input %></td>
+                  ), :travel_allowance, as: :input, display_as: :travel_allowance_replace %></td>
           </td>
           <td class="focus">
             <%= best_in_place project.personalcharges.find_or_create_by(
                   user_id: @report.user_id, 
                   period_id: @report.period_id
-                  ), :reimbursement, as: :input %>
+                  ), :reimbursement, as: :input, display_as: :reimbursement_replace %>
           </td>
           <td class="refresh7">
             <%= project.personalcharges.where(

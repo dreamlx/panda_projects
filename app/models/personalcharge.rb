@@ -26,6 +26,22 @@ class Personalcharge < ActiveRecord::Base
     end
   end
 
+  def hours_replace
+    hours == 0 ?  "-" : hours
+  end
+
+  def meal_allowance_replace
+    meal_allowance == 0 ? "-" : meal_allowance
+  end
+
+  def travel_allowance_replace
+    travel_allowance == 0 ? "-" : travel_allowance
+  end
+
+  def reimbursement_replace
+    reimbursement == 0 ? "-" : reimbursement
+  end
+
   def expense_sum
     reimbursement + meal_allowance + travel_allowance
   end
