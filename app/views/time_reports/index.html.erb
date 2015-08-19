@@ -9,12 +9,12 @@
 <!-- end of summary -->
 
 <!-- time report -->
-<%= form_tag('/time_reports/time_report', :method => :post) do %>
+<%= form_tag action: :time_report, method: :post do %>
   <b>Job_code:</b>
-  <%= collection_select(:personalcharge, :project_id, Project.order(:job_code), :id, :job_code) %>
+  <%= select_tag :project_code, options_for_select(Project.order_with_job_code) %>
   <b>Period:</b>
-  <%= collection_select(:personalcharge, :period_id, Period.order(number: :desc), :id, :number) %>
-  <input type="submit" value="REPORT" />
+  <%= select_tag :period_number, options_for_select(Period.period_number) %>
+  <%= submit_tag 'REPORT' %>
 <% end  %>
 <!-- end of time report -->
 

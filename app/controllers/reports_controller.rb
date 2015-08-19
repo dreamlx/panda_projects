@@ -48,7 +48,6 @@ class ReportsController < ApplicationController
     project = Project.find(params[:project_id])
     @report.projects.delete(project)
     Personalcharge.where(user_id: @report.user_id,  period_id: @report.period_id, project_id: project.id).delete_all
-    Expense.where(user_id: @report.user_id,  period_id: @report.period_id, project_id: project.id).delete_all
     redirect_to add_projects_report_path(@report)
   end
 

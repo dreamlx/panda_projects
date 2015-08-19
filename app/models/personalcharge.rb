@@ -14,6 +14,8 @@ class Personalcharge < ActiveRecord::Base
   belongs_to :user
   before_save :save_PFA_of_service_fee
 
+  scope :approveds, -> {where(state: "approved")}
+
   state_machine :state, :initial => :pending do
     event :submit do
       transition [:pending, :denied] => :submitted

@@ -5,8 +5,8 @@ class TimeReportsController < ApplicationController
   end
 
   def time_report
-    @project = Project.find(params[:personalcharge][:project_id])
-    @period = Period.find(params[:personalcharge][:period_id])
+    @project = Project.find_by(job_code: params[:project_code])
+    @period = Period.find_by(number: params[:period_number])
     
     @report = TimeReport.new
     @report.for_report(@project, @period)
@@ -105,7 +105,7 @@ class TimeReportsController < ApplicationController
 
   private
     def get_column(project, periods_ids)
-      personalcharges = project.personalcharges.where(period_id: periods_ids)
+      personalcharges = project.personalcharges.approveds.where(period_id: periods_ids)
       expenses        = project.expenses.where(period_id: periods_ids)
       ufafees         = project.ufafees.where(period_id: periods_ids)
       billings        = project.billings.where(period_id: periods_ids)
