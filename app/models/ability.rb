@@ -56,7 +56,7 @@ class Ability
       can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
       can :destroy,             Report, :state => ['pending', 'denied']
       can :show,                Report, :state => "approved", :user_id => user.id
-      can :delete_project,      Project
+      can :delete_project,      Report, :state => ['pending', 'denied'], :user_id => user.id
       can [:update],            Personalcharge
       can :manage,              Booking
       can :json_data,           Report
@@ -69,7 +69,7 @@ class Ability
       can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
       can :destroy,             Report, :state => ['pending', 'denied']
       can :show,                Report, :state => "approved", :user_id => user.id
-      can :delete_project,      Project
+      can :delete_project,      Report, :state => ['pending', 'denied'], :user_id => user.id
       can [:update],            Personalcharge
       can :manage,              Booking
       can :json_data,           Report
@@ -82,7 +82,7 @@ class Ability
       can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
       can :destroy,             Report, :state => ['pending', 'denied']
       can :show,                Report, :state => "approved", :user_id => user.id
-      can :delete_project,      Report
+      can :delete_project,      Report, :state => ['pending', 'denied'], :user_id => user.id
       can [:update],            Personalcharge
       can :json_data,           Report
       can [:edit_password, :update], User, :id => user.id

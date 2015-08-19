@@ -16,9 +16,6 @@ class ReportsController < ApplicationController
   def create
     @report = current_user.reports.build(report_params)
     if @report.save
-      current_user.projects.live.each do |project|
-        @report.projects.create!(project_id: project.id)
-      end
       redirect_to reports_url
     else
       render 'new'
@@ -37,6 +34,22 @@ class ReportsController < ApplicationController
     @projects = @report.projects
     @additional_projects = Project.where(job_code: Report.additional_items.values)
     render layout: false
+  end
+
+  def add_projects
+    @report = Report.find(params[:id])
+    if params[:project] && !params[:project][:job_code].empty?
+      @report.projects << Project.find_by_job_code(params[:project][:job_code])
+    end
+  end
+
+  def delete_project
+    @report = Report.find(params[:id])
+    project = Project.find(params[:project_id])
+    @report.projects.delete(project)
+    Personalcharge.where(user_id: @report.user_id,  period_id: @report.period_id, project_id: project.id).delete_all
+    Expense.where(user_id: @report.user_id,  period_id: @report.period_id, project_id: project.id).delete_all
+    redirect_to add_projects_report_path(@report)
   end
 
   def fill_data

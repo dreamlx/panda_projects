@@ -24,10 +24,9 @@ Rails.application.routes.draw do
   resources :personalcharges, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :reports, only: [:index, :new, :show, :create] do
     get :print, on: :collection
+    get :add_projects, on: :member
     get :fill_data, on: :member
-    resources :projects do
-      delete :delete_project, on: :member
-    end
+    delete :delete_project, on: :member
     post :submit, on: :member
     post :approve, on: :member
     post :deny, on: :member
