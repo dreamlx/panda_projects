@@ -37,15 +37,15 @@ class TimeReport
     sql_condition       = " project_id = #{project.id} and period_id ='#{period.id}' "
     sql_condition2      = " project_id = #{project.id} and periods.ending_date <= '#{period.ending_date}' "
     sql_all_by_project  = " project_id = #{project.id} "
-    sql_join            = " inner join people on personalcharges.person_id = people.id inner join periods on periods.id = period_id "
+    sql_join            = " inner join users on personalcharges.user_id = users.id inner join periods on periods.id = period_id "
     sql_order           = " english_name "
     #person charges
-    @personalcharges  = Personalcharge.joins(:period).where(sql_condition2)
-    @user_list = Personalcharge.find_by_sql("select distinct person_id, english_name, charge_rate, employee_number from personalcharges " + sql_join + 
+    @personalcharges  = Personalcharge.joins(:period).where(sql_condition2 + "and state = 'approved'")
+    @user_list = Personalcharge.find_by_sql("select distinct user_id, english_name, charge_rate, employee_number from personalcharges " + sql_join + 
         " where " + sql_all_by_project + " order by english_name" )
     for user in @user_list
-      @p_currents     << sum_personalcharge(project.id, user.person_id, period, 1)
-      @p_cumulatives  << sum_personalcharge(project.id, user.person_id, period, 0)   
+      @p_currents     << sum_personalcharge(project.id, user.user_id, period, 1)
+      @p_cumulatives  << sum_personalcharge(project.id, user.user_id, period, 0)   
     end                       
     @p_total = sum_personalcharge(project.id, nil, period, 0)
 
@@ -71,11 +71,11 @@ class TimeReport
   end
 
   private  
-  def sum_personalcharge(project_id = nil, person_id=nil, period=nil, flag = nil )
+  def sum_personalcharge(project_id = nil, user_id=nil, period=nil, flag = nil )
     sql_join          = " inner join periods on periods.id = period_id "
-    sql_condition = " 1 "
+    sql_condition = " 1 and state = 'approved' "
     sql_condition += " and project_id = #{project_id}" unless project_id.nil?
-    sql_condition += " and person_id = #{person_id} " unless person_id.nil?
+    sql_condition += " and user_id = #{user_id} " unless user_id.nil?
     if flag == 1
       sql_condition += " and period_id = #{period.id} " unless period.nil?
     end
@@ -85,7 +85,7 @@ class TimeReport
     end
     
     @p = Personalcharge.new
-    @p.person_id = person_id
+    @p.user_id = user_id
     
     @p.project_id = project_id                           
     @p.service_fee      = Personalcharge.joins(sql_join).where(sql_condition).sum("service_fee") ||0 
@@ -93,7 +93,7 @@ class TimeReport
     @p.reimbursement    = Personalcharge.joins(sql_join).where(sql_condition).sum("reimbursement") ||0
     @p.meal_allowance   = Personalcharge.joins(sql_join).where(sql_condition).sum("meal_allowance") ||0
     @p.travel_allowance = Personalcharge.joins(sql_join).where(sql_condition).sum("travel_allowance") ||0
-    @p.updated_on       = Personalcharge.joins(sql_join).where(sql_condition).sum("updated_on") || nil
+    @p.updated_on       = Personalcharge.joins(sql_join).where(sql_condition).maximum("updated_on") || nil
     return @p
   end
     
@@ -119,7 +119,7 @@ class TimeReport
     @e.payment_on_be_half = Expense.joins(sql_join).where(sql_condition).sum("payment_on_be_half") ||0
     @e.commission         = Expense.joins(sql_join).where(sql_condition).sum("commission") ||0
     @e.outsourcing        = Expense.joins(sql_join).where(sql_condition).sum("outsourcing") ||0
-    @e.updated_on         = Expense.joins(sql_join).where(sql_condition).sum("updated_on") || nil
+    @e.updated_on         = Expense.joins(sql_join).where(sql_condition).maximum("updated_on") || nil
     return @e
   end
 end

@@ -292,7 +292,7 @@ td
     <td class=xl26><%= sprintf("%0.0f" ,p_cumulative.meal_allowance) %></td>
     <td class=xl26><%= sprintf("%0.0f" ,p_cumulative.travel_allowance) %></td>
     <td class=xl30><%= sprintf("%0.0f" ,(p_cumulative.meal_allowance + p_cumulative.travel_allowance + p_cumulative.reimbursement)) %></td>
-    <td class=xl26><%= Time.at(p_cumulative.updated_on).strftime("%y-%m-%d") unless p_cumulative.updated_on.nil? %>&nbsp;</td>
+    <td class=xl26><%= p_cumulative.updated_on.strftime("%y-%m-%d") unless p_cumulative.updated_on.nil? %>&nbsp;</td>
   </tr>
   <% end %>
   <tr height=20 class=xl30>
