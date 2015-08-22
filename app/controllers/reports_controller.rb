@@ -33,7 +33,46 @@ class ReportsController < ApplicationController
     @report = Report.find(params[:id])
     @projects = @report.projects
     @additional_projects = Project.where(job_code: Report.additional_items.values)
-    render layout: false
+    @first_half_month = Array.new
+    @second_half_month = Array.new
+    @balance_days = 0
+    @column_date_array = (@report.period.starting_date.to_date..@report.period.ending_date.to_date).to_a
+    if @report.period.starting_date.to_date.day == 1
+      @balance_days = 1
+      @column_date_array.each do |per_day|
+        if weekend(per_day)
+          @first_half_month << "[#{per_day.day}]"
+        else
+          @first_half_month << per_day.day
+        end
+      end
+      
+      16.times do
+        @second_half_month << "-"
+      end
+    else
+      @balance_days = 31 - @report.period.ending_date.to_date.day
+      15.times do
+        @first_half_month << "-"
+      end
+      @column_date_array.each do |per_day|
+        if weekend(per_day)
+          @second_half_month << "[#{per_day.day}]"
+        else
+          @second_half_month << per_day.day
+        end
+      end
+      @balance_days.times do
+        @second_half_month << "-"
+      end
+    end
+    respond_to do |format|
+      format.html { render layout: false}
+      format.xml do  
+        stream = render_to_string(:template=>"reports/show" )  
+        send_data(stream, :type=>"text/xml",:filename => "test.xml")
+      end
+    end
   end
 
   def add_projects

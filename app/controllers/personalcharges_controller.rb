@@ -9,7 +9,6 @@ class PersonalchargesController < ApplicationController
     @personalcharges_total  = @q.result
     respond_to do |format|
       format.html
-      format.xls { send_data @personalcharges_total.to_xls(:columns => [{:project => [{:client => [:english_name]}]}, {:project => [:job_code]}, {:period => [:number]}, {:user => [:english_name]}, :hours, :service_fee, :reimbursement, :meal_allowance, :travel_allowance, :expense_sum], :headers => ['Client name', 'Job code', 'Period', 'Employee', 'Hours', 'Service fee', 'Reimbursement', 'Meal allowance', 'Travel allowance', 'Expense sum']), content_type: 'application/vnd.ms-excel', filename: "#{DateTime.now.to_s(:number)}personalcharges.xls" }
       header_string = 'attachment; filename=' + DateTime.now.to_s(:number) + ".xlsx"
       format.xlsx{  response.headers['Content-Disposition'] = header_string}
     end

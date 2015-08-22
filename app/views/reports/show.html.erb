@@ -9,6 +9,9 @@
 <body style="padding-top: 0px">
   <div class="container">
     <div class="row">
+      <div class="col-md-12">
+        <%= link_to t('export_data'), report_path(@report, format: :xml) %>
+      </div>
       <div class="col-md-3 col-md-offset-9">
         <%= link_to 'approve', approve_report_path(@report), method: :post, class: 'btn btn-danger' if @report.state == 'submitted' %>
         <%= link_to 'deny', deny_report_path(@report), method: :post, class: 'btn btn-danger' if @report.state == 'submitted' %>
@@ -129,7 +132,7 @@
             </tr>
           <% end %>
 
-          <!-- totol -->
+          <!-- total -->
           <tr>
             <td>
               <small>(12) TOTAL HOURS (Including overtime)</small>
@@ -247,14 +250,14 @@
               <td>
                 <%= pc_hours ? (pc_hours.meal_allowance == 0 ? "" : pc_hours.meal_allowance) : "" %></td>
               <td>
-                <%= "" %>
-              </td>
-              <td>
                 <%= pc_hours ? (pc_hours.travel_allowance == 0 ? "" : pc_hours.travel_allowance) : "" %>
               </td>
               <td>
-                <%= (pcs_hours.sum(:meal_allowance) + pcs_hours.sum(:travel_allowance) == 0) ? "" : (pcs_hours.sum(:meal_allowance) + 
-                    pcs_hours.sum(:travel_allowance)) %>
+                <%= pc_hours ? (pc_hours.reimbursement == 0 ? "" : pc_hours.reimbursement) : "" %>
+              </td>
+              <td>
+                <%= (pcs_hours.sum(:meal_allowance) + pcs_hours.sum(:travel_allowance) + pcs_hours.sum(:reimbursement) == 0) ? "" : (pcs_hours.sum(:meal_allowance) + 
+                    pcs_hours.sum(:travel_allowance)) + pcs_hours.sum(:reimbursement) %>
               </td>
               <td>
                 <%= project.job_code %>
@@ -296,13 +299,13 @@
                 <%= pc_hours ? (pc_hours.meal_allowance == 0 ? "" : pc_hours.meal_allowance) : "" %>
               </td>
               <td>
-                <%= "" %>
-              </td>
-              <td>
                 <%= pc_hours ? (pc_hours.travel_allowance == 0 ? "" : pc_hours.travel_allowance) : "" %>
               </td>
               <td>
-                <%= (pcs_hours.sum(:meal_allowance) + pcs_hours.sum(:travel_allowance) == 0) ? "" : (pcs_hours.sum(:meal_allowance) + pcs_hours.sum(:travel_allowance)) %>
+                <%= pc_hours ? (pc_hours.reimbursement == 0 ? "" : pc_hours.reimbursement) : "" %>
+              </td>
+              <td>
+                <%= (pcs_hours.sum(:meal_allowance) + pcs_hours.sum(:travel_allowance)  + pcs_hours.sum(:reimbursement) == 0) ? "" : (pcs_hours.sum(:meal_allowance) + pcs_hours.sum(:travel_allowance) + pcs_hours.sum(:reimbursement)) %>
               </td>
               <td>
                 <%= project.job_code %>
@@ -327,19 +330,23 @@
             <td>
               <%= (projects_pcs.sum(:meal_allowance) + add_projects_pcs.sum(:meal_allowance) == 0 ) ? "" : (projects_pcs.sum(:meal_allowance) + add_projects_pcs.sum(:meal_allowance)) %>
             </td>
-            <td></td>
+            <td><%= (projects_pcs.sum(:travel_allowance) + add_projects_pcs.sum(:travel_allowance) == 0) ? "" : (projects_pcs.sum(:travel_allowance) + add_projects_pcs.sum(:travel_allowance)) %></td>
             <td>
-              <%= (projects_pcs.sum(:travel_allowance) + add_projects_pcs.sum(:travel_allowance) == 0) ? "" : (projects_pcs.sum(:travel_allowance) + add_projects_pcs.sum(:travel_allowance)) %>
+              <%= (projects_pcs.sum(:reimbursement) + add_projects_pcs.sum(:reimbursement) == 0) ? "" : (projects_pcs.sum(:reimbursement) + add_projects_pcs.sum(:reimbursement)) %>
             </td>
             <td>
               <%= (projects_pcs.sum(:meal_allowance) + 
                   add_projects_pcs.sum(:meal_allowance) + 
                   projects_pcs.sum(:travel_allowance) + 
-                  add_projects_pcs.sum(:travel_allowance) == 0) ? "" : (
+                  add_projects_pcs.sum(:travel_allowance)+ 
+                  projects_pcs.sum(:reimbursement) + 
+                  add_projects_pcs.sum(:reimbursement) == 0) ? "" : (
                   projects_pcs.sum(:meal_allowance) +  
                   add_projects_pcs.sum(:meal_allowance) +
                   projects_pcs.sum(:travel_allowance) + 
-                  add_projects_pcs.sum(:travel_allowance)) %>
+                  add_projects_pcs.sum(:travel_allowance)+ 
+                  projects_pcs.sum(:reimbursement) + 
+                  add_projects_pcs.sum(:reimbursement)) %>
             </td>
             <td colspan="2">
               <small>Period time and expense</small>
