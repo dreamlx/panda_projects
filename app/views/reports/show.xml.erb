@@ -1274,13 +1274,22 @@
    <% @projects.each do |project| %>
     <Row ss:AutoFitHeight="0" ss:Height="12.75">
      <Cell ss:StyleID="s66"><Data ss:Type="String"><%= truncate(project.client.english_name, length: 20) %></Data></Cell>
-     <Cell ss:StyleID="s67"/>
+    <% personalcharge = project.personalcharges.find_by(
+                             user_id: @report.user_id, 
+                             charge_date:  nil, 
+                             period_id: @report.period_id) %>
+    <% if personalcharge && personalcharge.hours != 0 %>
+      <Cell ss:StyleID="s67"><Data ss:Type="Number"><%= personalcharge.hours %></Data></Cell>
+    <% else %>
+      <Cell ss:StyleID="s67"/>                        
+    <% end %>
+     
      <% @column_date_array.each  do |per_day| %>
        <% personalcharge = project.personalcharges.find_by(
                              user_id: @report.user_id, 
                              charge_date:  per_day, 
                              period_id: @report.period_id) %>
-       <% if personalcharge %>
+       <% if personalcharge && personalcharge.hours != 0 %>
           <Cell ss:StyleID="s67"><Data ss:Type="Number"><%= personalcharge.hours %></Data></Cell>
        <% else %>
          <Cell ss:StyleID="s67"/>
@@ -1291,7 +1300,7 @@
      <% end %>
      <Cell ss:StyleID="s57" ss:Formula="=SUM(RC[-17]:RC[-1])"><Data ss:Type="Number">0</Data></Cell>
      <Cell ss:StyleID="s58"
-      ss:Formula="=IF(ISERROR(LEFT(RC[9],1)*1),&quot;&quot;,SUM(RC[-18]:RC[-2]))"><Data
+      ss:Formula="=IF(ISERROR(LEFT(RC[9],1)*1),SUM(RC[-18]:RC[-2]),&quot;&quot;)"><Data
        ss:Type="String"></Data></Cell>
      <Cell ss:StyleID="s59"
       ss:Formula="=IF(RC[-2]&gt;=100,MOD(RC[-2]/100,10)-RC[1]/10-RC[2]/100-RC[3]/1000,IF(RC[-2]&lt;0,&quot;-&quot;,&quot;&quot;))"><Data
@@ -1321,7 +1330,7 @@
       <% end %>
      <Cell ss:StyleID="s57" ss:Formula="=SUM(RC[-17]:RC[-1])"><Data ss:Type="Number">0</Data></Cell>
      <Cell ss:StyleID="s58"
-      ss:Formula="=IF(ISERROR(LEFT(RC[9],1)*1),&quot;&quot;,SUM(RC[-18]:RC[-2]))"><Data
+      ss:Formula="=IF(ISERROR(LEFT(RC[9],1)*1),SUM(RC[-18]:RC[-2]),&quot;&quot;)"><Data
        ss:Type="String"></Data></Cell>
      <Cell ss:StyleID="s59"
       ss:Formula="=IF(RC[-2]&gt;=100,MOD(RC[-2]/100,10)-RC[1]/10-RC[2]/100-RC[3]/1000,IF(RC[-2]&lt;0,&quot;-&quot;,&quot;&quot;))"><Data
@@ -1346,14 +1355,22 @@
  <% Report.additional_items.each do |key, value| %>
   <Row>
    <Cell ss:StyleID="s66"><Data ss:Type="String"><%= key %></Data></Cell>
-   <Cell ss:StyleID="s67"/>
+   <% personalcharge = Project.find_by_job_code(value).personalcharges.find_by(
+                                user_id: @report.user_id, 
+                                charge_date:  nil, 
+                                period_id: @report.period_id) %>
+       <% if personalcharge && personalcharge.hours != 0 %>
+         <Cell ss:StyleID="s67"><Data ss:Type="Number"><%= personalcharge.hours %></Data></Cell>
+       <% else %>
+         <Cell ss:StyleID="s67"/>                        
+       <% end %>
    <% @column_date_array.each do |per_day| %>
      <% personalcharge = Project.find_by_job_code(value).personalcharges.find_by(
              user_id: @report.user_id,  
              charge_date:  per_day, 
              period_id: @report.period_id
              ) %>
-     <% if personalcharge %>
+     <% if personalcharge && personalcharge.hours != 0 %>
         <Cell ss:StyleID="s67"><Data ss:Type="Number"><%= personalcharge.hours %></Data></Cell>
      <% else %>
        <Cell ss:StyleID="s67"/>
@@ -1364,7 +1381,7 @@
     <% end %>
      <Cell ss:StyleID="s57" ss:Formula="=SUM(RC[-17]:RC[-1])"><Data ss:Type="Number">0</Data></Cell>
      <Cell ss:StyleID="s58"
-      ss:Formula="=IF(ISERROR(LEFT(RC[9],1)*1),&quot;&quot;,SUM(RC[-18]:RC[-2]))"><Data
+      ss:Formula="=IF(ISERROR(LEFT(RC[9],1)*1),SUM(RC[-18]:RC[-2]),&quot;&quot;)"><Data
        ss:Type="String"></Data></Cell>
      <Cell ss:StyleID="s59"
       ss:Formula="=IF(RC[-2]&gt;=100,MOD(RC[-2]/100,10)-RC[1]/10-RC[2]/100-RC[3]/1000,IF(RC[-2]&lt;0,&quot;-&quot;,&quot;&quot;))"><Data
@@ -1465,52 +1482,52 @@
     <Cell ss:StyleID="s93"><Data ss:Type="String">(13) OVERTIME</Data></Cell>
     <Cell ss:StyleID="s26" ss:Formula="=R[-1]C"><Data ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s26"
-     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(ISTEXT(R[-29]C),R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
+     ss:Formula="IF(R[-1]C=&quot;&quot;,&quot;&quot;,IF(OR(R[-1]C=&quot;&quot;,R[-1]C&lt;=0),&quot;&quot;,IF(R[-30]C&lt;&gt;&quot;-&quot;,IF(LEFT(R[-30]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)),IF(LEFT(R[-29]C,1)=&quot;[&quot;,R[-1]C,IF(R[-1]C&lt;=8,&quot;&quot;,R[-1]C-8)))))"><Data
       ss:Type="String"></Data></Cell>
     <Cell ss:StyleID="s57" ss:Formula="=SUM(RC[-17]:RC[-1])"><Data ss:Type="Number">0</Data></Cell>
     <Cell ss:StyleID="s83"/>

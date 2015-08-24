@@ -39,64 +39,47 @@
               </strong>
             </td>
           </tr>
-          <% if end_date.to_date.day < 16 %>
-            <!-- first half month-->
-            <tr>
-              <td></td>
-              <% (1..15).each  do |n| %>
-                <% if weekend(start_date.to_date + (n-1).days) %>
-                  <td><%= "[#{n}]" %></td>
-                <% else %>
-                  <td><%= n %></td>
-                <% end %>
-              <% end %>
-              <td></td>
-            </tr>
-            <tr>
-              <td>ADJ</td>
-              <% 16.times  do |n| %>
-                <td>-</td>
-              <% end %>
-            </tr>
-          <% else %>
-            <!-- second half month -->
-            <tr>
-              <td></td>
-              <% 15.times do %>
-                <td>-</td>
-              <% end %>
-              <td></td>
-            </tr>
-            <tr>
-              <td>ADJ</td>
-              <% (16..31).each  do |n| %>
-                <% if end_date.day < n %>
-                  <td>-</td>
-                <% else %>
-                  <td>
-                    <%= (weekend(start_date.beginning_of_month + (n - 1).days) ? "[#{n}]" : n) %>
-                  </td>
-                <% end %>
-              <% end %>
-            </tr>
-          <% end %>
-
+          <!-- first half month-->
+          <tr>
+            <td></td>
+            <% @first_half_month.each  do |day| %>
+              <td><%= day %></td>
+            <% end %>
+            <td></td>
+          </tr>
+          <!-- second half month -->
+          <tr>
+            <td>ADJ</td>
+            <% @second_half_month.each do |day| %>
+              <td><%= day %></td>
+            <% end %>
+          </tr>
           <!-- body -->
           <!-- projects -->
           <% @projects.each do |project| %>
             <tr>
               <td><%= truncate(project.client.english_name, length: 20) %></td>
-              <td></td>
-              <% 15.times  do |col| %>
+              <td>
                 <% personalcharge = project.personalcharges.find_by(
                                       user_id: @report.user_id, 
-                                      charge_date:  (start_date + col), 
+                                      charge_date: nil, 
+                                      period_id: @report.period_id) %>
+                <% if personalcharge && personalcharge.hours != 0 %>
+                  <%= personalcharge.hours %>
+                <% end %>
+              </td>
+              <% @column_date_array.each do |per_day| %>
+                <% personalcharge = project.personalcharges.find_by(
+                                      user_id: @report.user_id, 
+                                      charge_date: per_day, 
                                       period_id: @report.period_id) %>
                 <td>
                   <%= personalcharge ?  personalcharge.hours : "" %>
                 </td>
               <% end %>
-              <td></td>
+              <% @balance_days.times do %>
+                <td></td>
+              <% end %>
             </tr>
           <% end %>
 
@@ -118,16 +101,27 @@
                   <%= key %>
                 </small>
               </td>
-              <td></td>
-              <% 16.times  do |col| %>
+              <td>
+                <% personalcharge = Project.find_by_job_code(value).personalcharges.find_by(
+                                      user_id: @report.user_id, 
+                                      charge_date: nil, 
+                                      period_id: @report.period_id) %>
+                <% if personalcharge && personalcharge.hours != 0 %>
+                  <%= personalcharge.hours %>
+                <% end %>
+              </td>
+              <% @column_date_array.each  do |per_day| %>
                 <% personalcharge = Project.find_by_job_code(value).personalcharges.find_by(
                         user_id: @report.user_id,  
-                        charge_date:  (start_date + col), 
+                        charge_date:  per_day, 
                         period_id: @report.period_id
                         ) %>
                 <td style="width: 50px">
                   <%= personalcharge ?  personalcharge.hours : "" %>
                 </td>
+              <% end %>
+              <% @balance_days.times do %>
+                <td></td>
               <% end %>
             </tr>
           <% end %>
@@ -137,21 +131,23 @@
             <td>
               <small>(12) TOTAL HOURS (Including overtime)</small>
             </td>
-            <td></td>
-            <% 16.times do |col| %>
+            <td>
+              <%= Personalcharge.where(
+                period_id: @report.period_id,
+                charge_date: nil, 
+                user_id: @report.user_id).sum(:hours) %>
+            </td>
+            <% @column_date_array.each do |per_day| %>
               <% total_hours = Personalcharge.where(
-                      charge_date: start_date + col, 
-                      project_id: @projects.ids,
-                      user_id: @report.user_id
-                      ).sum(:hours)  + 
-                    Personalcharge.where(
-                      charge_date: start_date + col, 
-                      project_id: @additional_projects.ids,
+                      charge_date: per_day, 
                       user_id: @report.user_id
                       ).sum(:hours) %>
               <td>
                 <%= total_hours == 0 ? "" : total_hours %>
               </td>
+            <% end %>
+            <% @balance_days.times do %>
+              <td></td>
             <% end %>
           </tr>
 
@@ -160,7 +156,12 @@
             <td>
               <small>(13) OVERTIME</small>
             </td>
-            <td></td>
+            <td>
+              <%= Personalcharge.where(
+                period_id: @report.period_id,
+                charge_date: nil, 
+                user_id: @report.user_id).sum(:hours) %>
+            </td>
             <% 16.times  do |col| %>
               <% overtime_hours = Personalcharge.where(
                       charge_date: start_date + col, 
@@ -316,37 +317,22 @@
 
           <tr>
             <td>
-              <% 
-                projects_pcs = Personalcharge.where(
-                              period_id: @report.period_id, 
-                              project_id: @projects.ids,
-                              user_id: @report.user_id)
-                add_projects_pcs = Personalcharge.where(
-                              period_id: @report.period_id, 
-                              project_id: @additional_projects.ids,
-                              user_id: @report.user_id)  %>
-              <%= (projects_pcs.sum(:hours) + add_projects_pcs.sum(:hours) == 0) ? "" : projects_pcs.sum(:hours)  + add_projects_pcs.sum(:hours) %>
+              <%= (@personalcharges.sum(:hours) == 0) ? "" : @personalcharges.sum(:hours) %>
             </td>
             <td>
-              <%= (projects_pcs.sum(:meal_allowance) + add_projects_pcs.sum(:meal_allowance) == 0 ) ? "" : (projects_pcs.sum(:meal_allowance) + add_projects_pcs.sum(:meal_allowance)) %>
+              <%= (@personalcharges.sum(:meal_allowance) == 0 ) ? "" : (@personalcharges.sum(:meal_allowance)) %>
             </td>
-            <td><%= (projects_pcs.sum(:travel_allowance) + add_projects_pcs.sum(:travel_allowance) == 0) ? "" : (projects_pcs.sum(:travel_allowance) + add_projects_pcs.sum(:travel_allowance)) %></td>
+            <td><%= (@personalcharges.sum(:travel_allowance) == 0) ? "" : (@personalcharges.sum(:travel_allowance)) %></td>
             <td>
-              <%= (projects_pcs.sum(:reimbursement) + add_projects_pcs.sum(:reimbursement) == 0) ? "" : (projects_pcs.sum(:reimbursement) + add_projects_pcs.sum(:reimbursement)) %>
+              <%= (@personalcharges.sum(:reimbursement) == 0) ? "" : (@personalcharges.sum(:reimbursement)) %>
             </td>
             <td>
-              <%= (projects_pcs.sum(:meal_allowance) + 
-                  add_projects_pcs.sum(:meal_allowance) + 
-                  projects_pcs.sum(:travel_allowance) + 
-                  add_projects_pcs.sum(:travel_allowance)+ 
-                  projects_pcs.sum(:reimbursement) + 
-                  add_projects_pcs.sum(:reimbursement) == 0) ? "" : (
-                  projects_pcs.sum(:meal_allowance) +  
-                  add_projects_pcs.sum(:meal_allowance) +
-                  projects_pcs.sum(:travel_allowance) + 
-                  add_projects_pcs.sum(:travel_allowance)+ 
-                  projects_pcs.sum(:reimbursement) + 
-                  add_projects_pcs.sum(:reimbursement)) %>
+              <%= (@personalcharges.sum(:meal_allowance) + 
+                  @personalcharges.sum(:travel_allowance)+ 
+                  @personalcharges.sum(:reimbursement) == 0) ? "" : (
+                  @personalcharges.sum(:meal_allowance) +
+                  @personalcharges.sum(:travel_allowance)+ 
+                  @personalcharges.sum(:reimbursement)) %>
             </td>
             <td colspan="2">
               <small>Period time and expense</small>
@@ -355,16 +341,8 @@
           <tr>
             <td>
               <% overtime_total = 0.0 %>
-              <% projects_pcs.each do |personalcharge| %>
-                <% if weekend(personalcharge.charge_date) %>
-                  <% overtime_total += personalcharge.hours %>
-                <% else %>
-                  <% overtime_total += (personalcharge.hours - 8) if personalcharge.hours > 8 %>
-                <% end %>
-              <% end %>
-
-              <% add_projects_pcs.each do |personalcharge| %>
-                <% if weekend(personalcharge.charge_date) %>
+              <% @personalcharges.each do |personalcharge| %>
+                <% if weekend(personalcharge.charge_date) || personalcharge.charge_date.nil? %>
                   <% overtime_total += personalcharge.hours %>
                 <% else %>
                   <% overtime_total += (personalcharge.hours - 8) if personalcharge.hours > 8 %>

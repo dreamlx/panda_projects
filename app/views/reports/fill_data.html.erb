@@ -27,39 +27,21 @@
         start_date  = @report.period.starting_date
         end_date    = @report.period.ending_date
       %>
-      <% if end_date.day < 16 %>
-        <!-- first half month-->
-        <tr>
-          <td></td>
-          <% (1..15).each  do |n| %>
-            <td>
-              <%= weekend(start_date.to_date + (n-1).days) ? "[#{n}]" : n %>
-            </td>
-          <% end %>
-          <td></td>
-        </tr>
-        <tr>
-          <td>ADJ</td>
-          <% 16.times  do |n| %>
-            <td>-</td>
-          <% end %>
-        </tr>
-      <% else %>
-        <!-- second half month -->
-        <tr>
-          <td></td>
-          <% 15.times do %>
-            <td>-</td>
-          <% end %>
-          <td></td>
-        </tr>
-        <tr>
-          <td>ADJ</td>
-          <% (16..31).each  do |n| %>
-           <td><%= end_date.day < n ? "-" : (weekend(start_date.beginning_of_month + (n - 1).days) ? "[#{n}]" : n) %></td>
-          <% end %>
-        </tr>
-      <% end %>
+      <!-- first half month-->
+      <tr>
+        <td></td>
+        <% @first_half_month.each  do |day| %>
+          <td><%= day %></td>
+        <% end %>
+        <td></td>
+      </tr>
+      <!-- second half month -->
+      <tr>
+        <td>ADJ</td>
+        <% @second_half_month.each do |day| %>
+          <td><%= day %></td>
+        <% end %>
+      </tr>
 
       <!-- body -->
       <!-- projects -->
@@ -68,7 +50,12 @@
         <% @projects.each do |project| %>
           <tr>
             <td><%= truncate(project.client.english_name, length: 24) if project.client %></td>
-            <td></td>
+            <td>
+              <%= best_in_place project.personalcharges.find_or_create_by(
+                user_id: @report.user_id,
+                charge_date: nil,
+                period_id: @report.period_id), :hours, as: :input, display_as: :hours_replace %>
+            </td>
             <% 16.times  do |col| %>
               <% col_date = start_date + col %>
               <td class="focus">
@@ -101,7 +88,12 @@
               <%= key %>
             </small>
           </td>
-          <td></td>
+          <td>
+            <%= best_in_place Project.find_by_job_code(value).personalcharges.find_or_create_by(
+              user_id: @report.user_id,
+              charge_date: nil,
+              period_id: @report.period_id), :hours, as: :input, display_as: :hours_replace %>
+          </td>
           <% 16.times  do |col| %>
             <% col_date = start_date + col %>
             <td style="width: 50px" class="focus">
@@ -116,12 +108,17 @@
         </tr>
       <% end %>
 
-      <!-- totol -->
+      <!-- total -->
       <tr>
         <td>
           <small>(12) TOTAL HOURS (Including overtime)</small>
         </td>
-        <td></td>
+        <td>
+          <%= Personalcharge.where(
+            period_id: @report.period_id,
+            charge_date: nil, 
+            user_id: @report.user_id).sum(:hours) %>
+        </td>
         <% 16.times  do |col| %>
         <% col_date = start_date + col %>
           <% if col_date <= end_date %>
@@ -148,7 +145,12 @@
         <td>
           <small>(13) OVERTIME</small>
         </td>
-        <td></td>
+        <td>
+          <%= Personalcharge.where(
+            period_id: @report.period_id,
+            charge_date: nil, 
+            user_id: @report.user_id).sum(:hours) %>
+        </td>
         <% 16.times  do |col| %>
           <td class="refresh2">
             <% project_time = Personalcharge.where(
@@ -326,84 +328,21 @@
 
       <tr>
         <td class="refresh5_1">
-          <%= Personalcharge.where(
-                period_id: @report.period_id, 
-                project_id: @projects.ids,
-                user_id: @report.user_id
-                ).sum(:hours)  + 
-              Personalcharge.where(
-                period_id: @report.period_id, 
-                project_id: @additional_projects.ids,
-                user_id: @report.user_id
-                ).sum(:hours) %>
+          <%= @personalcharges.sum(:hours) %>
         </td>
         <td class="refresh5_2">
-          <%= Personalcharge.where(
-                period_id: @report.period_id, 
-                project_id: @projects.ids,
-                user_id: @report.user_id
-                ).sum(:meal_allowance) + 
-              Personalcharge.where(
-                period_id: @report.period_id, 
-                project_id: @additional_projects.ids,
-                user_id: @report.user_id
-                ).sum(:meal_allowance) %>
+          <%= @personalcharges.sum(:meal_allowance)  %>
         </td>
         <td class="refresh5_3">
-          <%= Personalcharge.where(
-                period_id: @report.period_id, 
-                project_id: @projects.ids,
-                user_id: @report.user_id
-                ).sum(:travel_allowance) + 
-              Personalcharge.where(
-                period_id: @report.period_id, 
-                project_id: @additional_projects.ids,
-                user_id: @report.user_id
-                ).sum(:travel_allowance) %>
+          <%= @personalcharges.sum(:travel_allowance)  %>
         </td>
         <td class="refresh5_4">
-          <%= Personalcharge.where(
-                period_id: @report.period_id, 
-                project_id: @projects.ids,
-                user_id: @report.user_id
-                ).sum(:reimbursement) + 
-              Personalcharge.where(
-                period_id: @report.period_id, 
-                project_id: @additional_projects.ids,
-                user_id: @report.user_id
-                ).sum(:reimbursement) %>
+          <%= @personalcharges.sum(:reimbursement) %>
         </td>
         <td class="refresh5_5">
-          <%= Personalcharge.where(
-                period_id: @report.period_id, 
-                project_id: @projects.ids,
-                user_id: @report.user_id
-                ).sum(:meal_allowance) + 
-              Personalcharge.where(
-                period_id: @report.period_id, 
-                project_id: @additional_projects.ids,
-                user_id: @report.user_id
-                ).sum(:meal_allowance) +
-              Personalcharge.where(
-                period_id: @report.period_id, 
-                project_id: @projects.ids,
-                user_id: @report.user_id
-                ).sum(:travel_allowance) + 
-              Personalcharge.where(
-                period_id: @report.period_id, 
-                project_id: @additional_projects.ids,
-                user_id: @report.user_id
-                ).sum(:travel_allowance)+
-              Personalcharge.where(
-                period_id: @report.period_id, 
-                project_id: @projects.ids,
-                user_id: @report.user_id
-                ).sum(:reimbursement) + 
-              Personalcharge.where(
-                period_id: @report.period_id, 
-                project_id: @additional_projects.ids,
-                user_id: @report.user_id
-                ).sum(:reimbursement) %>
+          <%= @personalcharges.sum(:meal_allowance) + 
+              @personalcharges.sum(:travel_allowance) + 
+              @personalcharges.sum(:reimbursement) %>
         </td>
         <td colspan="2">
           <small>Period time and expense</small>
@@ -417,7 +356,7 @@
               project_id: @projects.ids, 
               user_id: @report.user_id
               ).each do |personalcharge| %>
-            <% if weekend(personalcharge.charge_date) %>
+            <% if weekend(personalcharge.charge_date) || personalcharge.charge_date.nil? %>
               <% overtime_total += personalcharge.hours %>
             <% else %>
               <% overtime_total += (personalcharge.hours - 8) if personalcharge.hours > 8 %>
@@ -429,7 +368,7 @@
               project_id: @additional_projects.ids,
               user_id: @report.user_id
               ).each do |personalcharge| %>
-            <% if weekend(personalcharge.charge_date) %>
+            <% if weekend(personalcharge.charge_date) || personalcharge.charge_date.nil? %>
               <% overtime_total += personalcharge.hours %>
             <% else %>
               <% overtime_total += (personalcharge.hours - 8) if personalcharge.hours > 8 %>
