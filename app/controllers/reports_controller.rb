@@ -71,7 +71,7 @@ class ReportsController < ApplicationController
       format.html { render layout: false}
       format.xml do  
         stream = render_to_string(:template=>"reports/show" )  
-        send_data(stream, :type=>"text/xml",:filename => "test.xml")
+        send_data(stream, :type=>"text/xml",:filename => (DateTime.now.to_s(:number) +".xml"))
       end
     end
   end

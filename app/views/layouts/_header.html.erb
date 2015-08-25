@@ -50,6 +50,11 @@
             </ul>
           </li>
           <li><%= link_to current_user.name, edit_password_user_path(current_user) %></li>
+          <% if current_user.role.nil? %>
+            <li><%= link_to 'nil', page_path('authorization') %></li>
+          <% else %>
+            <li><%= link_to current_user.role, page_path('authorization') %></li>
+          <% end %>
           <li>
             <%= link_to destroy_user_session_path, method: :delete do %>
               <i class="glyphicon glyphicon-log-out"></i>
