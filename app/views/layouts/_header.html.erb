@@ -50,7 +50,7 @@
             </ul>
           </li>
           <li><%= link_to current_user.name, edit_password_user_path(current_user) %></li>
-          <% if current_user.role.nil? %>
+          <% if current_user.role.nil? || current_user.role == "" %>
             <li><%= link_to 'nil', page_path('authorization') %></li>
           <% else %>
             <li><%= link_to current_user.role, page_path('authorization') %></li>

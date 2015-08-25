@@ -21,7 +21,7 @@
   <%= f.input :gender, collection: User::GENDER_TYPES %>
   <%= f.input :status, collection: User::STATUS_TYPES %>
   <%= f.input :GMU, collection: User::GMU_TYPES %>
-  <%= f.input :role, collection: @roles %>
+  <%= f.input :role, collection: @roles, :include_blank => true %>
   <%= f.input :password if @user.new_record? %>
   <%= f.input :password_confirmation if @user.new_record? %>
   <%= f.button :submit %>
