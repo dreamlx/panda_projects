@@ -171,118 +171,70 @@ class ReportsController < ApplicationController
     @report = Report.find(params[:report_id])
     @projects = @report.projects
     @additional_projects = Project.where(job_code: Report.additional_items.values)
+    personalcharges = Personalcharge.where(period_id: @report.period_id, user_id: @report.user_id)
     start_date  = @report.period.starting_date
     end_date    = @report.period.ending_date
     @total = Array.new
+    @total << remove_zero(Personalcharge.where(charge_date: nil,period_id: @report.period_id, user_id: @report.user_id ).sum(:hours))
     16.times do |col|
       col_date = start_date + col
       if col_date <= end_date
-        @total << Personalcharge.where(charge_date: col_date,project_id: @projects.ids, user_id: @report.user_id ).sum(:hours)  + 
+        pc_hours = Personalcharge.where(charge_date: col_date,project_id: @projects.ids, user_id: @report.user_id ).sum(:hours)  + 
                   Personalcharge.where(charge_date: col_date, project_id: @additional_projects.ids, user_id: @report.user_id ).sum(:hours)
+        @total << remove_zero(pc_hours)
       end
     end
     @overtime = Array.new
+    @overtime << remove_zero(Personalcharge.where(charge_date: nil,period_id: @report.period_id, user_id: @report.user_id ).sum(:hours))
     16.times  do |col|
       project_time = Personalcharge.where( charge_date: start_date + col, project_id: @projects.ids, user_id: @report.user_id).sum(:hours)
-                     addtional_time = Personalcharge.where( charge_date: start_date + col, project_id: @additional_projects.ids, user_id: @report.user_id ).sum(:hours)
+      addtional_time = Personalcharge.where( charge_date: start_date + col, project_id: @additional_projects.ids, user_id: @report.user_id ).sum(:hours)
       if weekend(start_date + col.days)
-        @overtime << project_time + addtional_time
+        pc_overtime = project_time + addtional_time
+        @overtime << remove_zero(pc_overtime)
       else
-        @overtime << (((project_time + addtional_time) > 8) ? (project_time + addtional_time -8) : 0)
+        @overtime << (((project_time + addtional_time) > 8) ? (project_time + addtional_time -8) : "")
       end             
     end
     @total_hours = Array.new
     @total_expenses = Array.new
     @projects.each do |project|
-      @total_hours << project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id ).sum(:hours)
-      @total_expenses << project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id ).sum(:meal_allowance) + 
-                      project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id).sum(:travel_allowance)+ 
-                      project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id).sum(:reimbursement)
+      project_pcs = project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id )
+      @total_hours << remove_zero(project_pcs.sum(:hours))
+      @total_expenses << keep_dash(project_pcs.sum(:meal_allowance) + 
+                      project_pcs.sum(:travel_allowance)+ 
+                      project_pcs.sum(:reimbursement))
     end
-    (20 - @projects.count).times do |row|
+    (19 - @projects.count).times do |row|
       @total_hours << ""
-      @total_expenses << ""
+      @total_expenses << "-"
     end
     @additional_projects.each do |project|
-      @total_hours << project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id ).sum(:hours)
-      @total_expenses << project.personalcharges.where(user_id: @report.user_id, period_id: @report.period_id).sum(:meal_allowance) + 
-                project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id ).sum(:travel_allowance)+ 
-                project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id ).sum(:reimbursement)
+      additional_project_pcs = project.personalcharges.where( user_id: @report.user_id, period_id: @report.period_id )
+      @total_hours << remove_zero(additional_project_pcs.sum(:hours))
+      @total_expenses << keep_dash(additional_project_pcs.sum(:meal_allowance) + 
+                additional_project_pcs.sum(:travel_allowance)+ 
+                additional_project_pcs.sum(:reimbursement))
 
     end
     @periods = Array.new
-    @periods << Personalcharge.where(
+    pcs = Personalcharge.where(
                     period_id: @report.period_id, 
                     project_id: @projects.ids,
                     user_id: @report.user_id
-                    ).sum(:hours)  + 
-                  Personalcharge.where(
+                    )
+    add_pcs = Personalcharge.where(
                     period_id: @report.period_id, 
                     project_id: @additional_projects.ids,
                     user_id: @report.user_id
-                    ).sum(:hours)
-    @periods << Personalcharge.where(
-                    period_id: @report.period_id, 
-                    project_id: @projects.ids,
-                    user_id: @report.user_id
-                    ).sum(:meal_allowance) + 
-                  Personalcharge.where(
-                    period_id: @report.period_id, 
-                    project_id: @additional_projects.ids,
-                    user_id: @report.user_id
-                    ).sum(:meal_allowance)
-    @periods << Personalcharge.where(
-                    period_id: @report.period_id, 
-                    project_id: @projects.ids,
-                    user_id: @report.user_id
-                    ).sum(:travel_allowance) + 
-                  Personalcharge.where(
-                    period_id: @report.period_id, 
-                    project_id: @additional_projects.ids,
-                    user_id: @report.user_id
-                    ).sum(:travel_allowance)
-    @periods << Personalcharge.where(
-                    period_id: @report.period_id, 
-                    project_id: @projects.ids,
-                    user_id: @report.user_id
-                    ).sum(:reimbursement) + 
-                  Personalcharge.where(
-                    period_id: @report.period_id, 
-                    project_id: @additional_projects.ids,
-                    user_id: @report.user_id
-                    ).sum(:reimbursement)
-    @periods << Personalcharge.where(
-                    period_id: @report.period_id, 
-                    project_id: @projects.ids,
-                    user_id: @report.user_id
-                    ).sum(:meal_allowance) + 
-                  Personalcharge.where(
-                    period_id: @report.period_id, 
-                    project_id: @additional_projects.ids,
-                    user_id: @report.user_id
-                    ).sum(:meal_allowance) +
-                  Personalcharge.where(
-                    period_id: @report.period_id, 
-                    project_id: @projects.ids,
-                    user_id: @report.user_id
-                    ).sum(:travel_allowance) + 
-                  Personalcharge.where(
-                    period_id: @report.period_id, 
-                    project_id: @additional_projects.ids,
-                    user_id: @report.user_id
-                    ).sum(:travel_allowance)+
-                  Personalcharge.where(
-                    period_id: @report.period_id, 
-                    project_id: @projects.ids,
-                    user_id: @report.user_id
-                    ).sum(:reimbursement) + 
-                  Personalcharge.where(
-                    period_id: @report.period_id, 
-                    project_id: @additional_projects.ids,
-                    user_id: @report.user_id
-                    ).sum(:reimbursement)
+                    )
+    @periods << pcs.sum(:hours) + add_pcs.sum(:hours)
+    @periods << keep_dash(pcs.sum(:meal_allowance) + add_pcs.sum(:meal_allowance))
+    @periods << keep_dash(pcs.sum(:travel_allowance) + add_pcs.sum(:travel_allowance))
+    @periods << keep_dash(pcs.sum(:reimbursement) + add_pcs.sum(:reimbursement))
+    @periods << keep_dash(pcs.sum(:meal_allowance) + add_pcs.sum(:meal_allowance) + pcs.sum(:travel_allowance) + add_pcs.sum(:travel_allowance) + pcs.sum(:reimbursement) + add_pcs.sum(:reimbursement))
     @expenses = Array.new
-    @expenses <<  @overtime.inject{|sum,x| sum + x }
+    @expenses <<  @overtime.inject{|sum,x| x == "" ? 0 : sum + x }
   end
 
   private

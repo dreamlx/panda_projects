@@ -84,7 +84,7 @@
           <% end %>
 
           <!-- fill the empty project field -->
-          <% (20 - @projects.count ).times do |row| %>
+          <% (19 - @projects.count ).times do |row| %>
             <tr>
               <td><%= "-" %></td>
               <% 17.times  do |col| %>
@@ -268,7 +268,7 @@
           <% end %>
 
           <!-- fill the empty one -->
-          <% (20 - @projects.count).times do |row| %>
+          <% (19 - @projects.count).times do |row| %>
             <tr>
               <% 5.times do %>
                 <td><%= "" %></td>

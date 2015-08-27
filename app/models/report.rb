@@ -9,6 +9,7 @@ class Report < ActiveRecord::Base
 
   def self.additional_items
     { 
+      "Self-Study"                =>  "300STU",
       "Public Holiday"            =>  "900LEV",
       "Regular Vacation"          =>  "901LEV",
       "Overtime Vacation Taken"   =>  "902LEV",

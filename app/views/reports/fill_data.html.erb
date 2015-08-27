@@ -71,7 +71,7 @@
       <% end %>
 
       <!-- fill the empty project field -->
-      <% (20 - @projects.count ).times do |row| %>
+      <% (19 - @projects.count ).times do |row| %>
         <tr>
           <td><%= "-" %></td>
           <% 17.times  do |col| %>
@@ -113,17 +113,18 @@
         <td>
           <small>(12) TOTAL HOURS (Including overtime)</small>
         </td>
-        <td>
-          <%= Personalcharge.where(
+        <td class="refresh1">
+          <% adj_pc =  Personalcharge.where(
             period_id: @report.period_id,
             charge_date: nil, 
             user_id: @report.user_id).sum(:hours) %>
+          <%= remove_zero(adj_pc) %>
         </td>
         <% 16.times  do |col| %>
         <% col_date = start_date + col %>
           <% if col_date <= end_date %>
             <td class="refresh1">
-              <%= Personalcharge.where(
+              <% pc =  Personalcharge.where(
                     charge_date: col_date,
                     project_id: @projects.ids,
                     user_id: @report.user_id
@@ -133,6 +134,7 @@
                     project_id: @additional_projects.ids,
                     user_id: @report.user_id
                     ).sum(:hours) %>
+              <%= remove_zero(pc) %>
             </td>
           <% else %>
             <td>-</td>
@@ -145,11 +147,12 @@
         <td>
           <small>(13) OVERTIME</small>
         </td>
-        <td>
-          <%= Personalcharge.where(
+        <td class="refresh2">
+          <% adj_overtime = Personalcharge.where(
             period_id: @report.period_id,
             charge_date: nil, 
             user_id: @report.user_id).sum(:hours) %>
+          <%= remove_zero(adj_overtime) %>
         </td>
         <% 16.times  do |col| %>
           <td class="refresh2">
@@ -165,13 +168,13 @@
                     ).sum(:hours) %>
             <!-- if weekend, all time if overtime -->
             <% if weekend(start_date + col.days) %>
-              <%= project_time + addtional_time %>
+              <%= remove_zero(project_time + addtional_time) %>
             <% else %>
               <!-- if more than 8 hours, subtract 8 hours -->
               <% if (project_time + addtional_time) > 8 %>
                 <%= project_time + addtional_time -8  %>
               <% else %>
-                0
+                <%= "" %>
               <% end %>
             <% end %>
           </td>
@@ -224,10 +227,10 @@
       <% @projects.each do |project| %>
         <tr>
           <td class="refresh3">
-            <%= project.personalcharges.where(
+            <%= remove_zero(project.personalcharges.where(
                   user_id: @report.user_id, 
                   period_id: @report.period_id
-                  ).sum(:hours) %>
+                  ).sum(:hours)) %>
           </td>
           <!-- 输入2 -->
           <td class="focus">
@@ -248,7 +251,7 @@
                   ), :reimbursement, as: :input, display_as: :reimbursement_replace %>
           </td>
           <td class="refresh4">
-            <%= project.personalcharges.where(
+            <%= keep_dash(project.personalcharges.where(
                   user_id: @report.user_id, 
                   period_id: @report.period_id
                   ).sum(:meal_allowance) +
@@ -259,7 +262,7 @@
                 project.personalcharges.where(
                   user_id: @report.user_id, 
                   period_id: @report.period_id
-                  ).sum(:reimbursement) %>
+                  ).sum(:reimbursement)) %>
           </td>
           <td>
             <%= project.job_code %>
@@ -269,7 +272,7 @@
       <% end %>
 
       <!-- fill the empty one -->
-      <% (20 - @projects.count).times do |row| %>
+      <% (19 - @projects.count).times do |row| %>
         <tr>
           <% 5.times do %>
             <td><%= "" %></td>
@@ -282,10 +285,10 @@
       <% @additional_projects.each do |project| %>
         <tr>
           <td class="refresh8">
-            <%= project.personalcharges.where(
+            <%= remove_zero(project.personalcharges.where(
                   user_id: @report.user_id, 
                   period_id: @report.period_id
-                  ).sum(:hours) %>
+                  ).sum(:hours)) %>
           </td>
           <td class="focus">
             <%= best_in_place project.personalcharges.find_or_create_by(
@@ -305,7 +308,7 @@
                   ), :reimbursement, as: :input, display_as: :reimbursement_replace %>
           </td>
           <td class="refresh7">
-            <%= project.personalcharges.where(
+            <%= keep_dash(project.personalcharges.where(
                   user_id: @report.user_id, 
                   period_id: @report.period_id
                   ).sum(:meal_allowance) + 
@@ -316,7 +319,7 @@
                 project.personalcharges.where(
                   user_id: @report.user_id, 
                   period_id: @report.period_id
-                  ).sum(:reimbursement)
+                  ).sum(:reimbursement))
                    %>
           </td>
           <td>
@@ -328,21 +331,21 @@
 
       <tr>
         <td class="refresh5_1">
-          <%= @personalcharges.sum(:hours) %>
+          <%= remove_zero(@personalcharges.sum(:hours)) %>
         </td>
         <td class="refresh5_2">
-          <%= @personalcharges.sum(:meal_allowance)  %>
+          <%= keep_dash(@personalcharges.sum(:meal_allowance)) %>
         </td>
         <td class="refresh5_3">
-          <%= @personalcharges.sum(:travel_allowance)  %>
+          <%= keep_dash(@personalcharges.sum(:travel_allowance)) %>
         </td>
         <td class="refresh5_4">
-          <%= @personalcharges.sum(:reimbursement) %>
+          <%= keep_dash(@personalcharges.sum(:reimbursement)) %>
         </td>
         <td class="refresh5_5">
-          <%= @personalcharges.sum(:meal_allowance) + 
+          <%= keep_dash(@personalcharges.sum(:meal_allowance) + 
               @personalcharges.sum(:travel_allowance) + 
-              @personalcharges.sum(:reimbursement) %>
+              @personalcharges.sum(:reimbursement)) %>
         </td>
         <td colspan="2">
           <small>Period time and expense</small>
@@ -374,7 +377,7 @@
               <% overtime_total += (personalcharge.hours - 8) if personalcharge.hours > 8 %>
             <% end %>
           <% end %>
-          <%= overtime_total %>
+          <%= remove_zero(overtime_total) %>
         </td>
         <td></td>
         <td></td>
@@ -470,7 +473,7 @@
   }
 
   function refresh7(data7){
-    var i=20;
+    var i=19;
         $(".refresh7").each(function(){
           $(this).text(data7[i]);
           i++;
@@ -478,7 +481,7 @@
   }
 
   function refresh8(data8){
-    var i=20;
+    var i=19;
         $(".refresh8").each(function(){
           $(this).text(data8[i]);
           i++;
