@@ -29,7 +29,6 @@
           <tr>
             <th><%= t('user') %></th>
             <th><%= t('charge_rate') %></th>
-            <th><%= t('hours') %></th>
             <th><%= t('operations') %></th>
           </tr>
           <%= render @project.bookings %>
@@ -40,8 +39,7 @@
       <div class="col-md-3">
         <h3>book new User</h3>
         <%= simple_form_for([@project, @project.bookings.build]) do |f|%>
-          <%= f.input :user_id, collection: User.all %>
-          <%= f.input :hours %>
+          <%= f.input :user_id, collection: User.select_users %>
           <%= f.button :submit %>
         <% end  %>
       </div>

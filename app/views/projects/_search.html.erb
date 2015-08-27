@@ -7,11 +7,11 @@
     boolean: :horizontal_boolean}) do |f| %>
   <div class="col-md-4">
     <%= f.input :job_code_cont, required: false %>
-    <%= f.input :client_english_name_cont, required: false %>
-    <%= f.input :contract_number_cont,
-                required: false %>
+    <%= f.input :job_code_start, required: false %>
+    <%= f.input :job_code_end, required: false %>
   </div>
   <div class="col-md-4">
+    <%= f.input :client_english_name_cont, required: false %>
     <%= f.input :starting_date_gteq,
                 as: :date,
                 html5: true,
@@ -24,6 +24,8 @@
                 label: 'Start Date To' %>
   </div>
   <div class="col-md-4">
+    <%= f.input :contract_number_cont,
+                required: false %>
     <%= f.input :ending_date_gteq,
                 as: :date,
                 html5: true,
@@ -34,6 +36,9 @@
                 html5: true,
                 required: false,
                 label: 'End Date To' %>
+    <%= f.input :status_id_eq,
+                collection: Dict.selected_statuses,
+                required: false %>
   </div>
   <div class="col-md-12">
     <%= f.button :submit, class: "btn btn-primary" %>
