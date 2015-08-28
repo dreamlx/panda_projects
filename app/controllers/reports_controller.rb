@@ -228,13 +228,20 @@ class ReportsController < ApplicationController
                     project_id: @additional_projects.ids,
                     user_id: @report.user_id
                     )
-    @periods << pcs.sum(:hours) + add_pcs.sum(:hours)
+    @periods << remove_zero(pcs.sum(:hours) + add_pcs.sum(:hours))
     @periods << keep_dash(pcs.sum(:meal_allowance) + add_pcs.sum(:meal_allowance))
     @periods << keep_dash(pcs.sum(:travel_allowance) + add_pcs.sum(:travel_allowance))
     @periods << keep_dash(pcs.sum(:reimbursement) + add_pcs.sum(:reimbursement))
     @periods << keep_dash(pcs.sum(:meal_allowance) + add_pcs.sum(:meal_allowance) + pcs.sum(:travel_allowance) + add_pcs.sum(:travel_allowance) + pcs.sum(:reimbursement) + add_pcs.sum(:reimbursement))
+    char_pcs = Personalcharge.where(
+                    period_id: @report.period_id, 
+                    project_id: @projects.char_projects.ids,
+                    user_id: @report.user_id
+                    )
+    @periods << remove_zero(char_pcs.sum(:hours))
     @expenses = Array.new
-    @expenses <<  @overtime.inject{|sum,x| x == "" ? 0 : sum + x }
+    new_overtime = @overtime.reject(&:blank?)
+    @expenses <<  new_overtime.inject{|sum,x| sum + x }
   end
 
   private

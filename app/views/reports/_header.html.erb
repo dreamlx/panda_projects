@@ -42,9 +42,11 @@
       <div class="col-xs-6">
       <table border="1">
         <tr>
-          <td class="refresh5_1" style="width: 150px; height: 55px; vertical-align: top; horizotal-align: left ">
+          <td style="width: 150px; height: 55px; vertical-align: top; horizotal-align: left ">
             <strong>Chargeable Hours</strong>
-            <%= Personalcharge.where(period_id: @report.period.id, project_id: @projects.ids).sum(:hours)  if @report.period && @projects %>
+            <span class="refresh5_6">
+              <%= Personalcharge.where(period_id: @report.period.id, project_id: @projects.ids).sum(:hours)  if @report.period && @projects %>
+            </span>
           </td>
         </tr>
       </table>

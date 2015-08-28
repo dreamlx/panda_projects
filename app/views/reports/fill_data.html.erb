@@ -1,6 +1,9 @@
 <div class="row">
-  <div class="col-md-3 col-md-offset-9">
+  <div class="col-md-3">
     <%= link_to 'submit', submit_report_path(@report), method: :post, class: 'btn btn-danger' %>
+  </div>
+  <div class="col-md-3 col-md-offset-6">
+    <%= link_to 'refresh', fill_data_report_path(@report), method: :get, class: 'btn btn-primary' %>
   </div>
 </div>
 <!-- head -->
@@ -354,27 +357,16 @@
       <tr>
         <td class="refresh6">
           <% overtime_total = 0.0 %>
-          <% Personalcharge.where(
-              period_id: @report.period_id, 
-              project_id: @projects.ids, 
-              user_id: @report.user_id
-              ).each do |personalcharge| %>
-            <% if weekend(personalcharge.charge_date) || personalcharge.charge_date.nil? %>
-              <% overtime_total += personalcharge.hours %>
+          <% @column_date_array.each do |per_day| %>
+            <% overtime_hours = Personalcharge.where(
+                period_id: @report.period_id, 
+                user_id: @report.user_id,
+                charge_date: per_day
+                ).sum(:hours) %>
+            <% if weekend(per_day) || per_day.nil? %>
+              <% overtime_total += overtime_hours %>
             <% else %>
-              <% overtime_total += (personalcharge.hours - 8) if personalcharge.hours > 8 %>
-            <% end %>
-          <% end %>
-
-          <% Personalcharge.where(
-              period_id: @report.period_id, 
-              project_id: @additional_projects.ids,
-              user_id: @report.user_id
-              ).each do |personalcharge| %>
-            <% if weekend(personalcharge.charge_date) || personalcharge.charge_date.nil? %>
-              <% overtime_total += personalcharge.hours %>
-            <% else %>
-              <% overtime_total += (personalcharge.hours - 8) if personalcharge.hours > 8 %>
+              <% overtime_total += (overtime_hours - 8) if overtime_hours > 8 %>
             <% end %>
           <% end %>
           <%= remove_zero(overtime_total) %>
@@ -466,6 +458,7 @@
     $(".refresh5_3").text(data5[2]);
     $(".refresh5_4").text(data5[3]);
     $(".refresh5_5").text(data5[4]);
+    $(".refresh5_6").text(data5[5]);
   }
 
   function refresh6(data6){
