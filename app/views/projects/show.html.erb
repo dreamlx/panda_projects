@@ -48,8 +48,35 @@
   </div>
   <div class="col-md-12">
     <table class="table table-striped">
+      <thead>
+        <tr>
+          <th><%= sort_link(@q, :project_job_code, t('job_code')) %></th>
+          <th><%= sort_link(@q, :project_referring_english_name, 'Refer') %></th>
+          <th><%= sort_link(@q, :project_billing_partner_english_name, 'Partner') %></th>
+          <th><%= sort_link(@q, :project_billing_manager_english_name, 'Manager') %></th>
+          <th><%= sort_link(@q, :user_english_name, 'Prepared by') %></th>
+          <th><%= sort_link(@q, :number) %></th>
+          <th><%= sort_link(@q, :period_number, 'Period Number') %></th>
+          <th><%= sort_link(@q, :billing_date) %></th>
+          <th><%= sort_link(@q, :service_billing) %></th>
+          <th><%= sort_link(@q, :expense_billing) %></th>
+          <th><%= sort_link(@q, :amount) %></th>
+          <th>Received</th>
+          <th><%= sort_link(@q, :outstanding) %></th>
+          <th><%= sort_link(@q, :write_off) %></th>
+          <th>Outstanding Net</th>
+          <th><%= sort_link(@q, :provision) %></th>
+          <th><%= sort_link(@q, :days_of_ageing) %></th>
+          <th><%= sort_link(@q, :status) %></th>
+          <th><%= sort_link(@q, :business_tax) %></th>
+          <th><%= sort_link(@q, :collection_days) %></th>
+          <th><%= sort_link(@q, :created_on) %></th>
+          <th><%= sort_link(@q, :updated_on) %></th>
+          <th colspan="2">Operation</th>
+        </tr>
+      </thead>
       <tbody>
-        <%= render @project.billings %>    
+        <%= render @billings %>    
       </tbody>
     </table>
   </div>

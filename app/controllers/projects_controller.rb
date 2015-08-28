@@ -15,6 +15,8 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     @initialfee = @project.initialfee ? @project.initialfee : @project.create_initialfee
     @deduction  = @project.deduction ? @project.deduction : @project.create_deduction
+    @q = @project.billings.search(params[:q])
+    @billings = @q.result
   end
 
   def new
