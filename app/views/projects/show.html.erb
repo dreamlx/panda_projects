@@ -27,9 +27,9 @@
         <h3>User booked</h3>
         <table class="table table-bordered">
           <tr>
-            <th><%= t('user') %></th>
-            <th><%= t('charge_rate') %></th>
-            <th><%= t('operations') %></th>
+            <th>user</th>
+            <th>charge_rate</th>
+            <th>operations</th>
           </tr>
           <%= render @project.bookings %>
         </table>
@@ -47,36 +47,62 @@
     </div>
   </div>
   <div class="col-md-12">
+    <h2>Billing List</h2>
     <table class="table table-striped">
       <thead>
         <tr>
-          <th><%= sort_link(@q, :project_job_code, t('job_code')) %></th>
-          <th><%= sort_link(@q, :project_referring_english_name, 'Refer') %></th>
-          <th><%= sort_link(@q, :project_billing_partner_english_name, 'Partner') %></th>
-          <th><%= sort_link(@q, :project_billing_manager_english_name, 'Manager') %></th>
-          <th><%= sort_link(@q, :user_english_name, 'Prepared by') %></th>
-          <th><%= sort_link(@q, :number) %></th>
-          <th><%= sort_link(@q, :period_number, 'Period Number') %></th>
-          <th><%= sort_link(@q, :billing_date) %></th>
-          <th><%= sort_link(@q, :service_billing) %></th>
-          <th><%= sort_link(@q, :expense_billing) %></th>
-          <th><%= sort_link(@q, :amount) %></th>
+          <th>job_code</th>
+          <th>Refer</th>
+          <th>Partner</th>
+          <th>Manager</th>
+          <th>Prepared by</th>
+          <th>number</th>
+          <th>Period Number</th>
+          <th>billing_date</th>
+          <th>service_billing</th>
+          <th>expense_billing</th>
+          <th>amount</th>
           <th>Received</th>
-          <th><%= sort_link(@q, :outstanding) %></th>
-          <th><%= sort_link(@q, :write_off) %></th>
+          <th>outstanding</th>
+          <th>write_off</th>
           <th>Outstanding Net</th>
-          <th><%= sort_link(@q, :provision) %></th>
-          <th><%= sort_link(@q, :days_of_ageing) %></th>
-          <th><%= sort_link(@q, :status) %></th>
-          <th><%= sort_link(@q, :business_tax) %></th>
-          <th><%= sort_link(@q, :collection_days) %></th>
-          <th><%= sort_link(@q, :created_on) %></th>
-          <th><%= sort_link(@q, :updated_on) %></th>
+          <th>provision</th>
+          <th>days_of_ageing</th>
+          <th>status</th>
+          <th>business_tax</th>
+          <th>collection_days</th>
+          <th>created_on</th>
+          <th>updated_on</th>
           <th colspan="2">Operation</th>
         </tr>
       </thead>
       <tbody>
         <%= render @billings %>    
+      </tbody>
+    </table>
+    <h2>Expense List</h2>
+    <table class="table table-stripped">
+      <thead>
+        <tr>
+          <th>project_job_code</th>
+          <th>period_number</th>
+          <th>commission</th>
+          <th>outsourcing</th>
+          <th>tickets</th>
+          <th>courrier</th>
+          <th>postage</th>
+          <th>stationery</th>
+          <th>report_binding</th>
+          <th>cash_advance</th>
+          <th>payment_on_be_half</th>
+          <th>created_on</th>
+          <th>updated_on</th>
+          <th>memo</th>
+          <th colspan="2">Operation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render @expenses %>
       </tbody>
     </table>
   </div>

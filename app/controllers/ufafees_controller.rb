@@ -9,17 +9,23 @@ class UfafeesController < ApplicationController
     @ufafee = Ufafee.new
     @ufafee.project_id = params[:project_id]
     @ufafee.period_id = Period.last.id if Period.last
+
+    # update billing number mannually
+    unless Dict.find_by(category: "billing_number", title: Date.today.strftime("%Y%m%d"))
+      Dict.find_by(category: "billing_number").update(title: Date.today.strftime("%Y%m%d"), code: "0000")
+    end
+    billing_number        = Dict.find_by_category('billing_number')
+    billing_number.code   = billing_number.code.succ
+    billing_number.save
+    # end of update
+
+    @ufafee.number       = billing_number.title + billing_number.code
   end
 
   def create
-    billing_number = Dict.find_by_category('billing_number')
-    billing_number.update(code: (billing_number.code.to_i + 1).to_s.rjust(4, '0'))
-
     @ufafee = Ufafee.new(ufafee_params)
     if @ufafee.save
-      @ufafee.update(
-        number: (billing_number.title + billing_number.code),
-        amount: (@ufafee.service_UFA + @ufafee.expense_UFA))
+      @ufafee.update(amount: (@ufafee.service_UFA + @ufafee.expense_UFA))
       redirect_to ufafees_url
     else
       render 'new'

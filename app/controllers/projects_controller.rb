@@ -17,6 +17,8 @@ class ProjectsController < ApplicationController
     @deduction  = @project.deduction ? @project.deduction : @project.create_deduction
     @q = @project.billings.search(params[:q])
     @billings = @q.result
+    @p = @project.expenses.search(params[:p])
+    @expenses = @p.result
   end
 
   def new

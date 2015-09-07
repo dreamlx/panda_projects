@@ -30,8 +30,6 @@ class Project < ActiveRecord::Base
     Booking.find_or_create_by(project_id: self.id, user_id: self.partner_id) if self.partner_id
     Booking.find_or_create_by(project_id: self.id, user_id: self.manager_id) if self.manager_id
     Booking.find_or_create_by(project_id: self.id, user_id: self.referring_id) if self.referring_id
-    Booking.find_or_create_by(project_id: self.id, user_id: self.billing_partner_id) if self.billing_partner_id
-    Booking.find_or_create_by(project_id: self.id, user_id: self.billing_manager_id) if self.billing_manager_id
   end
   scope :num_projects,  ->  {where("job_code REGEXP '^[0-9]'")}
   scope :char_projects, ->  {where("job_code REGEXP '^[a-z]'")}
