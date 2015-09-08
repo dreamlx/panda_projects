@@ -35,7 +35,7 @@ class ProjectsController < ApplicationController
 
     if @project.save
       params[:project][:user_ids].each do |user_id|
-        @project.bookings.create!(user_id: user_id)
+        @project.bookings.find_or_create_by(user_id: user_id)
       end
       redirect_to @project
     else
