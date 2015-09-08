@@ -32,9 +32,9 @@
           <%= f.input :estimated_annual_fee %>
           <%= f.input :risk_id, collection: Dict.selected_risks, label: 'Collection risk' %>
           <%= f.input :status_id, collection: Dict.selected_statuses,  label: 'Job status' %>
-          <%= f.input :partner_id,    collection: User.order_english_name, label: 'Engagement partner' %>
-          <%= f.input :manager_id,    collection: User.order_english_name, label: 'Engagement manager' %>
-          <%= f.input :referring_id,  collection: User.order_english_name, label: 'Job source' %>
+          <%= f.input :partner_id,    collection: User.select_users, label: 'Engagement partner' %>
+          <%= f.input :manager_id,    collection: User.select_users, label: 'Engagement manager' %>
+          <%= f.input :referring_id,  collection: User.select_users, label: 'Job source' %>
           
         </div>
       </div>
@@ -62,8 +62,8 @@
       <div class="panel panel-default">
         <div class="panel-heading">Billing Responsibility</div>
         <div class="panel-body">
-          <%= f.input :billing_partner_id, collection: User.order_english_name, label: "Partner" %>
-          <%= f.input :billing_manager_id, collection: User.order_english_name, label: "Manager" %>
+          <%= f.input :billing_partner_id, collection: User.select_users, label: "Partner" %>
+          <%= f.input :billing_manager_id, collection: User.select_users, label: "Manager" %>
         </div>
       </div>
     </div>
