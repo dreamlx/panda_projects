@@ -58,7 +58,7 @@
           <!-- projects -->
           <% @projects.each do |project| %>
             <tr>
-              <td><%= truncate(project.client.english_name, length: 20) %></td>
+              <td><%= truncate(project.client.english_name, length: 15) %></td>
               <td>
                 <% personalcharge = project.personalcharges.find_by(
                                       user_id: @report.user_id, 

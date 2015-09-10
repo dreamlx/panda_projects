@@ -52,7 +52,7 @@
       <% if @projects %>
         <% @projects.each do |project| %>
           <tr>
-            <td><%= truncate(project.client.english_name, length: 24) if project.client %></td>
+            <td><%= truncate(project.client.english_name, length: 15) if project.client %></td>
             <td>
               <%= best_in_place project.personalcharges.find_or_create_by(
                 user_id: @report.user_id,
