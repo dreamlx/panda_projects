@@ -12,7 +12,7 @@
 <%= form_tag action: :time_report, method: :post do %>
   <% where_condition = 'manager_id=? OR partner_id=? OR referring_id=? OR billing_partner_id=? OR billing_manager_id=?' %>
   <b>Job_code:</b>
-  <%= select_tag :project_code, options_for_select(Project.where(where_condition, current_user.id, current_user.id, current_user.id, current_user.id, current_user.id).order(job_code: :asc).pluck(:job_code)) %>
+  <%= select_tag :project_code, options_for_select(current_user.role == 'hr_admin' ? Project.order(job_code: :asc).pluck(:job_code) : Project.where(where_condition, current_user.id, current_user.id, current_user.id, current_user.id, current_user.id).order(job_code: :asc).pluck(:job_code)) %>
   <b>Period:</b>
   <%= select_tag :period_number, options_for_select(Period.period_number) %>
   <%= submit_tag 'REPORT' %>
