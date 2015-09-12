@@ -51,9 +51,9 @@
           </li>
           <li><%= link_to current_user.name, edit_password_user_path(current_user) %></li>
           <% if current_user.role.nil? || current_user.role == "" %>
-            <li><%= link_to 'nil', page_path('authorization') %></li>
+            <li><%= link_to 'nil', "#" %></li>
           <% else %>
-            <li><%= current_user.role %></li>
+            <li><%= link_to current_user.role, "#" %></li>
           <% end %>
           <li>
             <%= link_to destroy_user_session_path, method: :delete do %>
