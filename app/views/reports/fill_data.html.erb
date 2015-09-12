@@ -130,12 +130,14 @@
               <% pc =  Personalcharge.where(
                     charge_date: col_date,
                     project_id: @projects.ids,
-                    user_id: @report.user_id
+                    user_id: @report.user_id,
+                    period: @report.period_id
                     ).sum(:hours)  + 
                   Personalcharge.where(
                     charge_date: col_date, 
                     project_id: @additional_projects.ids,
-                    user_id: @report.user_id
+                    user_id: @report.user_id,
+                    period: @report.period_id
                     ).sum(:hours) %>
               <%= remove_zero(pc) %>
             </td>
@@ -162,12 +164,14 @@
             <% project_time = Personalcharge.where(
                     charge_date: start_date + col, 
                     project_id: @projects.ids,
-                    user_id: @report.user_id
+                    user_id: @report.user_id,
+                    period: @report.period_id
                     ).sum(:hours)
                addtional_time = Personalcharge.where(
                     charge_date: start_date + col, 
                     project_id: @additional_projects.ids,
-                    user_id: @report.user_id
+                    user_id: @report.user_id,
+                    period: @report.period_id
                     ).sum(:hours) %>
             <!-- if weekend, all time if overtime -->
             <% if weekend(start_date + col.days) %>

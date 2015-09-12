@@ -179,16 +179,16 @@ class ReportsController < ApplicationController
     16.times do |col|
       col_date = start_date + col
       if col_date <= end_date
-        pc_hours = Personalcharge.where(charge_date: col_date,project_id: @projects.ids, user_id: @report.user_id ).sum(:hours)  + 
-                  Personalcharge.where(charge_date: col_date, project_id: @additional_projects.ids, user_id: @report.user_id ).sum(:hours)
+        pc_hours = Personalcharge.where(charge_date: col_date,project_id: @projects.ids, user_id: @report.user_id, period_id: @report.period_id ).sum(:hours)  + 
+                  Personalcharge.where(charge_date: col_date, project_id: @additional_projects.ids, user_id: @report.user_id, period_id: @report.period_id ).sum(:hours)
         @total << remove_zero(pc_hours)
       end
     end
     @overtime = Array.new
     @overtime << remove_zero(Personalcharge.where(charge_date: nil,period_id: @report.period_id, user_id: @report.user_id ).sum(:hours))
     16.times  do |col|
-      project_time = Personalcharge.where( charge_date: start_date + col, project_id: @projects.ids, user_id: @report.user_id).sum(:hours)
-      addtional_time = Personalcharge.where( charge_date: start_date + col, project_id: @additional_projects.ids, user_id: @report.user_id ).sum(:hours)
+      project_time = Personalcharge.where( charge_date: start_date + col, project_id: @projects.ids, user_id: @report.user_id, period_id: @report.period_id).sum(:hours)
+      addtional_time = Personalcharge.where( charge_date: start_date + col, project_id: @additional_projects.ids, user_id: @report.user_id, period_id: @report.period_id ).sum(:hours)
       if weekend(start_date + col.days)
         pc_overtime = project_time + addtional_time
         @overtime << remove_zero(pc_overtime)
