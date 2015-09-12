@@ -13,7 +13,11 @@ class ExpensesController < ApplicationController
 
   def new
     @expense = Expense.new
-    @expense.project_id = params[:project_id]
+    if params[:project_id]
+      @expense.project_id = params[:project_id]
+    else
+      @expense.project_id = Expense.last.project_id if Expense.last
+    end
     @expense.period_id = Period.last.id if Period.last
   end
 
