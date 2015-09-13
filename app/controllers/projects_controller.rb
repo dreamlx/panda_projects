@@ -61,11 +61,18 @@ class ProjectsController < ApplicationController
 
     allow_closed = is_balance(project)
 
+    billing_number= "|need close billings --"
+
     for item in Billing.where(project_id: project.id)
       allow_closed = false if item.status == "0" # billing status equal to 0, meas outstanding, 1 meas received
     end
     project.update(status_id: Dict.find_by_category_and_code(:prj_status, '0').id) if allow_closed
-    redirect_to project
+    notice = "ballance is not 0!" + "|service balance: #{ @service_balance.to_s}" +"|expense balance:"+ @expense_balance.to_s + billing_number
+    if allow_closed
+      redirect_to project
+    else
+      redirect_to project, notice: notice
+    end
   end
 
   def open
