@@ -140,7 +140,8 @@
             <% @column_date_array.each do |per_day| %>
               <% total_hours = Personalcharge.where(
                       charge_date: per_day, 
-                      user_id: @report.user_id
+                      user_id: @report.user_id,
+                      period_id: @report.period_id
                       ).sum(:hours) %>
               <td>
                 <%= total_hours == 0 ? "" : total_hours %>
@@ -166,11 +167,13 @@
               <% overtime_hours = Personalcharge.where(
                       charge_date: start_date + col, 
                       project_id: @projects.ids,
-                      user_id: @report.user_id).sum(:hours)  + 
+                      user_id: @report.user_id,
+                      period_id: @report.period_id).sum(:hours)  + 
                     Personalcharge.where(
                       charge_date: start_date + col, 
                       project_id: @additional_projects.ids,
-                      user_id: @report.user_id
+                      user_id: @report.user_id,
+                      period_id: @report.period_id
                       ).sum(:hours) 
               %>
               <td>
