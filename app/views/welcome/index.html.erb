@@ -19,7 +19,7 @@
   </div>
   <div class="col-md-12">
     <h1>Projects</h1>
-    <% current_user.projects.order(job_code: :asc).each do |project| %>
+    <% current_user.projects.live.order(job_code: :asc).each do |project| %>
       <div class="col-md-1">
         <%= link_to project.job_code, project %>
       </div>
