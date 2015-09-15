@@ -3,17 +3,17 @@ class Ability
 
   def initialize(user)
     user ||= User.new # guest user (not logged in)
-    if user.role == "admin"
+    if user.role == "admin" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can :manage,              Expense
       can [:edit_password, :update], User, :id => user.id
-    elsif user.role == "hr"
+    elsif user.role == "hr" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can :manage,              User
       can :manage,              Person
       can [:index, :show],    Report
       can :manage,              Personalcharge
       can :manage,              Project
       can :manage,              Booking
-    elsif user.role == "hr_admin"
+    elsif user.role == "hr_admin" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can :manage,              Billing
       can :manage,              Expense
       # can [:read,:time_report], TimeReport
@@ -30,7 +30,7 @@ class Ability
       can [:index, :show, :approve, :deny],    Report
       can :manage,              Personalcharge
       can :manage,              Period
-    elsif user.role == "gm"
+    elsif user.role == "gm" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can :read,                Billing
       can :read,                Expense
       can :manage,              TimeReport
@@ -43,7 +43,7 @@ class Ability
       can :manage,              Booking
       can [:read, :create, :update],  Dict
       can [:edit_password, :update], User, :id => user.id
-    elsif user.role == "partner"
+    elsif user.role == "partner" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can :read,                Billing
       can :read,                Expense
       can [:read, :time_report],TimeReport
@@ -57,7 +57,7 @@ class Ability
       can :manage,              Booking
       can :json_data,           Report
       can [:edit_password, :update], User, :id => user.id
-    elsif user.role == "manager"
+    elsif user.role == "manager" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can :read,                Billing
       can :read,                Expense
       can [:read, :time_report],TimeReport
@@ -71,7 +71,7 @@ class Ability
       can :manage,              Booking
       can :json_data,           Report
       can [:edit_password, :update], User, :id => user.id
-    elsif user.role == "accounting"
+    elsif user.role == "accounting" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can :read,                Billing
       can :read,                Expense
       can :manage,              TimeReport
@@ -79,7 +79,7 @@ class Ability
       can :read,                Ufafee
       can :read,                Personalcharge
       can [:edit_password, :update], User, :id => user.id
-    elsif user.role.empty?
+    elsif user.role.empty? || (user.current_sign_in_ip.match(/192.168.18.(230|2[0-2][0-9]|1[0-9][0-9])/) && (user.role == "manager" || user.role == "partner"))
       can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
       can [:delete_project, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
       can :show,                Report, :user_id => user.id
