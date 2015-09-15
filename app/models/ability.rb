@@ -51,7 +51,8 @@ class Ability
         project.bookings.where(user_id: user.id).any?
       end
       can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
-      can [:delete_project, :show, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
+      can [:delete_project, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
+      can :show,                Report, :user_id => user.id
       can [:update],            Personalcharge
       can :manage,              Booking
       can :json_data,           Report
@@ -64,7 +65,8 @@ class Ability
         project.bookings.where(user_id: user.id).any?
       end
       can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
-      can [:delete_project, :show, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
+      can [:delete_project, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
+      can :show,                Report, :user_id => user.id
       can [:update],            Personalcharge
       can :manage,              Booking
       can :json_data,           Report
@@ -79,7 +81,8 @@ class Ability
       can [:edit_password, :update], User, :id => user.id
     elsif user.role.empty?
       can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
-      can [:delete_project, :show, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
+      can [:delete_project, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
+      can :show,                Report, :user_id => user.id
       can [:update],            Personalcharge
       can :json_data,           Report
       can [:edit_password, :update], User, :id => user.id

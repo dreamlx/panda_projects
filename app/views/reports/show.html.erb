@@ -10,7 +10,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <%= link_to t('export_data'), report_path(@report, format: :xml) %>
+        <%= link_to t('export_data'), report_path(@report, format: :xml) if @report.state == "pending" || @report.state == "denid" %>
       </div>
       <div class="col-md-3 col-md-offset-9">
         <%= link_to 'approve', approve_report_path(@report), method: :post, class: 'btn btn-danger' if @report.state == 'submitted' %>
@@ -65,7 +65,7 @@
                                       charge_date: nil, 
                                       period_id: @report.period_id) %>
                 <% if personalcharge && personalcharge.hours != 0 %>
-                  <%= personalcharge.hours %>
+                  <%= remove_zero(personalcharge.hours) %>
                 <% end %>
               </td>
               <% @column_date_array.each do |per_day| %>
@@ -74,7 +74,7 @@
                                       charge_date: per_day, 
                                       period_id: @report.period_id) %>
                 <td>
-                  <%= personalcharge ?  personalcharge.hours : "" %>
+                  <%= personalcharge ?  remove_zero(personalcharge.hours) : "" %>
                 </td>
               <% end %>
               <% @balance_days.times do %>
@@ -106,8 +106,8 @@
                                       user_id: @report.user_id, 
                                       charge_date: nil, 
                                       period_id: @report.period_id) %>
-                <% if personalcharge && personalcharge.hours != 0 %>
-                  <%= personalcharge.hours %>
+                <% if personalcharge %>
+                  <%= remove_zero(personalcharge.hours) %>
                 <% end %>
               </td>
               <% @column_date_array.each  do |per_day| %>
@@ -117,7 +117,7 @@
                         period_id: @report.period_id
                         ) %>
                 <td style="width: 50px">
-                  <%= personalcharge ?  personalcharge.hours : "" %>
+                  <%= personalcharge ?  remove_zero(personalcharge.hours) : "" %>
                 </td>
               <% end %>
               <% @balance_days.times do %>
@@ -132,10 +132,10 @@
               <small>(12) TOTAL HOURS (Including overtime)</small>
             </td>
             <td>
-              <%= Personalcharge.where(
+              <%= remove_zero(Personalcharge.where(
                 period_id: @report.period_id,
                 charge_date: nil, 
-                user_id: @report.user_id).sum(:hours) %>
+                user_id: @report.user_id).sum(:hours)) %>
             </td>
             <% @column_date_array.each do |per_day| %>
               <% total_hours = Personalcharge.where(
@@ -144,7 +144,7 @@
                       period_id: @report.period_id
                       ).sum(:hours) %>
               <td>
-                <%= total_hours == 0 ? "" : total_hours %>
+                <%= remove_zero(total_hours) %>
               </td>
             <% end %>
             <% @balance_days.times do %>
@@ -158,10 +158,10 @@
               <small>(13) OVERTIME</small>
             </td>
             <td>
-              <%= Personalcharge.where(
+              <%= remove_zero(Personalcharge.where(
                 period_id: @report.period_id,
                 charge_date: nil, 
-                user_id: @report.user_id).sum(:hours) %>
+                user_id: @report.user_id).sum(:hours)) %>
             </td>
             <% 16.times  do |col| %>
               <% overtime_hours = Personalcharge.where(
@@ -178,7 +178,7 @@
               %>
               <td>
                 <% if weekend(start_date + col.days) %>
-                  <%= overtime_hours == 0 ? "" : overtime_hours %>
+                  <%= remove_zero(overtime_hours) %>
                 <% else %>
                   <%= overtime_hours > 8 ? overtime_hours -8 : ""  %>
                 <% end %>
@@ -249,19 +249,19 @@
             %>
             <tr>
               <td>
-                <%= pcs_hours.sum(:hours) == 0 ? "" : pcs_hours.sum(:hours) %>
+                <%= remove_zero(pcs_hours.sum(:hours)) %>
               </td>
               <td>
-                <%= pc_hours ? (pc_hours.meal_allowance == 0 ? "" : pc_hours.meal_allowance) : "" %></td>
+                <%= pc_hours ? remove_zero(pc_hours.meal_allowance) : "" %></td>
               <td>
-                <%= pc_hours ? (pc_hours.travel_allowance == 0 ? "" : pc_hours.travel_allowance) : "" %>
+                <%= pc_hours ? remove_zero(pc_hours.travel_allowance) : "" %>
               </td>
               <td>
-                <%= pc_hours ? (pc_hours.reimbursement == 0 ? "" : pc_hours.reimbursement) : "" %>
+                <%= pc_hours ? remove_zero(pc_hours.reimbursement) : "" %>
               </td>
               <td>
-                <%= (pcs_hours.sum(:meal_allowance) + pcs_hours.sum(:travel_allowance) + pcs_hours.sum(:reimbursement) == 0) ? "" : (pcs_hours.sum(:meal_allowance) + 
-                    pcs_hours.sum(:travel_allowance)) + pcs_hours.sum(:reimbursement) %>
+                <%= remove_zero(pcs_hours.sum(:meal_allowance) + 
+                    pcs_hours.sum(:travel_allowance) + pcs_hours.sum(:reimbursement)) %>
               </td>
               <td>
                 <%= project.job_code %>
@@ -300,16 +300,16 @@
                 <%= pcs_hours.sum(:hours) == 0 ? "" : pcs_hours.sum(:hours) %>
               </td>
               <td>
-                <%= pc_hours ? (pc_hours.meal_allowance == 0 ? "" : pc_hours.meal_allowance) : "" %>
+                <%= pc_hours ? remove_zero(pc_hours.meal_allowance) : "" %>
               </td>
               <td>
-                <%= pc_hours ? (pc_hours.travel_allowance == 0 ? "" : pc_hours.travel_allowance) : "" %>
+                <%= pc_hours ? remove_zero(pc_hours.travel_allowance) : "" %>
               </td>
               <td>
-                <%= pc_hours ? (pc_hours.reimbursement == 0 ? "" : pc_hours.reimbursement) : "" %>
+                <%= pc_hours ? remove_zero(pc_hours.reimbursement) : "" %>
               </td>
               <td>
-                <%= (pcs_hours.sum(:meal_allowance) + pcs_hours.sum(:travel_allowance)  + pcs_hours.sum(:reimbursement) == 0) ? "" : (pcs_hours.sum(:meal_allowance) + pcs_hours.sum(:travel_allowance) + pcs_hours.sum(:reimbursement)) %>
+                <%= remove_zero(pcs_hours.sum(:meal_allowance) + pcs_hours.sum(:travel_allowance) + pcs_hours.sum(:reimbursement)) %>
               </td>
               <td>
                 <%= project.job_code %>
@@ -330,10 +330,7 @@
               <%= (@personalcharges.sum(:reimbursement) == 0) ? "" : (@personalcharges.sum(:reimbursement)) %>
             </td>
             <td>
-              <%= (@personalcharges.sum(:meal_allowance) + 
-                  @personalcharges.sum(:travel_allowance)+ 
-                  @personalcharges.sum(:reimbursement) == 0) ? "" : (
-                  @personalcharges.sum(:meal_allowance) +
+              <%= remove_zero(@personalcharges.sum(:meal_allowance) +
                   @personalcharges.sum(:travel_allowance)+ 
                   @personalcharges.sum(:reimbursement)) %>
             </td>
@@ -351,7 +348,7 @@
                   <% overtime_total += (personalcharge.hours - 8) if personalcharge.hours > 8 %>
                 <% end %>
               <% end %>
-              <%= overtime_total == 0 ? "" : overtime_total %>
+              <%= remove_zero(overtime_total) %>
             </td>
             <td></td>
             <td></td>
