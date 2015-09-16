@@ -43,5 +43,5 @@
   <td><%= @personalcharges_total.sum(:reimbursement) %></td>
   <td><%= @personalcharges_total.sum(:meal_allowance) %></td>
   <td><%= @personalcharges_total.sum(:travel_allowance) %></td>
-  <td><%= @personalcharges_total.sum(:reimbursement) + @personalcharges.sum(:meal_allowance) + @personalcharges.sum(:travel_allowance) %></td>
+  <td><%= @personalcharges_total.sum(:reimbursement) + @personalcharges_total.sum(:meal_allowance) + @personalcharges_total.sum(:travel_allowance) %></td>
 </tr>
