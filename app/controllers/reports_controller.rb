@@ -1,11 +1,11 @@
 class ReportsController < ApplicationController
   load_and_authorize_resource
   def index
-    @q = Project.search(params[:q])
+    @q = Report.search(params[:q])
     if current_user.role == 'hr' ||  current_user.role == 'hr_admin'
-      @reports = Report.page(params[:page]).where(state: 'submitted')
+      @reports = @q.result.where(state: 'submitted').page(params[:page])
     else
-      @reports = current_user.reports.page(params[:page])
+      @reports = @q.result.where(user_id: current_user.id).page(params[:page])
     end
   end
 
