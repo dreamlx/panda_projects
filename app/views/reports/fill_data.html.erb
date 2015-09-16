@@ -390,9 +390,7 @@
 
 <script type="text/javascript">
   var thisurl=window.location.href;
-  var no=thisurl.indexOf("reports");
-  var surl=thisurl.substr(0,no+10);
-  var url=surl+"/json_data";
+  var url = thisurl.replace('fill_data', 'json_data')
   // alert(url);
 
   //setInterval("show()",2000);
