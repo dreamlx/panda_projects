@@ -1,5 +1,5 @@
 class Project < ActiveRecord::Base
-  # validates   :job_code,    uniqueness: true
+  validates   :job_code,    uniqueness: true
 
   has_one     :deduction
   has_one     :initialfee
