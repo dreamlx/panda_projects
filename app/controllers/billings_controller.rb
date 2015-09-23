@@ -2,6 +2,9 @@ class BillingsController < ApplicationController
   load_and_authorize_resource
   def index
     @q = Billing.search(params[:q])
+    if current_user.role == "manager" || current_user.role == "partner" || current_user.role == "gm"
+      @q.build_grouping({:m => 'or', :project_billing_manager_id_eq => current_user.id, :project_billing_partner_id_eq => current_user.id })
+    end
     @billings = @q.result.page(params[:page])
     @b_total = @q.result
     # @r_total = 0
