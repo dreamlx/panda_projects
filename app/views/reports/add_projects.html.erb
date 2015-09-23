@@ -13,7 +13,7 @@
 <%= simple_form_for([@report, @report.projects.build], 
   url: add_projects_report_path, 
   method: :get) do |f|%>
-  <%= f.input :job_code, collection: current_user.projects.order(job_code: :asc).pluck(:job_code) %>
+  <%= f.input :job_code, collection: current_user.projects.live.order(job_code: :asc).pluck(:job_code) %>
   <%= f.button :submit, 'add project' %>
 <% end  %>
 
