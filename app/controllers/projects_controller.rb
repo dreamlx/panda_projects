@@ -41,7 +41,7 @@ class ProjectsController < ApplicationController
       # add expense
       if ((@project.service_code.code.to_i < 60 ) || (@project.service_code.code.to_i > 68 )) || 
         (@project.service_code.code != 100) || 
-        (@project.status && @project.status.title == "Active")
+        (@project.status && (@project.status.title == "Active"))
         Expense.create(
           project_id: @project.id,
           period_id: Period.today_period.id,
