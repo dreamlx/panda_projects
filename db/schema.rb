@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150717072435) do
+ActiveRecord::Schema.define(version: 20150924060415) do
 
   create_table "billings", force: :cascade do |t|
     t.datetime "created_on"
@@ -401,8 +401,8 @@ ActiveRecord::Schema.define(version: 20150717072435) do
     t.decimal  "amount",                  precision: 10, scale: 2
     t.integer  "project_id",  limit: 4
     t.integer  "period_id",   limit: 4
-    t.decimal  "service_UFA",             precision: 10, scale: 2
-    t.decimal  "expense_UFA",             precision: 10, scale: 2
+    t.decimal  "service_UFA",             precision: 10, scale: 2, default: 0.0
+    t.decimal  "expense_UFA",             precision: 10, scale: 2, default: 0.0
   end
 
   create_table "users", force: :cascade do |t|
