@@ -19,7 +19,9 @@ Rails.application.routes.draw do
   resources :dicts, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :industries
   resources :items
-  resources :expenses, only: [:index, :new, :create, :edit, :update, :destroy]
+  resources :expenses, only: [:index, :new, :create, :edit, :update, :destroy] do
+    get :for_period, on: :collection
+  end
   resources :initialfees
   resources :personalcharges, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :reports, only: [:index, :new, :show, :create, :destroy] do

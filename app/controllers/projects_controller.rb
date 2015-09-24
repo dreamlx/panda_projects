@@ -32,8 +32,17 @@ class ProjectsController < ApplicationController
 
   def create
     @project = Project.new(project_params)
-
+    if (@project.job_code.nil? || @project.job_code.empty?) && @project.client && @project.GMU && @project.service_code
+      @project.job_code = @project.client.client_code + 
+                          @project.GMU.code + 
+                          @project.service_code.code
+    end
     if @project.save
+      # add expense
+      if ((@project.service_code.code.to_i < 60 ) || (@project.service_code.code.to_i > 68 )) || (@project.service_code.code != 100)
+        add_expense(@project.job_code, 250, "if prj code not in 60-68,then add 250")
+      end
+
       if params[:project][:user_ids]
         params[:project][:user_ids].each do |user_id|
           @project.bookings.find_or_create_by(user_id: user_id)
