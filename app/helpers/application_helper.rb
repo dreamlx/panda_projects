@@ -11,15 +11,4 @@ module ApplicationHelper
   def keep_dash(table_data)
     return (table_data ==0 ? "-" : table_data)
   end
-
-  def add_expense(job_code, price, msg)
-    project = Project.find_by(job_code: job_code)
-    if project.status.title == "Active"
-      Expense.create(
-        project_id: project.id,
-        period_id: Period.today_period.id,
-        report_binding: price,
-        memo: msg)
-    end
-  end
 end

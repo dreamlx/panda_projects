@@ -39,8 +39,14 @@ class ProjectsController < ApplicationController
     end
     if @project.save
       # add expense
-      if ((@project.service_code.code.to_i < 60 ) || (@project.service_code.code.to_i > 68 )) || (@project.service_code.code != 100)
-        add_expense(@project.job_code, 250, "if prj code not in 60-68,then add 250")
+      if ((@project.service_code.code.to_i < 60 ) || (@project.service_code.code.to_i > 68 )) || 
+        (@project.service_code.code != 100) || 
+        (@project.status && @project.status.title == "Active")
+        Expense.create(
+          project_id: @project.id,
+          period_id: Period.today_period.id,
+          report_binding: 250,
+          memo: "if prj code not in 60-68,then add 250")
       end
 
       if params[:project][:user_ids]
