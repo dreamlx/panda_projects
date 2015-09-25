@@ -48,7 +48,6 @@ class ProjectsController < ApplicationController
           report_binding: 250,
           memo: "if prj code not in 60-68,then add 250")
       end
-
       if params[:project][:user_ids]
         params[:project][:user_ids].each do |user_id|
           @project.bookings.find_or_create_by(user_id: user_id)
@@ -64,8 +63,10 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])  
     if @project.update(project_params)
       @project.bookings.delete_all
-      params[:project][:user_ids].each do |user_id|
-        @project.bookings.create!(user_id: user_id)
+      if params[:project][:user_ids]
+        params[:project][:user_ids].each do |user_id|
+          @project.bookings.create!(user_id: user_id)
+        end
       end
       redirect_to @project
     else
