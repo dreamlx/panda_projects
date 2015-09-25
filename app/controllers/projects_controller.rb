@@ -67,6 +67,7 @@ class ProjectsController < ApplicationController
         params[:project][:user_ids].each do |user_id|
           @project.bookings.create!(user_id: user_id)
         end
+        @project.save
       end
       redirect_to @project
     else
