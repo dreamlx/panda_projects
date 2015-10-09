@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  USER_ROLES = ["admin", "hr", "hr_admin", "gm", "partner", "manager", "accounting"]
+  USER_ROLES = ["admin", "hr", "hr_admin", "gm", "partner", "manager", "accounting", "it"]
   STATUS_TYPES = ["On leave", "Resigned", "Employed"]
   GMU_TYPES = ["Shanghai", "Beijing"]
   GENDER_TYPES = ["Male", "Female"]
