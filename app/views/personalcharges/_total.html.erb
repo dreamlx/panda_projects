@@ -34,7 +34,7 @@
   <td><%= @personalcharges_char.sum(:reimbursement) + @personalcharges_char.sum(:meal_allowance) + @personalcharges_char.sum(:travel_allowance) %></td>
 </tr>
 
-<tr bgcolor=yellow>
+<tr style="background-color: yellow;">
   <td COLSPAN=3>All total</td>
   <td><%= @personalcharges_total.sum(:hours) %></td>
   <td><%= @personalcharges_total.sum(:service_fee) %></td>
