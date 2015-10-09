@@ -78,9 +78,27 @@ class ReportsController < ApplicationController
 
   def add_projects
     @report = Report.find(params[:id])
-    if params[:project] && !params[:project][:job_code].empty?
-      @report.projects << Project.find_by_job_code(params[:project][:job_code])
+  end
+
+  def update_projects
+    @report = Report.find(params[:id])
+
+    # delete the one not included
+    @report.projects.each do |project|
+      if params[:report] && !params[:report][:project_ids].empty? && params[:report][:project_ids].include?(project.id.to_s)
+      else
+        @report.projects.delete(project)
+        Personalcharge.where(user_id: @report.user_id,  period_id: @report.period_id, project_id: project.id).delete_all
+      end
     end
+
+    # add the new one
+    if params[:report] && !params[:report][:project_ids].empty?
+      params[:report][:project_ids].each do |id|
+        @report.projects << Project.find(id)
+      end
+    end
+    redirect_to add_projects_report_path(@report)
   end
 
   def delete_project

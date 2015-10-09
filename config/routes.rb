@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   resources :reports, only: [:index, :new, :show, :create, :destroy] do
     get :print, on: :collection
     get :add_projects, on: :member
+    get :update_projects, on: :member
     get :fill_data, on: :member
     delete :delete_project, on: :member
     post :submit, on: :member

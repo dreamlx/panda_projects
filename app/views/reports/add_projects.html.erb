@@ -1,20 +1,17 @@
 <%= @report.period.number if @report.period %>
 <%= @report.user.name if @report.user %>
 
-<% @report.projects.each do |project|%>
-  <p><%= project.job_code %></p>
-  <p><%= link_to 'Destroy', delete_project_report_path(id: @report.id, project_id: project.id), 
-                  method: :delete, 
-                  data: {confirm: t('are_you_sure')} %></p>
+<%= simple_form_for(@report, url: update_projects_report_path, method: :get) do |f| %>
+  <% current_user.projects.live.each do |project| %>
+    <div class="col-md-2">
+    <%= check_box_tag "report[project_ids][]", project.id, @report.projects.include?(project) %>
+      <%= project.job_code %>
+    </div>
+  <% end %>
+  <div class="col-md-12">
+    <%= f.button :submit, "Update projects" %>
+  </div>
 <% end %>
-
-
-<h3>Add new Project</h3>
-<%= simple_form_for([@report, @report.projects.build], 
-  url: add_projects_report_path, 
-  method: :get) do |f|%>
-  <%= f.input :job_code, collection: current_user.projects.live.order(job_code: :asc).pluck(:job_code) %>
-  <%= f.button :submit, 'add project' %>
-<% end  %>
-
-<%= link_to 'Go to fill data', fill_data_report_path(@report) %>
+<div class="col-md-12">
+  <%= link_to 'Go to fill data', fill_data_report_path(@report) %>
+</div>
