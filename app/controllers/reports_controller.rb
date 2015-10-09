@@ -134,13 +134,23 @@ class ReportsController < ApplicationController
   def submit
     report = Report.find(params[:id])
     personalcharges = Personalcharge.where(user_id: report.user_id,  period_id: report.period_id)
+    projects = Project.close.includes(:personalcharges).where(personalcharges: {id: personalcharges.ids}).uniq
+    notice = "#{projects.pluck(:job_code)*","} closed"
     personalcharges.each do |personalcharge|
       if filter_personalcharge(personalcharge)
-        personalcharge.submit
+        if personalcharge.project.status_id == 252 # the project closed
+          personalcharge.delete
+        else
+          personalcharge.submit
+        end
       end
     end
     report.submit
-    redirect_to reports_url
+    if notice.length < 10
+      redirect_to reports_url
+    else
+      redirect_to reports_url, notice: notice
+    end
   end
 
   def approve

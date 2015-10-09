@@ -58,7 +58,11 @@
           <!-- projects -->
           <% @projects.each do |project| %>
             <tr>
-              <td><%= truncate(project.client.english_name, length: 15) %></td>
+              <% if project.client.english_name.empty? %>
+                <td>&nbsp;</td>
+              <% else %>
+                <td><%= truncate(project.client.english_name, length: 15) %></td>
+              <% end %>
               <td>
                 <% personalcharge = project.personalcharges.find_by(
                                       user_id: @report.user_id, 

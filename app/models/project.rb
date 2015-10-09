@@ -34,6 +34,7 @@ class Project < ActiveRecord::Base
   scope :num_projects,  ->  {where("job_code REGEXP '^[0-9]'")}
   scope :char_projects, ->  {where("job_code REGEXP '^[a-z]'")}
   scope :live, -> {where(status_id: 251)}
+  scope :close, -> {where(status_id: 252)}
   # def self.live
   #   live_projects = Array.new
   #   all.order(job_code: :asc).each do |project|
