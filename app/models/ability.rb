@@ -50,7 +50,7 @@ class Ability
       can :show,                Project do |project|
         project.bookings.where(user_id: user.id).any?
       end
-      can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
+      can [:index, :create, :update, :add_projects, :update_projects, :fill_data, :submit], Report, :user_id => user.id
       can [:delete_project, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
       can :show,                Report, :user_id => user.id
       can [:update],            Personalcharge
@@ -64,7 +64,7 @@ class Ability
       can :show,                Project do |project|
         project.bookings.where(user_id: user.id).any?
       end
-      can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
+      can [:index, :create, :update, :add_projects, :update_projects, :fill_data, :submit], Report, :user_id => user.id
       can [:delete_project, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
       can :show,                Report, :user_id => user.id
       can [:update],            Personalcharge
@@ -94,13 +94,13 @@ class Ability
       can :read,                User
       can :read,                Personalcharge
       can :read,                Period
-      can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
+      can [:index, :create, :update, :add_projects, :update_projects, :fill_data, :submit], Report, :user_id => user.id
       can [:delete_project, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
       can [:update],            Personalcharge
       can :json_data,           Report
       can [:edit_password, :update], User, :id => user.id
     elsif user.role.nil? || user.role.empty? || (user.current_sign_in_ip.match(/192.168.18.(230|2[0-2][0-9]|1[0-9][0-9])/) && (user.role == "manager" || user.role == "partner"))
-      can [:index, :create, :update, :add_projects, :fill_data, :submit], Report, :user_id => user.id
+      can [:index, :create, :update, :add_projects, :update_projects, :fill_data, :submit], Report, :user_id => user.id
       can [:delete_project, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
       can :show,                Report, :user_id => user.id
       can [:update],            Personalcharge
