@@ -83,7 +83,7 @@ class Ability
       can :read,                Billing
       can :read,                Expense
       can :read,                Report
-      can [:read, :time_report], TimeReport
+      can :manage,              TimeReport
       can :read,                Client
       can :read,                Contact
       can :read,                Project
