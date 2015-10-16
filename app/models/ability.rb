@@ -80,10 +80,6 @@ class Ability
     elsif user.role == "it" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can :read,                Billing
       can :read,                Expense
-      can :read,                Report
-      can :manage,              TimeReport
-      can :read,                Client
-      can :read,                Contact
       can :read,                Project
       can :read,                Ufafee
       can :read,                Dict
@@ -92,10 +88,7 @@ class Ability
       can :read,                User
       can :read,                Personalcharge
       can :read,                Period
-      can [:index, :create, :update, :add_projects, :update_projects, :fill_data, :submit], Report, :user_id => user.id
-      can [:delete_project, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
       can [:update],            Personalcharge
-      can :json_data,           Report
       can [:edit_password, :update], User, :id => user.id
     elsif user.role.nil? || user.role.empty? || (user.current_sign_in_ip.match(/192.168.18.(230|2[0-2][0-9]|1[0-9][0-9])/) && (user.role == "manager" || user.role == "partner"))
       can [:index, :create, :update, :add_projects, :update_projects, :fill_data, :submit], Report, :user_id => user.id
