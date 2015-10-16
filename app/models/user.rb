@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   STATUS_TYPES = ["On leave", "Resigned", "Employed"]
   GMU_TYPES = ["Shanghai", "Beijing"]
   GENDER_TYPES = ["Male", "Female"]
-  devise :database_authenticatable, #:registerable,
+  devise :database_authenticatable, :timeoutable, #:registerable,
          :recoverable, :rememberable, :trackable, :validatable,:session_limitable, :authentication_keys => [:name]
 
   validates :name ,presence: true, uniqueness: { case_sensitive: false}
