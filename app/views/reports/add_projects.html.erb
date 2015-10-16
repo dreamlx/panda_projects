@@ -1,6 +1,6 @@
 <%= @report.period.number if @report.period %>
 <%= @report.user.name if @report.user %>
-
+<span class="label label-danger">No more than 19 prjects</span>
 <%= simple_form_for(@report, url: update_projects_report_path, method: :get) do |f| %>
   <% current_user.projects.live.each do |project| %>
     <div class="col-md-2">
