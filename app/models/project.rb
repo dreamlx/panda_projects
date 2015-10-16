@@ -1,5 +1,9 @@
 class Project < ActiveRecord::Base
   validates   :job_code,    uniqueness: true
+  validates   :job_code,    presence: true
+  validates   :client_id,   presence: true
+  validates   :GMU_id,      presence: true
+  validates   :service_id,  presence: true
 
   has_one     :deduction
   has_one     :initialfee
