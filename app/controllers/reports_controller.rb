@@ -81,6 +81,9 @@ class ReportsController < ApplicationController
   end
 
   def update_projects
+    if params[:report] && params[:report][:project_ids] && params[:report][:project_ids].count > 19
+      return redirect_to add_projects_report_path(@report), notice: "no more than 19!"
+    end
     @report = Report.find(params[:id])
 
     # delete the one not included
@@ -98,7 +101,7 @@ class ReportsController < ApplicationController
         @report.projects << Project.find(id)
       end
     end
-    redirect_to add_projects_report_path(@report)
+    redirect_to add_projects_report_path(@report), notice: "update successfully."
   end
 
   def delete_project
