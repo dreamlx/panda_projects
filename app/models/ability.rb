@@ -45,7 +45,6 @@ class Ability
       can [:edit_password, :update], User, :id => user.id
     elsif user.role == "partner" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can :read,                Billing
-      can :read,                Expense
       can [:read, :time_report],TimeReport
       can :show,                Project do |project|
         project.bookings.where(user_id: user.id).any?
@@ -59,7 +58,6 @@ class Ability
       can [:edit_password, :update], User, :id => user.id
     elsif user.role == "manager" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can :read,                Billing
-      can :read,                Expense
       can [:read, :time_report],TimeReport
       can :show,                Project do |project|
         project.bookings.where(user_id: user.id).any?
