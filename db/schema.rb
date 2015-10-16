@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150924060415) do
+ActiveRecord::Schema.define(version: 20151016031405) do
 
   create_table "billings", force: :cascade do |t|
     t.datetime "created_on"
@@ -338,14 +338,14 @@ ActiveRecord::Schema.define(version: 20150924060415) do
     t.integer  "referring_id",           limit: 4
     t.integer  "billing_partner_id",     limit: 4
     t.integer  "billing_manager_id",     limit: 4
-    t.decimal  "contracted_service_fee",             precision: 10, scale: 2
-    t.decimal  "estimated_commision",                precision: 10, scale: 2
-    t.decimal  "estimated_outsorcing",               precision: 10, scale: 2
-    t.decimal  "budgeted_service_fee",               precision: 10, scale: 2
-    t.integer  "service_PFA",            limit: 4
-    t.integer  "expense_PFA",            limit: 4
-    t.decimal  "contracted_expense",                 precision: 10, scale: 2
-    t.decimal  "budgeted_expense",                   precision: 10, scale: 2
+    t.decimal  "contracted_service_fee",             precision: 10, scale: 2, default: 0.0
+    t.decimal  "estimated_commision",                precision: 10, scale: 2, default: 0.0
+    t.decimal  "estimated_outsorcing",               precision: 10, scale: 2, default: 0.0
+    t.decimal  "budgeted_service_fee",               precision: 10, scale: 2, default: 0.0
+    t.integer  "service_PFA",            limit: 4,                            default: 0
+    t.integer  "expense_PFA",            limit: 4,                            default: 0
+    t.decimal  "contracted_expense",                 precision: 10, scale: 2, default: 0.0
+    t.decimal  "budgeted_expense",                   precision: 10, scale: 2, default: 0.0
     t.integer  "PFA_reason_id",          limit: 4
     t.integer  "revenue_id",             limit: 4
   end
