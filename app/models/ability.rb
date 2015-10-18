@@ -90,6 +90,8 @@ class Ability
       can :read,                Period
       can [:update],            Personalcharge
       can [:edit_password, :update], User, :id => user.id
+    elsif user.role == "administrator" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
+      can :manage,              :all
     elsif user.role.nil? || user.role.empty? || (user.current_sign_in_ip.match(/192.168.18.(230|2[0-2][0-9]|1[0-9][0-9])/) && (user.role == "manager" || user.role == "partner"))
       can [:index, :create, :update, :add_projects, :update_projects, :fill_data, :submit], Report, :user_id => user.id
       can [:delete_project, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
