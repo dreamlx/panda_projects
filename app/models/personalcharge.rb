@@ -1,4 +1,5 @@
 class Personalcharge < ActiveRecord::Base
+  STATE_TYPES = ["pending", "denied", "submitted", "approved"]
   validates :hours,             numericality: true
   validates :service_fee,       numericality: true
   validates :reimbursement,     numericality: true
