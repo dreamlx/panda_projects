@@ -46,9 +46,9 @@ class Ability
     elsif user.role == "partner" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can :read,                Billing
       can [:read, :time_report],TimeReport
-      can :show,                Project do |project|
-        project.bookings.where(user_id: user.id).any?
-      end
+      # can :show,                Project do |project|
+      #   project.bookings.where(user_id: user.id).any?
+      # end
       can [:index, :create, :update, :add_projects, :update_projects, :fill_data, :submit], Report, :user_id => user.id
       can [:delete_project, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
       can :show,                Report, :user_id => user.id
@@ -59,9 +59,9 @@ class Ability
     elsif user.role == "manager" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can :read,                Billing
       can [:read, :time_report],TimeReport
-      can :show,                Project do |project|
-        project.bookings.where(user_id: user.id).any?
-      end
+      # can :show,                Project do |project|
+      #   project.bookings.where(user_id: user.id).any?
+      # end
       can [:index, :create, :update, :add_projects, :update_projects, :fill_data, :submit], Report, :user_id => user.id
       can [:delete_project, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
       can :show,                Report, :user_id => user.id

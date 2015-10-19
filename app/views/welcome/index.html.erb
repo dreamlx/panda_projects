@@ -21,7 +21,7 @@
     <h1>Projects</h1>
     <% current_user.projects.live.order(job_code: :asc).each do |project| %>
       <div class="col-md-1">
-        <%= link_to project.job_code, project %>
+        <%= link_to_if (can? :read, project), project.job_code, project %>
       </div>
     <% end %>
   </div>
