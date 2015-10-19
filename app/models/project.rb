@@ -5,14 +5,14 @@ class Project < ActiveRecord::Base
   validates   :GMU_id,      presence: true
   validates   :service_id,  presence: true
 
-  has_one     :deduction
-  has_one     :initialfee
-  has_many    :outsourcings
-  has_many    :commissions
-  has_many    :billings
-  has_many    :expenses
-  has_many    :personalcharges
-  has_many    :ufafees
+  has_one     :deduction,        :dependent => :destroy
+  has_one     :initialfee,        :dependent => :destroy
+  has_many    :outsourcings,        :dependent => :destroy
+  has_many    :commissions,        :dependent => :destroy
+  has_many    :billings,        :dependent => :destroy
+  has_many    :expenses,        :dependent => :destroy
+  has_many    :personalcharges,        :dependent => :destroy
+  has_many    :ufafees,        :dependent => :destroy
   has_many    :bookings,        :dependent => :destroy
   has_many    :users,           through: :bookings
   has_and_belongs_to_many       :reports, -> { uniq }, join_table: "projects_reports"
