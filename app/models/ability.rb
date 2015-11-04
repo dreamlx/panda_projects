@@ -14,41 +14,37 @@ class Ability
       can :manage,              Project
       can :manage,              Booking
     elsif user.role == "hr_admin" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
-      can :manage,              Billing
+      can [:read, :edit, :update, :new, :create], Billing
       can :manage,              Expense
       # can [:read,:time_report], TimeReport
       can :manage,              TimeReport
       can :manage,              Client
       can :manage,              Contact
-      can :manage,              Project
-      can :manage,              Ufafee
-      can :manage,              Dict
+      can [:read, :edit, :update, :new, :create], Project
+      can [:read, :edit, :update, :new, :create], Ufafee
       can :manage,              Booking
-      can :manage,              Industry
       can :manage,              User
       can :manage,              Person
       can [:index, :show, :approve, :deny],    Report
       can :manage,              Personalcharge
-      can :manage,              Period
     elsif user.role == "gm" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
-      can :read,                Billing
+      can [:read,:destroy],     Billing
       can :read,                Expense
       can :manage,              TimeReport
       can :read,                Client
       can :read,                User
-      can :read,                Project do |project|
-        project.bookings.where(user_id: user.id).any?
-      end
+      can [:read, :destroy],    Project
+      can [:read, :destroy],    Ufafee
       can :index,               Personalcharge
       can :manage,              Booking
       can [:read, :create, :update],  Dict
       can [:edit_password, :update], User, :id => user.id
+      can :manage,              Dict
+      can :manage,              Industry
+      can :manage,              Period
     elsif user.role == "partner" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can :read,                Billing
       can [:read, :time_report],TimeReport
-      # can :show,                Project do |project|
-      #   project.bookings.where(user_id: user.id).any?
-      # end
       can [:index, :create, :update, :add_projects, :update_projects, :fill_data, :submit], Report, :user_id => user.id
       can [:delete_project, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
       can :show,                Report, :user_id => user.id
@@ -59,9 +55,6 @@ class Ability
     elsif user.role == "manager" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can :read,                Billing
       can [:read, :time_report],TimeReport
-      # can :show,                Project do |project|
-      #   project.bookings.where(user_id: user.id).any?
-      # end
       can [:index, :create, :update, :add_projects, :update_projects, :fill_data, :submit], Report, :user_id => user.id
       can [:delete_project, :destroy], Report, :state => ['pending', 'denied'], :user_id => user.id
       can :show,                Report, :user_id => user.id
