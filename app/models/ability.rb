@@ -15,6 +15,7 @@ class Ability
       can :manage,              Booking
     elsif user.role == "hr_admin" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can [:read, :edit, :update, :new, :create], Billing
+      can :manage,              ReceiveAmount
       can :manage,              Expense
       # can [:read,:time_report], TimeReport
       can :manage,              TimeReport
