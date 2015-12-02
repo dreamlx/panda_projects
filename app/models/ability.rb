@@ -11,17 +11,16 @@ class Ability
       can :manage,              Person
       can [:index, :show],    Report
       can :manage,              Personalcharge
-      can :manage,              Project
+      can :read,                Project
       can :manage,              Booking
     elsif user.role == "hr_admin" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
       can [:read, :edit, :update, :new, :create], Billing
       can :manage,              ReceiveAmount
       can :manage,              Expense
-      # can [:read,:time_report], TimeReport
       can :manage,              TimeReport
       can :manage,              Client
       can :manage,              Contact
-      can [:read, :edit, :update, :new, :create], Project
+      can [:read, :edit, :update, :new, :create, :close], Project
       can [:read, :edit, :update, :new, :create], Ufafee
       can :manage,              Booking
       can :manage,              User
@@ -34,7 +33,7 @@ class Ability
       can :manage,              TimeReport
       can :read,                Client
       can :read,                User
-      can [:read, :destroy],    Project
+      can [:read, :destroy, :open],    Project
       can [:read, :destroy],    Ufafee
       can :index,               Personalcharge
       can :manage,              Booking
