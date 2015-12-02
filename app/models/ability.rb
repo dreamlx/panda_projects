@@ -13,7 +13,7 @@ class Ability
       can :manage,              Personalcharge
       can :read,                Project
       can :manage,              Booking
-    elsif user.role == "hr_admin" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
+    elsif user.role == "hr_admin"
       can [:read, :edit, :update, :new, :create], Billing
       can :manage,              ReceiveAmount
       can :manage,              Expense
@@ -27,7 +27,7 @@ class Ability
       can :manage,              Person
       can [:index, :show, :approve, :deny],    Report
       can :manage,              Personalcharge
-    elsif user.role == "gm" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
+    elsif user.role == "gm"
       can [:read,:destroy],     Billing
       can :read,                Expense
       can :manage,              TimeReport
@@ -42,7 +42,7 @@ class Ability
       can :manage,              Dict
       can :manage,              Industry
       can :manage,              Period
-    elsif user.role == "partner" && user.current_sign_in_ip.match(/192.168.(2|8|9).\d/)
+    elsif user.role == "partner"
       can :read,                Billing
       can [:read, :time_report],TimeReport
       can [:index, :create, :update, :add_projects, :update_projects, :fill_data, :submit], Report, :user_id => user.id
