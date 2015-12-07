@@ -11,7 +11,7 @@ class Ability
       can :manage,              Person
       can [:index, :show],    Report
       can :manage,              Personalcharge
-      can :read,                Project
+      can [:read, :update],     Project
       can :manage,              Booking
     elsif user.role == "hr_admin"
       can [:read, :edit, :update, :new, :create], Billing
