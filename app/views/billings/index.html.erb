@@ -14,6 +14,7 @@
 <table class="table table-striped">
   <thead>
     <tr>
+      <th><%= sort_link(@q, :id) %></th>
       <th><%= sort_link(@q, :project_job_code, t('job_code')) %></th>
       <th><%= sort_link(@q, :project_referring_english_name, 'Refer') %></th>
       <th><%= sort_link(@q, :project_billing_partner_english_name, 'Partner') %></th>
