@@ -24,8 +24,8 @@ class ReportsController < ApplicationController
 
   def destroy
     report = Report.find(params[:id])
-    report.destroy
     Personalcharge.where(user_id: report.user_id,  period_id: report.period_id).delete_all
+    report.destroy
     redirect_to reports_url
   end
 

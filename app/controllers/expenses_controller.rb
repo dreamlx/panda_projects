@@ -51,8 +51,7 @@ class ExpensesController < ApplicationController
   end
 
   def for_period
-    period = Period.find_by(number: Date.today.beginning_of_month.to_s)
-    return redirect_to expenses_url unless period
+    period = Period.today_period
     Project.live.each do |project|
       if project.service_code && project.service_code.code && (project.service_code.code.to_i >= 60 && project.service_code.code.to_i <= 68)
         Expense.find_or_create_by(project_id: project.id, period_id: period.id, report_binding: 100, memo: ("job_code in 60-68 add 100RMB|" + period.number))
