@@ -2,7 +2,7 @@ source 'https://ruby.taobao.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.5.1'
 # Use mysql as the database for Active Record
 gem 'mysql2'
 # Use SCSS for stylesheets
@@ -37,7 +37,9 @@ gem 'capistrano-passenger', '0.0.2', group: :development
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+end
 
+group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
 
@@ -52,7 +54,7 @@ gem 'simple_form'
 gem "nested_form"
 gem 'ransack'
 gem 'country_select'
-gem 'bootstrap-sass', '~> 3.3.3'
+gem 'bootstrap-sass'
 gem "best_in_place"
 gem "jquery-ui-rails"
 gem 'devise'
