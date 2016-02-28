@@ -44,7 +44,7 @@
     <%= render @billings %>
 
     <tr bgcolor = yellow>
-      <td colspan="8">Total</td>
+      <td colspan="9">Total</td>
       <td><%= @b_total.sum(:service_billing) %></td>
       <td><%= @b_total.sum(:expense_billing) %></td>
       <td><%= @b_total.sum(:amount) %></td>
