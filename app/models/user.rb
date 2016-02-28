@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
   end
 
   def self.select_users
-    Hash[User.employed.order(english_name: :asc).select("id,english_name").all.map{|u| [u.english_name, u.id]}]
+    Hash[User.order(english_name: :asc).select("id,english_name").all.map{|u| [u.english_name, u.id]}]
   end
 
   def self.select_partners

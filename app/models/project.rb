@@ -59,6 +59,6 @@ class Project < ActiveRecord::Base
   end
 
   def self.live_select_projects
-    Hash[Project.order(job_code: :asc).select("id,job_code, status_id").all.map{|u| [u.job_code, u.id] if u.status.title != 'closed'}]
+    Hash[Project.order(job_code: :asc).select("id,job_code, status_id").all.map{|u| [u.job_code, u.id] if u.status.title != 'closed'}.compact]
   end
 end
