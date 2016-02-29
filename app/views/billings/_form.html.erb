@@ -8,7 +8,7 @@
   <div class="col-md-6">
     <%= f.input :number, readonly: true  %>
     <%= f.input :project_id, collection:  Project.live_select_projects %>
-    <%= f.input :user_id, collection: User.select_users, label: 'Prepared by' %> 
+    <%= f.input :user_id, collection: (@billing.new_record? ? User.select_users : User.select_all_users), label: 'Prepared by' %> 
     <%= f.input :service_billing  %>
     <%= f.input :expense_billing  %>
     <%= f.input :status, collection: [["Outstanding", "0"],["Received", "1"]] %>
