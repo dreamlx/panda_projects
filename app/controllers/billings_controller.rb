@@ -28,7 +28,11 @@ class BillingsController < ApplicationController
     @billing.user_id      = current_user.id if current_user
     @billing.billing_date = Date.today
     @billing.status       = "0"
+  end
 
+  def create
+    @billing              = Billing.new(billing_params)
+    
     # update billing number mannually
     unless Dict.find_by(category: "billing_number", title: Date.today.strftime("%Y%m%d"))
       Dict.find_by(category: "billing_number").update(title: Date.today.strftime("%Y%m%d"), code: "0000")
@@ -37,12 +41,8 @@ class BillingsController < ApplicationController
     billing_number.code   = billing_number.code.succ
     billing_number.save
     # end of update
-
     @billing.number       = billing_number.title + billing_number.code
-  end
 
-  def create
-    @billing              = Billing.new(billing_params)
     @billing.collection_days = @billing.days_of_ageing if @billing.status == "1"
     tax_rate = 5.26/100
     @billing.business_tax = @billing.service_billing * tax_rate
