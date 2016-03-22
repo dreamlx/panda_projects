@@ -28,6 +28,13 @@ class BillingsController < ApplicationController
     @billing.user_id      = current_user.id if current_user
     @billing.billing_date = Date.today
     @billing.status       = "0"
+
+    unless Dict.find_by(category: "billing_number", title: Date.today.strftime("%Y%m%d"))
+      Dict.find_by(category: "billing_number").update(title: Date.today.strftime("%Y%m%d"), code: "0000")
+    end
+    billing_number        = Dict.find_by_category('billing_number')
+    billing_number.code   = billing_number.code.succ
+    @billing.number       = billing_number.title + billing_number.code
   end
 
   def create
@@ -50,7 +57,7 @@ class BillingsController < ApplicationController
     @billing.outstanding  = @billing.amount
     
     if @billing.save
-      redirect_to billings_url, notice: "#{@billing.project.job_code} -- Billing was successfully updated."
+      redirect_to billings_url, notice: "#{@billing.number} -- Billing was successfully updated."
     else
       render 'new'
     end
