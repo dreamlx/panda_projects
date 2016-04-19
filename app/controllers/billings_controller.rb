@@ -46,9 +46,7 @@ class BillingsController < ApplicationController
     end
     billing_number        = Dict.find_by_category('billing_number')
     billing_number.code   = billing_number.code.succ
-    billing_number.save
     # end of update
-    @billing.number       = billing_number.title + billing_number.code
 
     @billing.collection_days = @billing.days_of_ageing if @billing.status == "1"
     tax_rate = 5.26/100
@@ -57,6 +55,8 @@ class BillingsController < ApplicationController
     @billing.outstanding  = @billing.amount
     
     if @billing.save
+      @billing.update(number: billing_number.title + billing_number.code)
+      billing_number.save
       redirect_to billings_url, notice: "#{@billing.number} -- Billing was successfully updated."
     else
       render 'new'
