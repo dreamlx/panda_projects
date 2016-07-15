@@ -388,7 +388,7 @@ ActiveRecord::Schema.define(version: 20151016031405) do
     t.string  "name",   limit: 255
     t.string  "email",  limit: 255
     t.string  "other",  limit: 255
-    t.boolean "picked", limit: 1
+    t.boolean "picked"
     t.string  "other2", limit: 255
     t.string  "other3", limit: 255
     t.string  "other4", limit: 255
@@ -409,7 +409,7 @@ ActiveRecord::Schema.define(version: 20151016031405) do
     t.string   "name",                   limit: 255
     t.integer  "person_id",              limit: 4
     t.string   "hashed_password",        limit: 255
-    t.boolean  "auth",                   limit: 1
+    t.boolean  "auth"
     t.string   "other1",                 limit: 255
     t.string   "other2",                 limit: 255
     t.string   "email",                  limit: 255,                          default: "",  null: false

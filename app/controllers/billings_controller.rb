@@ -15,6 +15,23 @@ class BillingsController < ApplicationController
 
   def show
     @billing = Billing.find(params[:id])
+    @receive_amounts = @billing.receive_amounts
+    @num = @receive_amounts.count
+    if @billing.status != '1'
+      @billing_amount = @receive_amounts.sum(:receive_amount) ||0
+      @billing.outstanding = @billing.amount - @billing_amount
+      @billing.save
+      if @billing_amount == @billing.amount
+        @billing.status = '1'
+        @billing.update(status: '1')
+      else
+        @billing.status = '0'  
+        @billing.update(status: '0')
+      end
+    else
+      @billing.outstanding = 0
+      @billing.save
+    end
   end
 
   def new
