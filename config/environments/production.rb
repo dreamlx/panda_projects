@@ -78,5 +78,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Enable the logstasher logs for the current environment
-  config.logstasher.enabled = true
+  config.logstasher.enabled = false
 end
