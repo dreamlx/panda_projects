@@ -1,4 +1,3 @@
-== README
 
 Run this cmd, and import all data using SQL
 ```
